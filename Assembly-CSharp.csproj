@@ -58,7 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\GameControllerScript.cs" />
+     <Compile Include="Assets\Scripts\PlayerCamera.cs" />
      <Compile Include="Assets\Scripts\TerrainGenerator.cs" />
+     <Compile Include="Assets\Scripts\WorldInteractorTool.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/NamelessSage/Desktop/GitHub/Ballooned Away/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
