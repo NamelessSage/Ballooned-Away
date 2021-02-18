@@ -71,11 +71,6 @@ public class TerrainGenerator : MonoBehaviour
     // =========================
 
 
-    // Rendering and Testing (WILL BE REMOVED OR DISABLED)
-    [Range(0, 30)]
-    public float UpdateTime = 0;
-    // =========================
-
 
     // Terrain Layers (object locations) GameObject references
     public GameObject layer_Ground;                // Grass (ground) terrain parts stored here
@@ -150,7 +145,6 @@ public class TerrainGenerator : MonoBehaviour
     // Main Logic
     void Start()
     {
-        Elapsed = UpdateTime;
         ResetArrays(0, 0);
 
         InitiateIsland(xSize, ySize);
@@ -163,22 +157,8 @@ public class TerrainGenerator : MonoBehaviour
 
     void InitializeWorld()
     {
-        Elapsed = Elapsed - Time.deltaTime;
-        if (Elapsed <= 0)
-        {
-            Elapsed = UpdateTime;
-            
 
-            // ---------------------------------
-
-
-            //GenerateTerrain();
-            //GenerateForestLayout();
-            //GenerateGroundFeatures();
-
-
-            InitiateIsland(xSize, ySize);
-        }
+        InitiateIsland(xSize, ySize);
 
     }
     // =========================

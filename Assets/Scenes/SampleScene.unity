@@ -260,7 +260,7 @@ Transform:
   m_Children:
   - {fileID: 696413720}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &182406572
 MonoBehaviour:
@@ -609,7 +609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &776017988
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -730,7 +730,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSize: 150
   ySize: 150
-  UpdateTime: 5.1
   layer_Ground: {fileID: 2056748788}
   layer_Rocks: {fileID: 4256763}
   layer_Mountains: {fileID: 1246547292}
@@ -759,7 +758,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &944434550
 GameObject:
@@ -929,6 +928,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1297849959}
   - component: {fileID: 1297849960}
+  - component: {fileID: 1297849961}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -964,6 +964,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainObj: {fileID: 891263348}
   playerObj: {fileID: 776017987}
+--- !u!114 &1297849961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1297849958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 692d2a13432da724ab6145e95d8c4746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1301317739
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1088,7 @@ Transform:
   - {fileID: 587744584}
   - {fileID: 4256764}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2056748788
 GameObject:
