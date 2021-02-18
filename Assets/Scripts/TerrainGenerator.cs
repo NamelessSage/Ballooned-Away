@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -72,11 +70,6 @@ public class TerrainGenerator : MonoBehaviour
     private float WaterCoverage = 0.15f;
     // =========================
 
-
-    // Rendering and Testing (WILL BE REMOVED OR DISABLED)
-    [Range(0, 30)]
-    public float UpdateTime = 0;
-    // =========================
 
 
     // Terrain Layers (object locations) GameObject references
@@ -152,7 +145,6 @@ public class TerrainGenerator : MonoBehaviour
     // Main Logic
     void Start()
     {
-        Elapsed = UpdateTime;
         ResetArrays(0, 0);
 
         InitiateIsland(xSize, ySize);
@@ -165,22 +157,8 @@ public class TerrainGenerator : MonoBehaviour
 
     void InitializeWorld()
     {
-        Elapsed = Elapsed - Time.deltaTime;
-        if (Elapsed <= 0)
-        {
-            Elapsed = UpdateTime;
-            
 
-            // ---------------------------------
-
-
-            //GenerateTerrain();
-            //GenerateForestLayout();
-            //GenerateGroundFeatures();
-
-
-            InitiateIsland(xSize, ySize);
-        }
+        InitiateIsland(xSize, ySize);
 
     }
     // =========================
@@ -563,6 +541,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject grass = Instantiate(block_Grass);
         grass.name = "Grass_" + i + "_" + j;
+        grass.tag = "Grass";
         grass.transform.parent = layer_Ground.transform;
 
         grass.transform.position = new Vector3(i, 0.5f, j);
@@ -574,6 +553,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject rock = Instantiate(block_Rock);
         rock.name = "Rock_" + i + "_" + j;
+        rock.tag = "Rock";
         rock.transform.parent = layer_Rocks.transform;
 
         rock.transform.position = new Vector3(i, 0.75f, j);
@@ -585,6 +565,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject mnt = Instantiate(block_Mountain);
         mnt.name = "Mnt_" + i + "_" + j;
+        mnt.tag = "Mountain";
         mnt.transform.parent = layer_Mountains.transform;
 
         float difference = z - MountainsCoverage + 1;
@@ -606,6 +587,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject wat = Instantiate(block_Water);
         wat.name = "Wtr_" + i + "_" + j;
+        wat.tag = "Water";
         wat.transform.parent = layer_Waters.transform;
 
         wat.transform.position = new Vector3(i, 0.5f, j);
@@ -617,6 +599,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject tree = Instantiate(object_Forest);
         tree.name = "Tree_" + i + "_" + j;
+        tree.tag = "Tree";
         tree.transform.parent = layer_Forests.transform;
 
         float height = 1.5f;
@@ -651,4 +634,67 @@ public class TerrainGenerator : MonoBehaviour
         return a;
     }
     // =========================
+
+
+
+    // INTERFACE METHODS
+    public void PrintMe(int a)
+    {
+        Debug.Log("Ive been printed from TerrainGenerator: " + a);
+    }
+
+
+    public GameObject getObjectFromTerrain(int i, int j)
+    {
+        GameObject locatedVeg = VegetationObjects[i, j];          // Located Vegetation object on the surface of the terrain
+
+        if (locatedVeg != null)
+        {
+            return locatedVeg;
+        }
+
+        return null;
+    }
+
+    public GameObject getTerrainObject(int i, int j)
+    {
+        Debug.Log("i" + i);
+        Debug.Log("j" + j);
+        GameObject locatedTer = TerrainObjs[i, j];                // Located Terrain object in the world
+
+        if (locatedTer != null)
+        {
+            return locatedTer;
+        }
+
+        return null;
+    }
+
+    public GameObject[,] getTerrainObjects()
+    {
+        return TerrainObjs;
+    }
+
+
+    
+    // =========================
 }
+
+
+//public GameObject getObjectFromTerrain(int i, int j)
+//{
+//    GameObject locatedVeg = VegetationObjects[i, j];          // Located Vegetation object on the surface of the terrain
+//    GameObject locatedTer = TerrainObjs[i, j];                // Located Terrain object in the world
+
+//    if (locatedTer != null)
+//    {
+//        if (locatedVeg != null)
+//        {
+//            return locatedVeg;
+//        }
+
+//        return locatedTer;
+//    }
+
+//    return null;
+//}
