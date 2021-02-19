@@ -168,6 +168,8 @@ public class TerrainGenerator : MonoBehaviour
         ClearMap();
 
         int[,] bap  = GenerateIsland(x_s, y_s);
+        xSize = bap.GetLength(0);
+        ySize = bap.GetLength(1);
         int sX = bap.GetLength(0);
         int sY = bap.GetLength(1);
         ResetArrays(sX, sY);
@@ -658,8 +660,6 @@ public class TerrainGenerator : MonoBehaviour
 
     public GameObject getTerrainObject(int i, int j)
     {
-        Debug.Log("i" + i);
-        Debug.Log("j" + j);
         GameObject locatedTer = TerrainObjs[i, j];                // Located Terrain object in the world
 
         if (locatedTer != null)
@@ -673,6 +673,26 @@ public class TerrainGenerator : MonoBehaviour
     public GameObject[,] getTerrainObjects()
     {
         return TerrainObjs;
+    }
+    
+    public GameObject[,] getVegetationObjects()
+    {
+        return VegetationObjects;
+    }
+    
+    public bool GetWalkable(int i, int j)
+    {
+        if (i < 0 || i >= xSize || j < 0 || j >= ySize)
+            return false;
+        
+        if ((TerrainArray[i, j] == types["grass"] ||
+             TerrainArray[i, j] == types["rock"]) && 
+            VegetationArray[i, j] != vegTypes["tree"])
+        {
+            return true;
+        }
+
+        return false;
     }
 
 
