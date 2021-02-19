@@ -68,17 +68,20 @@ public class GameControllerScript : MonoBehaviour
         return terrain.getTerrainObject(i, j);
     }
 
+    /// <summary>
+    /// spawns a player where there on grass ant there is no vegetation
+    /// </summary>
     private void spawnPlayer()
     {
         var terrainObjects = terrain.getTerrainObjects();
-        
-        for (int i = terrainObjects.GetLength(0)/2; i < terrainObjects.GetLength(0); i++)
+        var vegetationObjects = terrain.getVegetationObjects();
+        for (int i = 0; i < terrainObjects.GetLength(0); i++)
         {
             for (int j = 0; j < terrainObjects.GetLength(1); j++)
             {
                 if (terrainObjects[i,j])
                 {
-                    if (terrainObjects[i,j].CompareTag("Grass"))
+                    if (terrainObjects[i,j].CompareTag("Grass") && !vegetationObjects[i,j])
                     {
                         Vector3 spawn = new Vector3(i, 1, j);
                         playerObj.transform.position = spawn;
@@ -88,5 +91,10 @@ public class GameControllerScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    public TerrainGenerator GetTerrain()
+    {
+        return terrain;
     }
 }

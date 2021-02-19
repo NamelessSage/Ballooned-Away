@@ -6,8 +6,10 @@ public class WorldInteractorTool : MonoBehaviour
 {
     public GameObject GameController;
     public GameObject selector;
-
+    
     private GameControllerScript controller;
+
+
 
     void Start()
     {
@@ -18,7 +20,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonUp(0))
         {
             Vector3 position = GetMousePos();
             if (position.x >= 0)
@@ -26,13 +28,15 @@ public class WorldInteractorTool : MonoBehaviour
                 GameObject target = controller.getTerrainObjectFromPosition(position);
                 if (target != null)
                 {
-                    Debug.Log(position);
+                    // Debug.Log(position);
                     Vector3 targetPos = target.transform.position;
                     Vector3 newSelectroPos = new Vector3(targetPos.x,
                                                          targetPos.y + (target.transform.localScale.y / 2) + 0.005f,
                                                          targetPos.z);
                     selector.SetActive(true);
                     selector.transform.position = newSelectroPos;
+                    
+                    movePlayer(targetPos);
                 }
             }
             else
@@ -41,6 +45,17 @@ public class WorldInteractorTool : MonoBehaviour
             }
         }
     }
+
+    private void movePlayer(Vector3 newPos)
+    {
+        var playerObj = controller.playerObj;
+        // Vector3 curPos = playerObj.transform.position;
+        PathfindingService pathfinding = new PathfindingService();
+        pathfinding.GetAstarPath(controller.playerObj, newPos, controller.GetTerrain());
+
+    }
+
+
 
 
     private Vector3 GetMousePos()
