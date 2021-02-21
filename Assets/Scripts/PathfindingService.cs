@@ -6,18 +6,18 @@ using UnityEngine;
 public class PathfindingService
 {
     private Grid grid;
-    
+
     public void GetAstarPath(GameObject playerObject, Vector3 newpos, TerrainGenerator terrain)
     {
         grid = new Grid();
         CreateWorldGrid(terrain);
         List<Node> foundPath = FindPath(playerObject.transform.position, newpos);
-        if (foundPath!=null)
+        if (foundPath != null)
         {
             foreach (Node node in foundPath)
             {
                 GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
                 sphere.GetComponent<MeshRenderer>().material.color = Color.red;
                 sphere.transform.position = new Vector3(node.X, 1.5f, node.Z);
             }
@@ -28,7 +28,7 @@ public class PathfindingService
 
     private void CreateWorldGrid(TerrainGenerator terrain)
     {
-        grid.CreateGrid(150,150);
+        grid.CreateGrid(150, 150);
         AssignWalkableState(terrain);
     }
 
@@ -38,7 +38,7 @@ public class PathfindingService
         {
             for (int z = 0; z < grid.lenght; z++)
             {
-                if (terrain.GetWalkable(x,z))
+                if (terrain.GetWalkable(x, z))
                 {
                     grid.setWalkable(x, z, true);
                 }
@@ -48,19 +48,19 @@ public class PathfindingService
 
     private List<Node> FindPath(Vector3 curPos, Vector3 newPos)
     {
-        Node StartNode = grid.GetNodeObject((int) curPos.x, (int) curPos.z);
-        Node TargerNode = grid.GetNodeObject((int)newPos.x,(int)newPos.z);
+        Node StartNode = grid.GetNodeObject((int)curPos.x, (int)curPos.z);
+        Node TargerNode = grid.GetNodeObject((int)newPos.x, (int)newPos.z);
 
         List<Node> OpenList = new List<Node>();
         List<Node> ClosedList = new List<Node>();
-        
+
         OpenList.Add(StartNode);
         while (OpenList.Count > 0)
         {
             Node CurrentNode = OpenList[0];
             for (int i = 1; i < OpenList.Count; i++)
             {
-                if (OpenList[i].fCost<CurrentNode.fCost || OpenList[i].fCost == CurrentNode.fCost && OpenList[i].hCost < CurrentNode.hCost)
+                if (OpenList[i].fCost < CurrentNode.fCost || OpenList[i].fCost == CurrentNode.fCost && OpenList[i].hCost < CurrentNode.hCost)
                 {
                     CurrentNode = OpenList[i];
                 }
@@ -118,6 +118,6 @@ public class PathfindingService
         FinalPath.Reverse();
         grid.FinalPath = FinalPath;
     }
-    
+
 
 }
