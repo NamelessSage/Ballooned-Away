@@ -75,13 +75,13 @@ public class GameControllerScript : MonoBehaviour
     {
         var terrainObjects = terrain.getTerrainObjects();
         var vegetationObjects = terrain.getVegetationObjects();
-        for (int i = 0; i < terrainObjects.GetLength(0); i++)
+        for (int i = (int)(terrainObjects.GetLength(0)/2); i < terrainObjects.GetLength(0); i++)
         {
             for (int j = 0; j < terrainObjects.GetLength(1); j++)
             {
                 if (terrainObjects[i,j])
                 {
-                    if (terrainObjects[i,j].CompareTag("Grass") && !vegetationObjects[i,j])
+                    if (!vegetationObjects[i,j] && terrainObjects[i, j].transform.localScale.y <= 1.1)
                     {
                         Vector3 spawn = new Vector3(i, 1, j);
                         playerObj.transform.position = spawn;
