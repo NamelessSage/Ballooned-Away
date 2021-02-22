@@ -30,7 +30,8 @@ public class tree : MonoBehaviour
 
     private IEnumerator destroyTree()
     {
-        yield return new WaitForSeconds(60);
+        yield return new WaitForSeconds(5);
         Destroy(ThisTree);
+
     }
 }
