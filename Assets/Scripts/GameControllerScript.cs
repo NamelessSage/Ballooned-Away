@@ -30,7 +30,7 @@ public class GameControllerScript : MonoBehaviour
     {
         pos = adjustCords(pos);
 
-        return getTerrainFromPosition((int)pos.x, (int)pos.z);
+        return terrain.getTerrainObject((int)pos.x, (int)pos.z);
     }
 
 
@@ -43,11 +43,35 @@ public class GameControllerScript : MonoBehaviour
     {
         pos = adjustCords(pos);
 
-        return getObjectFromTerrain((int)pos.x, (int)pos.z);
+        return terrain.getObjectFromTerrain((int)pos.x, (int)pos.z);
     }
 
 
-    // PRIVATE METHODS BELLOW
+    /// <summary>
+    /// Return Terrain Generator object
+    /// </summary>
+    /// <returns> TerrainGenerator object </returns>
+    public TerrainGenerator GetTerrain()
+    {
+        return terrain;
+    }
+
+
+    /// <summary>
+    /// Removes tree from the world grid
+    /// </summary>
+    /// <param name="pos"> position where tree is being removed Vector3</param>
+    /// <returns> return null, will be changed </returns>
+    public GameObject ChopDownTreeAtPosition(Vector3 pos)
+    {
+        pos = adjustCords(pos);
+
+        terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
+        return null;
+    }
+
+
+    #region PRIVATE METHODS BELLOW
 
     private Vector3 adjustCords(Vector3 pos)
     {
@@ -56,16 +80,6 @@ public class GameControllerScript : MonoBehaviour
         int z = Mathf.RoundToInt(pos.z + 0.01f);
 
         return new Vector3(x, y, z);
-    }
-
-    private GameObject getObjectFromTerrain(int i, int j)
-    {
-        return terrain.getObjectFromTerrain(i, j);
-    }
-
-    private GameObject getTerrainFromPosition(int i, int j)
-    {
-        return terrain.getTerrainObject(i, j);
     }
 
     /// <summary>
@@ -92,9 +106,7 @@ public class GameControllerScript : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    public TerrainGenerator GetTerrain()
-    {
-        return terrain;
-    }
+
 }
