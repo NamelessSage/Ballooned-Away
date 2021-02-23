@@ -8,12 +8,13 @@ public class GameControllerScript : MonoBehaviour
     public GameObject playerObj;
 
     private TerrainGenerator terrain;
-
+    private Grid grid;
 
     void Start()
     {
         terrain = terrainObj.GetComponent<TerrainGenerator>();
-        
+        grid = new Grid();
+        grid.CreateGrid(terrain.xSize, terrain.ySize);
         spawnPlayer();
     }
 
@@ -69,6 +70,8 @@ public class GameControllerScript : MonoBehaviour
         terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
         return null;
     }
+    
+    
 
 
     #region PRIVATE METHODS BELLOW

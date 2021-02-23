@@ -511,6 +511,9 @@ public class TerrainGenerator : MonoBehaviour
 
     public bool GetWalkable(int i, int j)
     {
+        // Debug.Log(i + " " + j);
+        // Debug.Log(grid_Terrain_Array[i,j]);
+
         if (i < 0 || i >= xSize || j < 0 || j >= ySize)
             return false;
 
@@ -520,6 +523,7 @@ public class TerrainGenerator : MonoBehaviour
             grid_Terrain_Array[i, j] == types["rock"]) &&
             grid_Vegetation_Array[i, j] != vegTypes["tree"])
         {
+            // Debug.Log("true");
             return true;
         }
 
@@ -541,6 +545,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         return VegetationObjects;
     }
+
     // =========================
     #endregion
 }
