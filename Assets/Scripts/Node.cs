@@ -15,7 +15,7 @@ public class Node
     public Node(int x, int z, bool isWalkable)
     {
         X = x;
-        isWalkable = isWalkable;
+        this.isWalkable = isWalkable;
         Z = z;
     }
 
