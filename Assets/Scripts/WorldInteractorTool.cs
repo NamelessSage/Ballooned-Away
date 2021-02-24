@@ -48,6 +48,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     private void movePlayer(Vector3 newPos)
     {
+        // MUST BE CHANGED
         var playerObj = controller.playerObj;
         // Vector3 curPos = playerObj.transform.position;
         PathfindingService pathfinding = new PathfindingService();
