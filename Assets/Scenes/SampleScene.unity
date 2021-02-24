@@ -930,7 +930,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1297849959}
   - component: {fileID: 1297849960}
-  - component: {fileID: 1297849961}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -969,18 +968,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainObj: {fileID: 891263348}
   playerObj: {fileID: 776017987}
---- !u!114 &1297849961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1297849958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c1da826e4050334189be05d1c0e0561, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1301317739
 GameObject:
   m_ObjectHideFlags: 0
