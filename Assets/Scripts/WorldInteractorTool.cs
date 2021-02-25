@@ -25,7 +25,7 @@ public class WorldInteractorTool : MonoBehaviour
             Vector3 position = GetMousePos();
             if (position.x >= 0)
             {
-                GameObject target = controller.getTerrainObjectFromPosition(position);
+                GameObject target = controller.GetTerrainObjectFromPosition(position);
                 if (target != null)
                 {
                     // Debug.Log(position);

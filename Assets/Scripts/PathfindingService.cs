@@ -110,10 +110,9 @@ public class PathfindingService
     {
         List<Node> FinalPath = new List<Node>();
         Node CurrentNode = target;
-        Debug.Log("dipjfgnoisdfjghpsdf " + start.X + " " + start.Z + "   " + target.X + " " + target.Z);
+
         while (!(CurrentNode.X == start.X && CurrentNode.Z == start.Z))
         {
-            Debug.Log(CurrentNode.X + " " + CurrentNode.Z + "   " + start.X + " " + start.Z);
             FinalPath.Add(CurrentNode);
             CurrentNode = CurrentNode.Parent;
         }

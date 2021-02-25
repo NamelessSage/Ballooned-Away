@@ -27,11 +27,11 @@ public class GameControllerScript : MonoBehaviour
     /// </summary>
     /// <param name="pos"> coordinate where to look for a terrain object </param>
     /// <returns> retrun the Object if found, retrun NULL if there is no object on that terrain coordinate </returns>
-    public GameObject getTerrainObjectFromPosition(Vector3 pos)
+    public GameObject GetTerrainObjectFromPosition(Vector3 pos)
     {
         pos = adjustCords(pos);
 
-        return terrain.getTerrainObject((int)pos.x, (int)pos.z);
+        return terrain.Get_Terrian_Object_From_Grid((int)pos.x, (int)pos.z);
     }
 
 
@@ -40,11 +40,11 @@ public class GameControllerScript : MonoBehaviour
     /// </summary>
     /// <param name="pos">coordinate where to look for an object </param>
     /// <returns> retrun the Object if found, retrun NULL if there is no object on that terrain coordinate </returns>
-    public GameObject getObjectFromPosition(Vector3 pos)
+    public GameObject GetVegetationObjectFromPosition(Vector3 pos)
     {
         pos = adjustCords(pos);
 
-        return terrain.getObjectFromTerrain((int)pos.x, (int)pos.z);
+        return terrain.Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
     }
 
 
@@ -90,21 +90,16 @@ public class GameControllerScript : MonoBehaviour
     /// </summary>
     private void spawnPlayer()
     {
-        var terrainObjects = terrain.getTerrainObjects();
-        var vegetationObjects = terrain.getVegetationObjects();
-        for (int i = (int)(terrainObjects.GetLength(0)/2); i < terrainObjects.GetLength(0); i++)
+        for (int i = (int)terrain.xSize/2; i < terrain.xSize; i++)
         {
-            for (int j = 0; j < terrainObjects.GetLength(1); j++)
+            for (int j = 0; j < terrain.ySize; j++)
             {
-                if (terrainObjects[i,j])
+                
+                if (terrain.GetWalkable(i, j) && terrain.Get_Terrian_Object_From_Grid(i, j).transform.localScale.y <= 1.1f)
                 {
-                    if (!vegetationObjects[i,j] && terrainObjects[i, j].transform.localScale.y <= 1.1)
-                    {
-                        Vector3 spawn = new Vector3(i, 1, j);
-                        playerObj.transform.position = spawn;
-                        return;
-                    }
-
+                    Vector3 spawn = new Vector3(i, 1, j);
+                    playerObj.transform.position = spawn;
+                    return;
                 }
             }
         }

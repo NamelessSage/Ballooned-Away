@@ -9,6 +9,7 @@ TagManager:
   - Mountain
   - Rock
   - Grass
+  - Mushroom
   layers:
   - Default
   - TransparentFX
