@@ -110,7 +110,6 @@ public class TerrainGenerator : MonoBehaviour
     // =========================
 
 
-
     // Dictionaries to keep terrain parts and objects name tags
     private Dictionary<string, int> types = new Dictionary<string, int>()
     {
@@ -132,11 +131,11 @@ public class TerrainGenerator : MonoBehaviour
 
 
     // Temporary variables, will be changed
-    private GameObject[,] TerrainObjs;          // Stores grass,rock,mountain terrain blocks
-    private GameObject[,] VegetationObjects;    // Stores trees,mushrooms,plants blocks
+    private GameObject[,] grid_Terrain_Objects;          // Stores grass,rock,mountain terrain blocks
+    private GameObject[,] grid_Vegetation_Objects;    // Stores trees,mushrooms,plants blocks
 
-    private int[,] grid_Terrain_Array;          // Stores terrain grid tags 
-    private int[,] grid_Vegetation_Array;       // Stores vegetation grid tags
+    //private int[,] grid_Terrain_Array;          // Stores terrain grid tags 
+    //private int[,] grid_Vegetation_Array;       // Stores vegetation grid tags
 
 
     // ===========================
@@ -204,11 +203,11 @@ public class TerrainGenerator : MonoBehaviour
 
     void ResetArrays(int sX, int sY)
     {
-        TerrainObjs = new GameObject[sX, sY];
-        VegetationObjects = new GameObject[sX, sY];
+        grid_Terrain_Objects = new GameObject[sX, sY];
+        grid_Vegetation_Objects = new GameObject[sX, sY];
 
-        grid_Terrain_Array = new int[sX, sY];
-        grid_Vegetation_Array = new int[sX, sY];
+        //grid_Terrain_Array = new int[sX, sY];
+        //grid_Vegetation_Array = new int[sX, sY];
     }
 
     int[,] GenerateSquareIsland(int size_x, int size_y)
@@ -244,32 +243,32 @@ public class TerrainGenerator : MonoBehaviour
                     if (z <= WaterCoverage)
                     {
                         newBlock = SpawnWater(i, j);
-                        grid_Terrain_Array[i, j] = types["water"];
+                        //grid_Terrain_Array[i, j] = types["water"];
                     }
                     else if (z >= MountainsCoverage * RockAmount && z < MountainsCoverage)
                     {
                         newBlock = SpawnFlatRock(i, j);
-                        grid_Terrain_Array[i, j] = types["rock"];
-                        grid_Vegetation_Array[i, j] = vegTypes["plain"];
+                        //grid_Terrain_Array[i, j] = types["rock"];
+                        //grid_Vegetation_Array[i, j] = vegTypes["plain"];
                     }
                     else if (z >= MountainsCoverage)
                     {
                         newBlock = SpawnMountain(i, j, z);
-                        grid_Terrain_Array[i, j] = types["mountain"];
+                        //grid_Terrain_Array[i, j] = types["mountain"];
                     }
                     else
                     {
                         newBlock = SpawnGrass(i, j);
-                        grid_Terrain_Array[i, j] = types["grass"];
-                        grid_Vegetation_Array[i, j] = vegTypes["plain"];
+                       // grid_Terrain_Array[i, j] = types["grass"];
+                       // grid_Vegetation_Array[i, j] = vegTypes["plain"];
                     }
 
-                    TerrainObjs[i, j] = newBlock;
+                    grid_Terrain_Objects[i, j] = newBlock;
                 }
                 else
                 {
-                    TerrainObjs[i, j] = null;
-                    grid_Terrain_Array[i, j] = types["dead"];
+                    grid_Terrain_Objects[i, j] = null;
+                   // grid_Terrain_Array[i, j] = types["dead"];
                 }
             }
         }
@@ -284,10 +283,11 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
-                int h = grid_Terrain_Array[i, j];
+                // int h = grid_Terrain_Array[i, j];
+                string h = grid_Terrain_Objects[i, j].tag;
                 float z = GetPerlinVal(i, j, forest_PerlinScale, forest_XOffset, forest_YOffset);
 
-                if (map[i, j] == 1 && h != types["mountain"] && h != types["water"] && z <= ForestCoverage && (spawn_Trees || spawn_Plants))
+                if (map[i, j] == 1 && !h.Equals("Mountain") && !h.Equals("Water") && z <= ForestCoverage && (spawn_Trees || spawn_Plants))
                 {
 
                     if (spawn_Trees == true && spawn_Plants == true)
@@ -298,33 +298,33 @@ public class TerrainGenerator : MonoBehaviour
                         if (chance <= forest_PlantsToTrees_ratio)
                         {
                             newPlant = SpawnForestPlant(i, j, h);
-                            grid_Vegetation_Array[i, j] = vegTypes["grass"];
+                            //grid_Vegetation_Array[i, j] = vegTypes["grass"];
                         }
                         else
                         {
                             newPlant = SpawnTree(i, j, h);
-                            grid_Vegetation_Array[i, j] = vegTypes["tree"];
+                            //grid_Vegetation_Array[i, j] = vegTypes["tree"];
                         }
 
-                        VegetationObjects[i, j] = newPlant;
+                        grid_Vegetation_Objects[i, j] = newPlant;
                     }
                     else if (spawn_Trees == true)
                     {
                         GameObject newPlant;
                         newPlant = SpawnTree(i, j, h);
-                        grid_Vegetation_Array[i, j] = vegTypes["tree"];
+                        //grid_Vegetation_Array[i, j] = vegTypes["tree"];
                     }
                     else if (spawn_Plants == true)
                     {
                         GameObject newPlant;
                         newPlant = SpawnTree(i, j, h);
-                        grid_Vegetation_Array[i, j] = vegTypes["tree"];
+                        //grid_Vegetation_Array[i, j] = vegTypes["tree"];
                     }
                 }
                 else
                 {
-                    VegetationObjects[i, j] = null;
-                    grid_Vegetation_Array[i, j] = vegTypes["dead"];
+                    grid_Vegetation_Objects[i, j] = null;
+                    //grid_Vegetation_Array[i, j] = vegTypes["dead"];
                 }
             }
         }
@@ -416,7 +416,7 @@ public class TerrainGenerator : MonoBehaviour
         return wat;
     }
 
-    GameObject SpawnTree(int i, int j, int h)
+    GameObject SpawnTree(int i, int j, string h)
     {
         int whichOne = Random.Range(0, spawner_Tree_Pool.Length);
         GameObject tree = Instantiate(spawner_Tree_Pool[whichOne]);
@@ -424,7 +424,7 @@ public class TerrainGenerator : MonoBehaviour
         tree.transform.parent = layer_Forests.transform;
 
         float height = 1f;
-        if (h == types["rock"]) height = 1.5f;
+        if (h.Equals("Rock")) height = 1.5f;
         int rn = Random.Range(-6, 6);
         int rot = 90 * rn;
 
@@ -434,7 +434,7 @@ public class TerrainGenerator : MonoBehaviour
         return tree;
     }
 
-    GameObject SpawnForestPlant(int i, int j, int h)
+    GameObject SpawnForestPlant(int i, int j, string h)
     {
         int whichOne = Random.Range(0, spawner_Plants_Pool.Length);
         GameObject plant = Instantiate(spawner_Plants_Pool[whichOne]);
@@ -443,7 +443,7 @@ public class TerrainGenerator : MonoBehaviour
         plant.transform.parent = layer_Forests.transform;
 
         float height = 1f;
-        if (h == types["rock"]) height = 1.5f;
+        if (h.Equals("Rock")) height = 1.5f;
         int rn = Random.Range(-6, 6);
         int rot = 90 * rn;
 
@@ -485,9 +485,15 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    public GameObject getObjectFromTerrain(int i, int j)
+    /// <summary>
+    /// Finds and return a terrian block (Grass block or rock block)
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
+    /// <returns> GameObject or null if nothingn found on guven X anz Z </returns>
+    public GameObject Get_Terrian_Object_From_Grid(int i, int j)
     {
-        GameObject locatedVeg = VegetationObjects[i, j];          // Located Vegetation object on the surface of the terrain
+        GameObject locatedVeg = grid_Terrain_Objects[i, j];          // Located Vegetation object on the surface of the terrain
 
         if (locatedVeg != null)
         {
@@ -497,9 +503,15 @@ public class TerrainGenerator : MonoBehaviour
         return null;
     }
 
-    public GameObject getTerrainObject(int i, int j)
+    /// <summary>
+    /// Finds and return a vegetation object (Tree or mushrooms or grass...)
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
+    /// <returns> GameObject or null if nothingn found on guven X anz Z </returns>
+    public GameObject Get_Vegetation_Object_From_Grid(int i, int j)
     {
-        GameObject locatedTer = TerrainObjs[i, j];                // Located Terrain object in the world
+        GameObject locatedTer = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
 
         if (locatedTer != null)
         {
@@ -509,41 +521,57 @@ public class TerrainGenerator : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Checks if the area on given X and Z is walkable
+    /// (if thre is a tree or water in that X and Z than it's unwalkable)
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
+    /// <returns> true if walkable, false if not</returns>
     public bool GetWalkable(int i, int j)
     {
         // Debug.Log(i + " " + j);
         // Debug.Log(grid_Terrain_Array[i,j]);
 
-        if (i < 0 || i >= xSize || j < 0 || j >= ySize)
+        if ((i < 0 || i >= xSize || j < 0 || j >= ySize) && (grid_Terrain_Objects[i, j] != null ))
             return false;
 
-        //Debug.Log("i - " + i + "     " + "j - " + j + "       " + grid_Terrain_Array[i, j]);
-
-        if ((grid_Terrain_Array[i, j] == types["grass"] ||
-            grid_Terrain_Array[i, j] == types["rock"]) &&
-            grid_Vegetation_Array[i, j] != vegTypes["tree"])
+        if ((grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
+            (grid_Vegetation_Objects[i, j] == null || !grid_Vegetation_Objects[i, j].tag.Equals("Tree")))
         {
-            // Debug.Log("true");
             return true;
         }
 
         return false;
     }
 
+    /// <summary>
+    /// Removes Tree Object from the grid on given X and Z
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
     public void RemoveTreeFromGrid(int i, int j)
     {
-        grid_Vegetation_Array[i, j] = vegTypes["dead"];
-        VegetationObjects[i, j] = null;
+        //grid_Vegetation_Array[i, j] = vegTypes["dead"];
+        grid_Vegetation_Objects[i, j] = null;
     }
 
-    public GameObject[,] getTerrainObjects()
+    /// <summary>
+    /// Return whole Terrain Blocks grid
+    /// </summary>
+    /// <returns></returns>
+    public GameObject[,] GetTerrainObjects()
     {
-        return TerrainObjs;
+        return grid_Terrain_Objects;
     }
 
-    public GameObject[,] getVegetationObjects()
+    /// <summary>
+    /// Return whole Vegetation Objects grid
+    /// </summary>
+    /// <returns></returns>
+    public GameObject[,] GetVegetationObjects()
     {
-        return VegetationObjects;
+        return grid_Vegetation_Objects;
     }
 
     // =========================
