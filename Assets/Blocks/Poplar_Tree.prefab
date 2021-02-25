@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3545803511923521016}
   m_Layer: 0
   m_Name: Poplar_Tree
-  m_TagString: Untagged
+  m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c791ac5a1f701eb46806e4945aa1462c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
   treeHealth: 5
 --- !u!65 &3545803511923521016
 BoxCollider:

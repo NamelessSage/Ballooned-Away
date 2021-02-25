@@ -44,6 +44,21 @@ public class WorldInteractorTool : MonoBehaviour
                 selector.SetActive(false);
             }
         }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit hit;
+            Vector3 fwd = GetMousePos();
+        
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
+            {
+                if (hit.collider.tag == "Tree" && Input.GetMouseButtonDown(1))
+                {
+                    tree treescript = hit.collider.gameObject.GetComponent<tree>();
+                    treescript.treeHealth--;
+                }
+            }
+        }
     }
 
     private void movePlayer(Vector3 newPos)
