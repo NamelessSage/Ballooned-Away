@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
+
 
 public class WorldInteractorTool : MonoBehaviour
 {
@@ -15,7 +17,6 @@ public class WorldInteractorTool : MonoBehaviour
     private int curNode = 0;
     private Vector3 target;
     private GameObject player;
-
 
 
 
@@ -56,13 +57,18 @@ public class WorldInteractorTool : MonoBehaviour
         {
             RaycastHit hit;
             Vector3 fwd = GetMousePos();
-        
+            Vector3 player = controller.playerObj.transform.position;
+            float dist = Vector3.Distance(player, fwd);
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
             {
-                if (hit.collider.tag == "Tree" && Input.GetMouseButtonDown(1))
+                if (hit.collider.CompareTag("Tree"))
                 {
-                    tree treescript = hit.collider.gameObject.GetComponent<tree>();
-                    treescript.treeHealth--;
+                    if (dist <= 1.3f)
+                    {
+                        tree treescript = hit.collider.gameObject.GetComponent<tree>();
+                        Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
+                        treescript.change(script);
+                    }
                 }
             }
         }
