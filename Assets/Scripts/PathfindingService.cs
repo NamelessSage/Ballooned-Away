@@ -12,11 +12,12 @@ public class PathfindingService
     private int nodeCount = 0;
     private int curNodeIndex = 0;
     private TerrainGenerator terrainObject;
-    public List<Node> GetAstarPath(GameObject playerObject, Vector3 newpos, TerrainGenerator terrain)
+    public List<Node> GetAstarPath(Vector3 frompos, Vector3 newpos, TerrainGenerator terrain)
     {
-        return FindPath(playerObject.transform.position, newpos, terrain);
+        return FindPath(frompos, newpos, terrain);
 
     }
+
     private List<Node> FindPath(Vector3 curPos, Vector3 newPos, TerrainGenerator terrain)
     {
         Node StartNode = new Node((int) curPos.x, (int) curPos.z, true);
@@ -69,6 +70,7 @@ public class PathfindingService
             }
         }
 
+        
         return null;
     }
 
