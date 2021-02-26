@@ -60,7 +60,9 @@
      <Compile Include="Assets\Scripts\Node.cs" />
      <Compile Include="Assets\Scripts\PathfindingService.cs" />
      <Compile Include="Assets\Scripts\PlayerCamera.cs" />
+     <Compile Include="Assets\Scripts\ShopUI.cs" />
      <Compile Include="Assets\Scripts\TerrainGenerator.cs" />
+     <Compile Include="Assets\Scripts\UI.cs" />
      <Compile Include="Assets\Scripts\WorldInteractorTool.cs" />
      <Compile Include="Assets\Scripts\tree.cs" />
  <Reference Include="UnityEngine">
