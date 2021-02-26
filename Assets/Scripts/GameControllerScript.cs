@@ -67,9 +67,13 @@ public class GameControllerScript : MonoBehaviour
         terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
         return null;
     }
+    
+    
 
 
-    public Vector3 adjustCords(Vector3 pos)
+    #region PRIVATE METHODS BELLOW
+
+    private Vector3 adjustCords(Vector3 pos)
     {
         int x = Mathf.RoundToInt(pos.x + 0.01f);
         int y = Mathf.RoundToInt(pos.y + 0.01f);
@@ -77,11 +81,6 @@ public class GameControllerScript : MonoBehaviour
 
         return new Vector3(x, y, z);
     }
-
-
-    #region PRIVATE METHODS BELLOW
-
-
 
     /// <summary>
     /// spawns a player where there on grass ant there is no vegetation

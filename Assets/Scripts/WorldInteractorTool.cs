@@ -8,13 +8,6 @@ using Debug = UnityEngine.Debug;
 
 public class WorldInteractorTool : MonoBehaviour
 {
-
-    [Range(0, 5)]
-    public float player_Speed = 2f;
-
-    [Range(0, 1)]
-    public float precision = 0.1f;
-
     public GameObject GameController;
     public GameObject selector;
     
@@ -51,7 +44,6 @@ public class WorldInteractorTool : MonoBehaviour
                                                          targetPos.z);
                     selector.SetActive(true);
                     selector.transform.position = newSelectroPos;
-
                     movePlayer(targetPos);
                 }
             }
@@ -85,9 +77,8 @@ public class WorldInteractorTool : MonoBehaviour
         if (pathFound)
         {
             Vector3 dir = target - player.transform.position;
-            
-            player.transform.Translate(dir.normalized * player_Speed * Time.deltaTime, Space.World);
-            if (Vector3.Distance(player.transform.position, target) <= precision)
+            player.transform.Translate(dir.normalized*1f*Time.deltaTime, Space.World);
+            if (Vector3.Distance(player.transform.position, target)<=0.05f)
             {
                 GetNextNode();
             }
@@ -97,19 +88,19 @@ public class WorldInteractorTool : MonoBehaviour
 
     private void movePlayer(Vector3 newPos)
     {
-
-        PathfindingService pathfinding = new PathfindingService();
-
-        Vector3 fromPos = controller.adjustCords(player.transform.position);
-
-        List<Node> newPath = pathfinding.GetAstarPath(fromPos, newPos, controller.GetTerrain());
-        
-        if (newPath != null)
+        // Vector3 curPos = playerObj.transform.position;
+        if (path!=null)
         {
-            if (newPath.Count > 0)
+            path.Clear();
+            curNode = 0;
+            pathFound = false;
+        }
+        PathfindingService pathfinding = new PathfindingService();
+        path = pathfinding.GetAstarPath(player, newPos, controller.GetTerrain());
+        if (path != null)
+        {
+            if (path.Count > 0)
             {
-                path = newPath;
-
                 pathFound = true;
                 float y = 0;
                 if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[0].X, path[0].Z).CompareTag("Rock"))
