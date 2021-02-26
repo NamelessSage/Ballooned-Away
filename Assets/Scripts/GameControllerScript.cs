@@ -8,13 +8,10 @@ public class GameControllerScript : MonoBehaviour
     public GameObject playerObj;
 
     private TerrainGenerator terrain;
-    private Grid grid;
 
     void Start()
     {
         terrain = terrainObj.GetComponent<TerrainGenerator>();
-        grid = new Grid();
-        grid.CreateGrid(terrain.xSize, terrain.ySize);
         spawnPlayer();
     }
 
@@ -97,7 +94,7 @@ public class GameControllerScript : MonoBehaviour
                 
                 if (terrain.GetWalkable(i, j) && terrain.Get_Terrian_Object_From_Grid(i, j).transform.localScale.y <= 1.1f)
                 {
-                    Vector3 spawn = new Vector3(i, 1, j);
+                    Vector3 spawn = new Vector3(i, 1.2f, j);
                     playerObj.transform.position = spawn;
                     return;
                 }
