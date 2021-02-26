@@ -9,7 +9,6 @@ public class WorldInteractorTool : MonoBehaviour
     public GameObject selector;
     
     private GameControllerScript controller;
-    private Billboard health;
 
 
     void Start()
