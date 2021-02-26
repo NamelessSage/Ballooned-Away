@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+
 
 public class WorldInteractorTool : MonoBehaviour
 {
@@ -9,12 +12,18 @@ public class WorldInteractorTool : MonoBehaviour
     public GameObject selector;
     
     private GameControllerScript controller;
+    private List<Node> path;
+    private bool pathFound = false;
+    private int curNode = 0;
+    private Vector3 target;
+    private GameObject player;
+
 
 
     void Start()
     {
         controller = GameController.GetComponent<GameControllerScript>();
-
+        player = controller.playerObj;
         selector.SetActive(false);
     }
 
@@ -35,7 +44,6 @@ public class WorldInteractorTool : MonoBehaviour
                                                          targetPos.z);
                     selector.SetActive(true);
                     selector.transform.position = newSelectroPos;
-                    
                     movePlayer(targetPos);
                 }
             }
@@ -64,16 +72,74 @@ public class WorldInteractorTool : MonoBehaviour
                 }
             }
         }
+        
+        // movement block
+        if (pathFound)
+        {
+            Vector3 dir = target - player.transform.position;
+            player.transform.Translate(dir.normalized*1f*Time.deltaTime, Space.World);
+            if (Vector3.Distance(player.transform.position, target)<=0.05f)
+            {
+                GetNextNode();
+            }
+        }
+        
     }
 
     private void movePlayer(Vector3 newPos)
     {
-        // MUST BE CHANGED
-        var playerObj = controller.playerObj;
         // Vector3 curPos = playerObj.transform.position;
+        if (path!=null)
+        {
+            path.Clear();
+            curNode = 0;
+            pathFound = false;
+        }
         PathfindingService pathfinding = new PathfindingService();
-        pathfinding.GetAstarPath(controller.playerObj, newPos, controller.GetTerrain());
+        path = pathfinding.GetAstarPath(player, newPos, controller.GetTerrain());
+        if (path != null)
+        {
+            if (path.Count > 0)
+            {
+                pathFound = true;
+                float y = 0;
+                if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[0].X, path[0].Z).CompareTag("Rock"))
+                {
+                    y = 1.7f;
+                }
+                else
+                {
+                    y = 1.2f;
+                }
+                target = new Vector3(path[0].X, y, path[0].Z);
+            }
+        }
+        
+    }
 
+    private void GetNextNode()
+    {
+        if (path!=null)
+        {
+            if (curNode >= path.Count-1)
+            {
+                pathFound = false;
+                curNode = 0;
+                path.Clear();
+                return;
+            }
+            curNode++;
+            float y = 0;
+            if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("Rock"))
+            {
+                y = 1.7f;
+            }
+            else
+            {
+                y = 1.2f;
+            }
+            target = new Vector3(path[curNode].X, y, path[curNode].Z);
+        }
     }
 
 

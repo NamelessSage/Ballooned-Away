@@ -6,44 +6,17 @@ using UnityEngine;
 public class PathfindingService
 {
     // private Grid grid;
-
-    public void GetAstarPath(GameObject playerObject, Vector3 newpos, TerrainGenerator terrain)
+    private bool pathfound = false;
+    private List<Node> foundPath;
+    private GameObject player;
+    private int nodeCount = 0;
+    private int curNodeIndex = 0;
+    private TerrainGenerator terrainObject;
+    public List<Node> GetAstarPath(GameObject playerObject, Vector3 newpos, TerrainGenerator terrain)
     {
-        // CreateWorldGrid(terrain);
-        List<Node> foundPath = FindPath(playerObject.transform.position, newpos, terrain);
-        if (foundPath != null)
-        {
-            foreach (Node node in foundPath)
-            {
-                GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-                sphere.GetComponent<MeshRenderer>().material.color = Color.red;
-                sphere.transform.position = new Vector3(node.X, 1.5f, node.Z);
-                playerObject.transform.position = new Vector3(newpos.x, playerObject.transform.position.y, newpos.z);
-            }
-        }
+        return FindPath(playerObject.transform.position, newpos, terrain);
+
     }
-
-    // private void CreateWorldGrid(TerrainGenerator terrain)
-    // {
-    //     grid.CreateGrid(150, 150);
-    //     AssignWalkableState(terrain);
-    // }
-
-    // private void AssignWalkableState(TerrainGenerator terrain)
-    // {
-    //     for (int x = 0; x < grid.height; x++)
-    //     {
-    //         for (int z = 0; z < grid.lenght; z++)
-    //         {
-    //             if (terrain.GetWalkable(x, z))
-    //             {
-    //                 grid.setWalkable(x, z, true);
-    //             }
-    //         }
-    //     }
-    // }
-
     private List<Node> FindPath(Vector3 curPos, Vector3 newPos, TerrainGenerator terrain)
     {
         Node StartNode = new Node((int) curPos.x, (int) curPos.z, true);
@@ -124,10 +97,10 @@ public class PathfindingService
     {
         List<Node> list = new List<Node>();
         //left side
-        if (current.X-1>=0 && current.X-1<terrain.xSize)
-        {
             //up
-            if (current.Z+1<terrain.ySize && terrain.GetWalkable(current.X-1, current.Z+1))
+            if (terrain.GetWalkable(current.X-1, current.Z+1) && 
+                terrain.GetWalkable(current.X, current.Z+1) && 
+                terrain.GetWalkable(current.X-1, current.Z))
             {
                 list.Add(new Node(current.X-1, current.Z+1, true));
             }
@@ -137,32 +110,30 @@ public class PathfindingService
                 list.Add(new Node(current.X-1, current.Z, true));
             }
             //down
-            if (current.Z-1>=0 && terrain.GetWalkable(current.X-1, current.Z-1))
+            if (terrain.GetWalkable(current.X-1, current.Z-1) &&
+                terrain.GetWalkable(current.X-1, current.Z) && 
+                terrain.GetWalkable(current.X, current.Z-1))
             {
                 list.Add(new Node(current.X-1, current.Z-1, true));
             }
-        }
+        
         
         //center
-        if (current.X>=0 && current.X<terrain.xSize)
-        {
             //up
-            if (current.Z+1<terrain.ySize &&terrain.GetWalkable(current.X, current.Z+1))
+            if (terrain.GetWalkable(current.X, current.Z+1))
             {
                 list.Add(new Node(current.X, current.Z+1, true));
             }
             //down
-            if (current.Z-1>=0 && terrain.GetWalkable(current.X, current.Z-1))
+            if (terrain.GetWalkable(current.X, current.Z-1))
             {
                 list.Add(new Node(current.X, current.Z-1, true));
             }
-        }
-        
+            
         //right side
-        if (current.X+1>=0 && current.X+1<terrain.xSize)
-        {
-            //up
-            if (current.Z+1<terrain.ySize && terrain.GetWalkable(current.X+1, current.Z+1))
+            if (terrain.GetWalkable(current.X+1, current.Z+1) && 
+                terrain.GetWalkable(current.X+1, current.Z) && 
+                terrain.GetWalkable(current.X, current.Z+1))
             {
                 list.Add(new Node(current.X+1, current.Z+1, true));
             }
@@ -173,11 +144,13 @@ public class PathfindingService
             }
             //down
             
-            if (current.Z-1>=0 && terrain.GetWalkable(current.X + 1, current.Z - 1))
+            if (terrain.GetWalkable(current.X + 1, current.Z - 1) && 
+                terrain.GetWalkable(current.X, current.Z-1) &&
+                terrain.GetWalkable(current.X+1, current.Z))
             {
                 list.Add(new Node(current.X + 1, current.Z - 1, true));
             }
-        }
+        
         return list;
     }
 

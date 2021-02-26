@@ -533,7 +533,7 @@ public class TerrainGenerator : MonoBehaviour
         // Debug.Log(i + " " + j);
         // Debug.Log(grid_Terrain_Array[i,j]);
 
-        if ((i < 0 || i >= xSize || j < 0 || j >= ySize) && (grid_Terrain_Objects[i, j] != null ))
+        if ((i < 0 || i >= xSize || j < 0 || j >= ySize) || (grid_Terrain_Objects[i, j] == null ))
             return false;
 
         if ((grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
