@@ -10,12 +10,25 @@ public class GameControllerScript : MonoBehaviour
     private TerrainGenerator terrain;
     private Grid grid;
 
+
+    // player resources
+    public GameObject playerUiObj;
+    private UI PlayerUI;
+    private int woodAmount = 0;
+    private int rockAmount = 0;
+
+
+
+
     void Start()
     {
         terrain = terrainObj.GetComponent<TerrainGenerator>();
+        PlayerUI = playerUiObj.GetComponent<UI>();
         grid = new Grid();
         grid.CreateGrid(terrain.xSize, terrain.ySize);
         spawnPlayer();
+
+
     }
 
 
@@ -66,6 +79,11 @@ public class GameControllerScript : MonoBehaviour
     public GameObject ChopDownTreeAtPosition(Vector3 pos)
     {
         pos = adjustCords(pos);
+
+
+        woodAmount++;
+        PlayerUI.printAmountOfWood(woodAmount);
+        
 
         terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
         return null;
