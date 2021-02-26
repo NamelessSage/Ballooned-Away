@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+
 public class tree : MonoBehaviour
 {
     public GameObject controller;
@@ -9,7 +11,7 @@ public class tree : MonoBehaviour
     GameObject ThisTree;
     BoxCollider ThisCollider;
 
-    public int treeHealth = 5;
+    public int treeHealth = 100;
     private bool isFallen = false;
 
     private void Start()
@@ -39,7 +41,11 @@ public class tree : MonoBehaviour
         }
     }
 
-
+    public void change(Text script)
+    {
+        treeHealth--;
+        script.text = "Health:" + treeHealth;
+    }
 
     private IEnumerator dropTree()
     {
