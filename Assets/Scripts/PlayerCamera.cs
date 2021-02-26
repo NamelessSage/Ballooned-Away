@@ -24,7 +24,7 @@ public class PlayerCamera : MonoBehaviour
         if (target)
         {
             // Vector3 delta = target.transform.position - camera.ViewportToWorldPoint(new Vector3(0, cameraZ+2, 0));
-            Vector3 destination = target.transform.position + new Vector3(-4, 5, -4);
+            Vector3 destination = target.transform.position + new Vector3(-3, 5, -3);
 
             // transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
             transform.position = destination;
