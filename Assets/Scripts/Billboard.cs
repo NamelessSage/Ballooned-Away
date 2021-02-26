@@ -9,6 +9,6 @@ public class Billboard : MonoBehaviour
     // Start is called before the first frame update
     void LateUpdate()
     {
-        transform.LookAt(transform.position - new Vector3(-3, 3, -3));
+        transform.LookAt(transform.position - new Vector3(-4, 5, -4));
     }
 }
