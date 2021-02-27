@@ -14,6 +14,11 @@ public class GameControllerScript : MonoBehaviour
     private int rockAmount = 0;
 
 
+    // Mechanics objects
+    public GameObject balloon_Pad;
+    public GameObject balloon_Model;
+    //
+
     private TerrainGenerator terrain;
 
     void Start()
@@ -21,6 +26,7 @@ public class GameControllerScript : MonoBehaviour
         terrain = terrainObj.GetComponent<TerrainGenerator>();
         PlayerUI = playerUiObj.GetComponent<UI>();
         spawnPlayer();
+        spawnBalloonPad();
     }
 
 
@@ -104,10 +110,28 @@ public class GameControllerScript : MonoBehaviour
             for (int j = 0; j < terrain.ySize; j++)
             {
                 
-                if (terrain.GetWalkable(i, j) && terrain.Get_Terrian_Object_From_Grid(i, j).transform.localScale.y <= 1.1f)
+                if (terrain.ChechkIfFlat(i, j))
                 {
                     Vector3 spawn = new Vector3(i, 1.2f, j);
                     playerObj.transform.position = spawn;
+                    return;
+                }
+            }
+        }
+    }
+
+    private void spawnBalloonPad()
+    {
+        for (int i = ((int)terrain.xSize / 2) + 1; i < terrain.xSize; i++)
+        {
+            for (int j = 0; j < terrain.ySize; j++)
+            {
+
+                if (terrain.ChechkIfFlat(i, j))
+                {
+
+                    Vector3 pos = new Vector3(i, 0, j);
+                    terrain.PositionateObjectInWorld(Instantiate(balloon_Pad), pos);
                     return;
                 }
             }
