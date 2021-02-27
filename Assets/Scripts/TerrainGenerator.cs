@@ -533,11 +533,34 @@ public class TerrainGenerator : MonoBehaviour
         // Debug.Log(i + " " + j);
         // Debug.Log(grid_Terrain_Array[i,j]);
 
-        if ((i < 0 || i >= xSize || j < 0 || j >= ySize) || (grid_Terrain_Objects[i, j] == null ))
+        if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
             return false;
 
         if ((grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
             (grid_Vegetation_Objects[i, j] == null || !grid_Vegetation_Objects[i, j].tag.Equals("Tree")))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if on the given X and Z there is grass block and no unwalkable objects on top of it
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
+    /// <returns></returns>
+    public bool ChechkIfFlat(int i, int j)
+    {
+        // Debug.Log(i + " " + j);
+        // Debug.Log(grid_Terrain_Array[i,j]);
+
+        if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
+            return false;
+
+        if (grid_Terrain_Objects[i, j].tag.Equals("Grass") &&
+            (grid_Vegetation_Objects[i, j] == null))
         {
             return true;
         }
@@ -574,6 +597,16 @@ public class TerrainGenerator : MonoBehaviour
         return grid_Vegetation_Objects;
     }
 
+    /// <summary>
+    /// Positions a given object in given X and Z in the world
+    /// </summary>
+    /// <param name="obj"> the object </param>
+    /// <param name="objPos"> desired grid position (X and Z must be integers) </param>
+    public void PositionateObjectInWorld(GameObject obj, Vector3 objPos)
+    {
+        float newY = grid_Terrain_Objects[(int)objPos.x, (int)objPos.z].transform.position.y + 0.5f;
+        obj.transform.position = new Vector3(objPos.x, newY, objPos.z);
+    }
     // =========================
     #endregion
 }
