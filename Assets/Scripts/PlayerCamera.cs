@@ -10,6 +10,7 @@ public class PlayerCamera : MonoBehaviour
     private float cameraZ = 0;
     private Camera camera;
 
+    private Vector3 mainVec = new Vector3(-3, 5, -3);
     // Start is called before the first frame update
     void Start()
     {
@@ -24,10 +25,13 @@ public class PlayerCamera : MonoBehaviour
         if (target)
         {
             // Vector3 delta = target.transform.position - camera.ViewportToWorldPoint(new Vector3(0, cameraZ+2, 0));
-            Vector3 destination = target.transform.position + new Vector3(-3, 5, -3);
+            Vector3 destination = target.transform.position + mainVec;
 
             // transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
             transform.position = destination;
         }
+
+
+
     }
 }
