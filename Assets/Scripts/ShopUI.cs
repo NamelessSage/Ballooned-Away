@@ -41,7 +41,7 @@ public class ShopUI : MonoBehaviour
         for (int i = 0; i < ShopItems.Length; i++)
         {
             NameLabels[i].text = ShopItems[i].Name;
-            PriceLabels[i].text = ShopItems[i].Price.ToString();
+            PriceLabels[i].text = ShopItems[i].Price.ToString() + " Wood Logs";
         }
         
         if (ShopPanel != null)
