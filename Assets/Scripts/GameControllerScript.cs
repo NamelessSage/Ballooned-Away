@@ -10,12 +10,14 @@ public class GameControllerScript : MonoBehaviour
     // player resources
     public GameObject playerUiObj;
     private UI PlayerUI;
+    private ShopUI Shop;
     private int woodAmount = 0;
     private int rockAmount = 0;
 
 
     // Mechanics objects
-    public GameObject balloon_Pad;
+    public GameObject balloon_Pad_Prefab;
+    private GameObject Balloon_Pad;
     public GameObject balloon_Model;
     //
 
@@ -25,10 +27,13 @@ public class GameControllerScript : MonoBehaviour
     {
         terrain = terrainObj.GetComponent<TerrainGenerator>();
         PlayerUI = playerUiObj.GetComponent<UI>();
+        Shop = playerUiObj.GetComponentInChildren<ShopUI>();
+        Shop.CloseShop();
         spawnPlayer();
         spawnBalloonPad();
     }
-
+    
+    
 
 
     // METHODS BELLOW
@@ -102,6 +107,10 @@ public class GameControllerScript : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
+    public void OpenShopUI()
+    {
+        Shop.OpenShop(Balloon_Pad.GetComponent<BalloonPad>());
+    }
 
     #region PRIVATE METHODS BELLOW
 
@@ -129,7 +138,7 @@ public class GameControllerScript : MonoBehaviour
 
     private void spawnBalloonPad()
     {
-        for (int i = ((int)terrain.xSize / 2) + 1; i < terrain.xSize; i++)
+        for (int i = ((int)terrain.xSize / 2); i < terrain.xSize; i++)
         {
             for (int j = 0; j < terrain.ySize; j++)
             {
@@ -138,13 +147,14 @@ public class GameControllerScript : MonoBehaviour
                 {
 
                     Vector3 pos = new Vector3(i, 0, j);
-                    terrain.PositionateObjectInWorld(Instantiate(balloon_Pad), pos);
+                    Balloon_Pad = Instantiate(balloon_Pad_Prefab);
+                    terrain.PositionateObjectInWorld(Balloon_Pad, pos);
                     return;
                 }
             }
         }
     }
     #endregion
-
+    
 
 }

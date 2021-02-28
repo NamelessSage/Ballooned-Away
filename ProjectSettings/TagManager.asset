@@ -10,6 +10,7 @@ TagManager:
   - Rock
   - Grass
   - Mushroom
+  - BalloonPad
   layers:
   - Default
   - TransparentFX

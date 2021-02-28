@@ -29,19 +29,15 @@ public class ShopUI : MonoBehaviour
     void Start()
     {
         Events = Events_Obj.GetComponent<EventSystem>();
-        ShopItems[0] = new Item("Trash1", 1);
-        ShopItems[1] = new Item("Trash2", 2);
-        ShopItems[2] = new Item("Trash3", 1);
-            
-        OpenShop();
-
+        
     }
     
     /// <summary>
     /// Open shop's UI
     /// </summary>
-    public void OpenShop()
+    public void OpenShop(BalloonPad Balloon)
     {
+        GetItemsFromBalloon(Balloon);
         for (int i = 0; i < ShopItems.Length; i++)
         {
             NameLabels[i].text = ShopItems[i].Name;
@@ -53,7 +49,19 @@ public class ShopUI : MonoBehaviour
             ShopPanel.SetActive(true);
         }
     }
-    
+
+    private void GetItemsFromBalloon(BalloonPad Balloon)
+    {
+        string[] names = Balloon.GetItemsOnSale1();
+        int[] prices = Balloon.GetItemsOnSale2();
+        for (int i = 0; i < 3; i++)
+        {
+            ShopItems[i] = new Item(names[i], prices[i]);
+        }
+    }
+
+
+
     /// <summary>
     /// Close shop's window
     /// </summary>
