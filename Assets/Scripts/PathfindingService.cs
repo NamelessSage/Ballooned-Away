@@ -5,13 +5,7 @@ using UnityEngine;
 
 public class PathfindingService
 {
-    // private Grid grid;
-    private bool pathfound = false;
-    private List<Node> foundPath;
-    private GameObject player;
-    private int nodeCount = 0;
-    private int curNodeIndex = 0;
-    private TerrainGenerator terrainObject;
+
     public List<Node> GetAstarPath(Vector3 frompos, Vector3 newpos, TerrainGenerator terrain)
     {
         return FindPath(frompos, newpos, terrain);
@@ -180,6 +174,7 @@ public class PathfindingService
         }
         return false;
     }
+
 
 
 }
