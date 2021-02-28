@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  treeHealth: 100
+  treeHealth: 5
 --- !u!65 &3545803511923521016
 BoxCollider:
   m_ObjectHideFlags: 0
