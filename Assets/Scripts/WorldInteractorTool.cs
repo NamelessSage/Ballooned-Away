@@ -75,7 +75,7 @@ public class WorldInteractorTool : MonoBehaviour
                     {
                         tree treescript = hit.collider.gameObject.GetComponent<tree>();
                         Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
-                        treescript.change(script);
+                        treescript.Perform_Chop();
                     }
                 }
             }
