@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class tree : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class tree : MonoBehaviour
 
     public int treeHealth = 5;
     private bool isFallen = false;
+    public int progress = 0;
 
     private Canvas thisTreeCanvas;
     private Text thisTreeHealthbar;
@@ -25,7 +27,6 @@ public class tree : MonoBehaviour
         thisTreeHealthbar = transform.gameObject.GetComponentInChildren<Text>();
         thisTreeCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
         thisTreeCanvas.enabled = false;
-
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
         ThisCollider = ThisTree.GetComponent<BoxCollider>();
@@ -35,6 +36,7 @@ public class tree : MonoBehaviour
     public void Perform_Chop()
     {
         treeHealth--;
+        progress++;
         UpdateTree();
 
     }
@@ -44,7 +46,8 @@ public class tree : MonoBehaviour
         wasInteracted = true;
         if (treeHealth <= 0 && isFallen == false)
         {
-            Destroy(thisTreeCanvas);
+            //Destroy(thisTreeCanvas);
+            thisTreeCanvas.enabled = false;
             isFallen = true;
 
             Rigidbody rb = ThisTree.AddComponent<Rigidbody>();
@@ -67,6 +70,12 @@ public class tree : MonoBehaviour
 
                 StartCoroutine(TurnOffUI());
             }
+        }
+
+        if (progress >= 10)
+        {
+            progress = progress - 10;
+            controller.GetComponent<GameControllerScript>().UpdateWoodAmount();
         }
     }
 

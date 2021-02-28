@@ -83,11 +83,18 @@ public class GameControllerScript : MonoBehaviour
     {
         pos = adjustCords(pos);
 
-        woodAmount++;
+        //woodAmount++;
         PlayerUI.printAmountOfWood(woodAmount);
 
         terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
         return null;
+    }
+
+    public void UpdateWoodAmount()
+    {
+        int i = Random.Range(1,5);
+        woodAmount = woodAmount + i;
+        PlayerUI.printAmountOfWood(woodAmount);
     }
 
 
