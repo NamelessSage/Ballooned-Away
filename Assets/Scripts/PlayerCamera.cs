@@ -8,15 +8,15 @@ public class PlayerCamera : MonoBehaviour
     public float dampTime = 0.15f;
     private Vector3 velocity = Vector3.zero;
     private float cameraZ = 0;
-    private Camera camera;
+    private Camera player_camera;
 
     private Vector3 mainVec = new Vector3(-3, 5, -3);
     // Start is called before the first frame update
     void Start()
     {
         cameraZ = transform.position.z;
-        camera = GetComponent<Camera>();
-        camera.fieldOfView = 60;
+        player_camera = GetComponent<Camera>();
+        player_camera.fieldOfView = 60;
     }
 
     // Update is called once per frame
