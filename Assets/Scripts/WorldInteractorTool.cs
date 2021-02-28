@@ -69,13 +69,19 @@ public class WorldInteractorTool : MonoBehaviour
             float dist = Vector3.Distance(player, fwd);
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
             {
-                if (hit.collider.CompareTag("Tree"))
+                if (dist <= 1.3f)
                 {
-                    if (dist <= 1.3f)
+                    if (hit.collider.CompareTag("Tree"))
                     {
+
                         tree treescript = hit.collider.gameObject.GetComponent<tree>();
                         Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
                         treescript.Perform_Chop();
+
+                    }
+                    else if (hit.collider.CompareTag("BalloonPad"))
+                    {
+                        controller.OpenShopUI();
                     }
                 }
             }
