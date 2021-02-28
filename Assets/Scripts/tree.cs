@@ -11,40 +11,63 @@ public class tree : MonoBehaviour
     GameObject ThisTree;
     BoxCollider ThisCollider;
 
-    public int treeHealth = 100;
+    public int treeHealth = 5;
     private bool isFallen = false;
+
+    private Canvas thisTreeCanvas;
+    private Text thisTreeHealthbar;
+    private bool showUI = false;
+    private bool wasInteracted = false;
 
     private void Start()
     {
         ThisTree = transform.gameObject;
+        thisTreeHealthbar = transform.gameObject.GetComponentInChildren<Text>();
+        thisTreeCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
+        thisTreeCanvas.enabled = false;
 
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
         ThisCollider = ThisTree.GetComponent<BoxCollider>();
     }
 
-    private void Update()
+
+    public void Perform_Chop()
     {
+        treeHealth--;
+        UpdateTree();
+
+    }
+
+    private void UpdateTree()
+    {
+        wasInteracted = true;
         if (treeHealth <= 0 && isFallen == false)
         {
+            Destroy(thisTreeCanvas);
             isFallen = true;
 
             Rigidbody rb = ThisTree.AddComponent<Rigidbody>();
             rb.isKinematic = false;
             rb.useGravity = true;
-            rb.AddForce(Vector3.forward,ForceMode.Impulse);
+            rb.AddForce(Vector3.forward, ForceMode.Impulse);
 
             // Removes tree from the grid, so area where ThisTree was standing is now walkable
             controller.GetComponent<GameControllerScript>().ChopDownTreeAtPosition(ThisTree.transform.position);
 
             StartCoroutine(dropTree());
         }
-    }
+        else
+        {
+            thisTreeHealthbar.text = "Health: " + treeHealth;
+            if (showUI == false)
+            {
+                showUI = true;
+                thisTreeCanvas.enabled = true;
 
-    public void change(Text script)
-    {
-        treeHealth--;
-        script.text = "Health:" + treeHealth;
+                StartCoroutine(TurnOffUI());
+            }
+        }
     }
 
     private IEnumerator dropTree()
@@ -61,4 +84,24 @@ public class tree : MonoBehaviour
         Destroy(ThisTree);
 
     }
+
+    private IEnumerator TurnOffUI()
+    {
+        yield return new WaitForSeconds(1);
+        
+        if (wasInteracted == true)
+        {
+            wasInteracted = false;
+            StartCoroutine(TurnOffUI());
+        }
+        else
+        {
+            showUI = false;
+            thisTreeCanvas.enabled = false;
+            wasInteracted = false;
+        }
+
+    }
+
+
 }
