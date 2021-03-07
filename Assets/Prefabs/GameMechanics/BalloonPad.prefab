@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 1167528787122065401}
   m_Layer: 0
   m_Name: BalloonPad
-  m_TagString: Untagged
+  m_TagString: BalloonPad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
