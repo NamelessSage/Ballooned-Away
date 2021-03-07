@@ -372,9 +372,12 @@ public class TerrainGenerator : MonoBehaviour
     // Trees and plants
     public void Spawner_Tree(int x, int z)
     {
-        string h = grid_Terrain_Objects[x, z].tag;
-        GameObject obj = SpawnTree(x, z, h);
-        grid_Vegetation_Objects[x, z] = obj;
+        if (grid_Vegetation_Objects[x, z] == null && ChechkIfPlantable(x, z))
+        {
+            string h = grid_Terrain_Objects[x, z].tag;
+            GameObject obj = SpawnTree(x, z, h);
+            grid_Vegetation_Objects[x, z] = obj;
+        }
     }
 
     public void Spawner_ForestPlant(int x, int z)
@@ -569,7 +572,39 @@ public class TerrainGenerator : MonoBehaviour
         return false;
     }
 
-   
+    /// <summary>
+    /// Checks if given X and Z pairs share same border (are right or left or up or down form each other)
+    /// </summary>
+    /// <param name="x1"> pair 1 x </param>
+    /// <param name="z1"> pair 1 z </param>
+    /// <param name="x2"> pair 2 x</param>
+    /// <param name="z2"> pair 2 z </param>
+    /// <returns> true if they share same border </returns>
+    public bool IsAdjacent(int x1, int z1, int x2, int z2)
+    {
+        if ((x1 + 1 == x2 || x1 - 1 == x2) && z1 == z2) return true;
+        if ((z1 + 1 == z2 || z1 - 1 == z2) && x1 == x2) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Checks if given X and Z pairs share at least one point (they are nearby each other)
+    /// </summary>
+    /// <param name="x1"> pair 1 x </param>
+    /// <param name="z1"> pair 1 z </param>
+    /// <param name="x2"> pair 2 x</param>
+    /// <param name="z2"> pair 2 z </param>
+    /// <returns> true if they share at least one point </returns>
+    public bool IsAdjacent_diaganal(int x1, int z1, int x2, int z2)
+    {
+        if (IsAdjacent(x1, z1, x2, z2)) return true;
+        if ((x1 + 1 == x2 && z1 + 1 == z2)) return true;
+        if ((x1 - 1 == x2 && z1 - 1 == z2)) return true;
+        if ((x1 + 1 == x2 && z1 - 1 == z2)) return true;
+        if ((x1 - 1 == x2 && z1 + 1 == z2)) return true;
+
+        return false;
+    }
 
     /// <summary>
     /// Checks if on the given X and Z there is grass block and no unwalkable objects on top of it
@@ -594,6 +629,22 @@ public class TerrainGenerator : MonoBehaviour
         return false;
     }
 
+    public bool ChechkIfPlantable(int i, int j)
+    {
+        // Debug.Log(i + " " + j);
+        // Debug.Log(grid_Terrain_Array[i,j]);
+
+        if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
+            return false;
+
+        if (grid_Terrain_Objects[i, j].tag.Equals("Grass") ||
+            grid_Terrain_Objects[i, j].tag.Equals("Rock"))
+        {
+            return true;
+        }
+
+        return false;
+    }
     /// <summary>
     /// Removes Tree Object from the grid on given X and Z
     /// </summary>

@@ -6,13 +6,21 @@ using UnityEngine;
 public class PathfindingService
 {
 
-    public List<Node> GetAstarPath(Vector3 frompos, Vector3 newpos, TerrainGenerator terrain)
+    /// <summary>
+    /// Creates shortest path from point A to point B
+    /// </summary>
+    /// <param name="frompos"> point A </param>
+    /// <param name="newpos"> point B </param>
+    /// <param name="terrain"> terrain object </param>
+    /// <param name="flag"> 1-walk to Exact; 2-walk to Nearby </param>
+    /// <returns></returns>
+    public List<Node> GetAstarPath(Vector3 frompos, Vector3 newpos, TerrainGenerator terrain, int flag)
     {
-        return FindPath(frompos, newpos, terrain);
+        return FindPath(frompos, newpos, terrain, flag);
 
     }
 
-    private List<Node> FindPath(Vector3 curPos, Vector3 newPos, TerrainGenerator terrain)
+    private List<Node> FindPath(Vector3 curPos, Vector3 newPos, TerrainGenerator terrain, int flag)
     {
         Node StartNode = new Node((int) curPos.x, (int) curPos.z, true);
         Node TargerNode = new Node((int) newPos.x, (int) newPos.z, terrain.GetWalkable((int)newPos.x, (int) newPos.z));
@@ -35,12 +43,18 @@ public class PathfindingService
             DeleteNode(OpenList, CurrentNode);
             ClosedList.Add(CurrentNode);
 
-            if (CurrentNode.X == TargerNode.X && CurrentNode.Z == TargerNode.Z)
+            // -----------------------------------------------------------------
+            // Check if Path was Found directly to target
+            if (flag == 1 && CurrentNode.X == TargerNode.X && CurrentNode.Z == TargerNode.Z)
             {
-                // TargerNode.Parent = CurrentNode;
                 return GetFinalPath(StartNode, CurrentNode);
-                // return null;
             }
+            // Check if Path was found nearby the target
+            if (flag == 2 && terrain.IsAdjacent(CurrentNode.X, CurrentNode.Z, TargerNode.X, TargerNode.Z))
+            {
+                return GetFinalPath(StartNode, CurrentNode);
+            }
+            // -----------------------------------------------------------------
 
             foreach (Node n in GetNeighbors(CurrentNode, terrain))
             {
@@ -79,16 +93,26 @@ public class PathfindingService
     {
         List<Node> FinalPath = new List<Node>();
         Node CurrentNode = target;
+        FinalPath.Add(CurrentNode);
+        CurrentNode = CurrentNode.Parent;
 
-        while (!(CurrentNode.X == start.X && CurrentNode.Z == start.Z))
+        if (CurrentNode != null)
         {
-            FinalPath.Add(CurrentNode);
-            CurrentNode = CurrentNode.Parent;
+            while (!(CurrentNode.X == start.X && CurrentNode.Z == start.Z))
+            {
+
+                FinalPath.Add(CurrentNode);
+                CurrentNode = CurrentNode.Parent;
+            }
         }
         FinalPath.Reverse();
         return FinalPath;
     }
-    
+
+
+    /// <summary>
+    /// Find all neighbors around
+    /// </summary>
     private List<Node> GetNeighbors(Node current, TerrainGenerator terrain)
     {
         List<Node> list = new List<Node>();
@@ -127,6 +151,7 @@ public class PathfindingService
             }
             
         //right side
+            //up
             if (terrain.GetWalkable(current.X+1, current.Z+1) && 
                 terrain.GetWalkable(current.X+1, current.Z) && 
                 terrain.GetWalkable(current.X, current.Z+1))
@@ -149,6 +174,8 @@ public class PathfindingService
         
         return list;
     }
+
+  
 
     private bool ContainsNode(List<Node> list, Node search)
     {

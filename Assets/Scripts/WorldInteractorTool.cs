@@ -14,7 +14,9 @@ public class WorldInteractorTool : MonoBehaviour
     private enum ActionType
     {
         Plant_Tree,
-        Walk_To
+        Walk_To,
+        Chop_Tree,
+        Open_Shop
     }
 
     #region Action Queue class
@@ -24,6 +26,7 @@ public class WorldInteractorTool : MonoBehaviour
         public Vector3 dst_Pos { get; }  // Destination position
         public ActionType type { get; }
 
+        public int flag; // flags for misc, actions, default 1 (such as Walk To directly or walk to Nearby, not mandatory to use)
         public bool done = false;  // Is it finished?
         public bool active = false;  // Is it being performed right now?
 
@@ -38,6 +41,7 @@ public class WorldInteractorTool : MonoBehaviour
         /// <param name="t"> action type from ENUM </param>
         public Action(Vector3 dst, ActionType t)
         {
+            flag = 1;
             dst_Pos = dst;
             type = t;
         }
@@ -132,32 +136,36 @@ public class WorldInteractorTool : MonoBehaviour
             {
                 AdjustSelector(fwd);
                 Vector3 clicked_grid_pos = adjustCords(fwd);
-                AddToQue(new Action(clicked_grid_pos, ActionType.Plant_Tree));
+                Vector3 plr_pos = GetPlayerCoords();
+
+                if (hit.collider.gameObject.CompareTag("BalloonPad"))
+                {
+                    if (controller.GetTerrain().IsAdjacent((int)clicked_grid_pos.x, (int)clicked_grid_pos.z, (int)plr_pos.x, (int)plr_pos.z))
+                    {
+                        controller.OpenShopUI();
+                    }
+                    else
+                    {
+                        AddToQue(new Action(clicked_grid_pos, ActionType.Open_Shop));
+                    }
+                }
+                else if (controller.GetTerrain().GetWalkable((int)clicked_grid_pos.x, (int)clicked_grid_pos.z))
+                {
+                    AddToQue(new Action(clicked_grid_pos, ActionType.Plant_Tree));
+                }
+                else
+                {
+                    AddToQue(new Action(clicked_grid_pos, ActionType.Chop_Tree));
+                }
+                
             }
 
-            //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit))
-            //{
-            //    if (dist <= 1.3f)
-            //    {
-            //        if (hit.collider.CompareTag("Tree"))
-            //        {
 
-            //            tree treescript = hit.collider.gameObject.GetComponent<tree>();
-            //            Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
-            //            treescript.Perform_Chop();
-
-            //        }
-            //        else if (hit.collider.CompareTag("BalloonPad"))
-            //        {
-            //            controller.OpenShopUI();
-            //        }
-            //    }
-            //}
         }
 
         // -------------------------------------
         UpdateQue();
-        CheckQue();
+        PerformCurrentAction();
         // -------------------------------------
 
 
@@ -177,6 +185,11 @@ public class WorldInteractorTool : MonoBehaviour
         
     }
 
+    // --------------------------------------
+    // Que management
+    #region Que methods
+
+    // Add new action into action que
     private void AddToQue(Action newAction)
     {
         Current_Action = null;
@@ -188,6 +201,26 @@ public class WorldInteractorTool : MonoBehaviour
 
     }
 
+    private void ResetQue()
+    {
+        Current_Action = null;
+        Action_Que.Clear();
+    }
+
+    private void EmptyQue()
+    {
+        if (Action_Que.Count > 0)
+        {
+            Action onTop = Action_Que.Peek();
+
+            if (onTop.type.Equals(ActionType.Walk_To))
+            {
+                Action_Que.Clear();
+            }
+        }
+    }
+
+    // Update Qued action states and prepare Current action
     private void UpdateQue()
     {
 
@@ -207,48 +240,61 @@ public class WorldInteractorTool : MonoBehaviour
                     break;
                 // -------------------------------------------------------------------
                 case ActionType.Plant_Tree:
-                    if (onTop.active) // if PlantTree action was reviewd before, means it had it's path already assigned
-                    {
-                        Current_Action = Action_Que.Pop();
-                        Current_Action.Set_Origin(GetPlayerCoords());
-                        Current_Action.active = false;
-                        Action_Que.Clear();
-                    }
-                    else // if action was encountered for the first time, walk to it firstly
-                    {
-                        Current_Action = new Action(onTop.dst_Pos, ActionType.Walk_To);
-                        Current_Action.Set_Origin(GetPlayerCoords());
-                        onTop.active = true;
-                    }
 
+                    DetermineNextStep(onTop);
 
                     break;
                 // -------------------------------------------------------------------
+                case ActionType.Chop_Tree:
+
+                    DetermineNextStep(onTop);
+
+                    break;
+                // -------------------------------------------------------------------
+                case ActionType.Open_Shop:
+
+                    DetermineNextStep(onTop);
+
+                    break;
+                    // -------------------------------------------------------------------
             }
         }
 
     }
 
-    private void ResetQue()
+    /// <summary>
+    /// Determine what to do next (applicable only for non-walking actions, such as chop tree, since we first have to walk to the tree)
+    /// </summary>
+    /// <param name="onTop"> peeked action at the top of action que stack </param>
+    private void DetermineNextStep(Action onTop)
     {
-        Current_Action = null;
-        Action_Que.Clear();
-    }
-
-    private void EmptyQue()
-    {
-        if (Action_Que.Count > 0)
+        if (onTop.active) // If action was already reviewed, means path to it is found
         {
-            Action onTop = Action_Que.Peek();
-
-            if (!onTop.type.Equals(ActionType.Plant_Tree))
+            Current_Action = Action_Que.Pop();
+            Current_Action.Set_Origin(GetPlayerCoords());
+            Current_Action.active = false; // after we walked to this action, we must begin performing it, but it is inactive anymore, since we are not chopping it yet
+            Action_Que.Clear();
+        }
+        else // if action was encountered for the first time, walk to it firstly
+        {
+            Vector3 plr_pos = GetPlayerCoords();
+            if (controller.GetTerrain().IsAdjacent((int)onTop.dst_Pos.x, (int)onTop.dst_Pos.z, (int)plr_pos.x, (int)plr_pos.z)) // If we are nearby the action destination, just prepare it for execution
             {
-                Action_Que.Clear();
+                QueChanged = true;
+                onTop.active = true;
+            }
+            else // If we are not nearby the action destination, let's walk to it first
+            {
+                Current_Action = new Action(onTop.dst_Pos, ActionType.Walk_To);
+                Current_Action.Set_Origin(GetPlayerCoords());
+                Current_Action.flag = 2;
+                onTop.active = true; // we are currently performing this action, but not directly - we first must find a path to it
             }
         }
     }
 
-    private void CheckQue()
+    // Perfrom current action
+    private void PerformCurrentAction()
     {
         if (Current_Action != null)
         {
@@ -259,16 +305,23 @@ public class WorldInteractorTool : MonoBehaviour
                 {
                     // -------------------------------------------------------------------
                     case ActionType.Walk_To:
-                        movePlayer(Current_Action.Get_Origin(), Current_Action.dst_Pos);
+                        PerformAction_walk_to(Current_Action.Get_Origin(), Current_Action.dst_Pos, Current_Action.flag);
 
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.Plant_Tree:
-                        Debug.Log("Planting tree");
-                        Current_Action.done = true;
-                        
+                        PerformAction_plant_tree_at(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
+                    case ActionType.Chop_Tree:
+                        PerformAction_chop_tree_at(Current_Action.dst_Pos);
+                        break;
+                    // -------------------------------------------------------------------
+                    case ActionType.Open_Shop:
+                        controller.OpenShopUI();
+                        Current_Action.done = true;
+                        break;
+                        // -------------------------------------------------------------------
                 }
 
             }
@@ -283,16 +336,51 @@ public class WorldInteractorTool : MonoBehaviour
 
         }
     }
+    #endregion
+    // --------------------------------------
 
+    private void PerformAction_chop_tree_at(Vector3 pos)
+    {
+        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        //{
+        //    if (dist <= 1.3f)
+        //    {
+        //        if (hit.collider.CompareTag("Tree"))
+        //        {
 
+        //            tree treescript = hit.collider.gameObject.GetComponent<tree>();
+        //            Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
+        //            treescript.Perform_Chop();
 
+        //        }
+        //        else if (hit.collider.CompareTag("BalloonPad"))
+        //        {
+        //            controller.OpenShopUI();
+        //        }
+        //    }
+        //}
+        GameObject treeObj = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
+        tree treescript = treeObj.GetComponent<tree>();
+        treescript.Perform_Chop();
+        Current_Action.done = true;
+    }
 
-    private void movePlayer(Vector3 from_Pos, Vector3 to_Pos)
+    private void PerformAction_plant_tree_at(Vector3 pos)
+    {
+        controller.GetTerrain().Spawner_Tree((int)pos.x, (int)pos.z);
+        Current_Action.done = true;
+    }
+
+    /// <summary>
+    /// Flags: 1-walk direcltly, 2-walk nearby
+    /// </summary>
+    /// <param name="flag"> 1-walk direcltly, 2-walk nearby </param>
+    private void PerformAction_walk_to(Vector3 from_Pos, Vector3 to_Pos, int flag)
     {
 
         PathfindingService pathfinding = new PathfindingService();
 
-        List<Node> newPath = pathfinding.GetAstarPath(from_Pos, to_Pos, controller.GetTerrain());
+        List<Node> newPath = pathfinding.GetAstarPath(from_Pos, to_Pos, controller.GetTerrain(), flag);
         
         if (newPath != null)
         {
@@ -312,14 +400,11 @@ public class WorldInteractorTool : MonoBehaviour
                 }
                 target = new Vector3(path[0].X, y, path[0].Z);
             }
-        }
-        else // If we can't walk there, means we can't do anything so we kill everything
-        {
-            ResetQue();
-        }
-        
+        }  
     }
-    
+
+   
+
     private void EndPath()
     {
         if (path != null)
