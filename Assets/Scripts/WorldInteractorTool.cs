@@ -16,7 +16,8 @@ public class WorldInteractorTool : MonoBehaviour
         Plant_Tree,
         Walk_To,
         Chop_Tree,
-        Open_Shop
+        Open_Shop,
+        PickUpShoorm
     }
 
     #region Action Queue class
@@ -35,13 +36,25 @@ public class WorldInteractorTool : MonoBehaviour
         public Action() {}
 
         /// <summary>
-        /// Creates new action
+        /// Creates new action, default flag value 1
         /// </summary>
         /// <param name="dst"> action destination position </param>
         /// <param name="t"> action type from ENUM </param>
         public Action(Vector3 dst, ActionType t)
         {
             flag = 1;
+            dst_Pos = dst;
+            type = t;
+        }
+
+        /// <summary>
+        /// Creates new action with your define flag
+        /// </summary>
+        /// <param name="dst"> action destination position </param>
+        /// <param name="t"> action type from ENUM </param>
+        public Action(Vector3 dst, ActionType t, int flag)
+        {
+            this.flag = flag;
             dst_Pos = dst;
             type = t;
         }
@@ -62,8 +75,9 @@ public class WorldInteractorTool : MonoBehaviour
     }
     #endregion
 
-    private Stack<Action> Action_Que = new Stack<Action>(5); // Only 5 actions can be stored
+    private Stack<Action> Action_Que = new Stack<Action>(3); // Only 3 actions can be stored
     private Action Current_Action = null;
+    private Action Previous_Root_Action = null;
     private bool QueChanged = false;
 
     // ---------------------------------------
@@ -98,79 +112,92 @@ public class WorldInteractorTool : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            //Vector3 position = GetMousePos();
-            //if (position.x >= 0)
-            //{
-            //    AdjustSelector(position);
-            //}
-            //else
-            //{
-            //    selector.SetActive(false);
-            //}
+        // -------------------------------------
+        #region Mouse Input
+        bool leftBtn = Input.GetMouseButtonDown(0);
+        bool rightBtn = Input.GetMouseButtonDown(1);
 
-            RaycastHit hit;
-            Vector3 fwd = GetMousePos();
-            Vector3 player = controller.playerObj.transform.position;
-            float dist = Vector3.Distance(player, fwd);
-
-            bool clicked = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit);
-            if (clicked)
-            {
-                AdjustSelector(fwd);
-                Vector3 clicked_grid_pos = adjustCords(fwd);
-                AddToQue(new Action(clicked_grid_pos, ActionType.Walk_To));
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1))
+        if (leftBtn || rightBtn) // If right or left button was smacked
         {
             RaycastHit hit;
-            Vector3 fwd = GetMousePos();
-            Vector3 player = controller.playerObj.transform.position;
-            float dist = Vector3.Distance(player, fwd);
+            Vector3 clickPosition;
+            Vector3 clickPositionOnGrid;
+            Vector3 playerPos = GetPlayerPosition_Adjusted();
 
-            bool clicked = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            bool clicked = Physics.Raycast(ray, out hit);
+
             if (clicked)
             {
-                AdjustSelector(fwd);
-                Vector3 clicked_grid_pos = adjustCords(fwd);
-                Vector3 plr_pos = GetPlayerCoords();
+                clickPosition = hit.point;
+                clickPositionOnGrid = adjustCords(hit.point);
+                AdjustSelector(clickPosition);
 
-                if (hit.collider.gameObject.CompareTag("BalloonPad"))
+                TerrainGenerator terrain = controller.GetTerrain();
+                bool walkable = terrain.IsWalkable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool plantable = terrain.IsPlantable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isTree = terrain.IsTree((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isShroom = terrain.IsShroom((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+
+                // -------------------------------------
+                if (leftBtn) // If LEFT Mouse Button was Clicked
                 {
-                    if (controller.GetTerrain().IsAdjacent((int)clicked_grid_pos.x, (int)clicked_grid_pos.z, (int)plr_pos.x, (int)plr_pos.z))
+                    // If clicked on walkable area then go directyl to it
+                    if (walkable)
                     {
-                        controller.OpenShopUI();
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Walk_To));
                     }
+                    // If clicked on unwalkable area, maybe it can be reached nearby?
                     else
                     {
-                        AddToQue(new Action(clicked_grid_pos, ActionType.Open_Shop));
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Walk_To, 2)); // Constructing new action with flas = 2 which means Walk to Nearby area
+                    }
+                    
+                }
+                // -------------------------------------
+
+                // -------------------------------------
+                if (rightBtn) // If RIGHT Mouse Button was Clicked
+                {
+                    // If BallonPad is overthere
+                    if (hit.collider.gameObject.CompareTag("BalloonPad"))
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Open_Shop));
+                    }
+                    // If clicked on empty grass
+                    else if (plantable)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Plant_Tree));
+                    }
+                    // If clicked on a tree
+                    else if (isTree)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Tree));
+                    }
+                    // If clicked on a shroom
+                    else if (isShroom)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.PickUpShoorm));
                     }
                 }
-                else if (controller.GetTerrain().GetWalkable((int)clicked_grid_pos.x, (int)clicked_grid_pos.z))
-                {
-                    AddToQue(new Action(clicked_grid_pos, ActionType.Plant_Tree));
-                }
-                else
-                {
-                    AddToQue(new Action(clicked_grid_pos, ActionType.Chop_Tree));
-                }
-                
+                // -------------------------------------
+
+
             }
-
-
+            else
+            {
+                selector.SetActive(false); // Remove selector tool from world
+            }
         }
+        #endregion
+        // -------------------------------------
 
         // -------------------------------------
         UpdateQue();
         PerformCurrentAction();
         // -------------------------------------
 
-
-
-
+        // -------------------------------------
         // movement block
         if (pathFound)
         {
@@ -182,7 +209,8 @@ public class WorldInteractorTool : MonoBehaviour
                 GetNextNode();
             }
         }
-        
+        // -------------------------------------
+
     }
 
     // --------------------------------------
@@ -234,7 +262,7 @@ public class WorldInteractorTool : MonoBehaviour
                 // -------------------------------------------------------------------
                 case ActionType.Walk_To:
                     Current_Action = Action_Que.Pop();
-                    Current_Action.Set_Origin(GetPlayerCoords());
+                    Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
                     Current_Action.active = false;
 
                     break;
@@ -256,6 +284,12 @@ public class WorldInteractorTool : MonoBehaviour
                     DetermineNextStep(onTop);
 
                     break;
+                // -------------------------------------------------------------------
+                case ActionType.PickUpShoorm:
+
+                    DetermineNextStep(onTop);
+
+                    break;
                     // -------------------------------------------------------------------
             }
         }
@@ -271,13 +305,13 @@ public class WorldInteractorTool : MonoBehaviour
         if (onTop.active) // If action was already reviewed, means path to it is found
         {
             Current_Action = Action_Que.Pop();
-            Current_Action.Set_Origin(GetPlayerCoords());
+            Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
             Current_Action.active = false; // after we walked to this action, we must begin performing it, but it is inactive anymore, since we are not chopping it yet
             Action_Que.Clear();
         }
         else // if action was encountered for the first time, walk to it firstly
         {
-            Vector3 plr_pos = GetPlayerCoords();
+            Vector3 plr_pos = GetPlayerPosition_Adjusted();
             if (controller.GetTerrain().IsAdjacent((int)onTop.dst_Pos.x, (int)onTop.dst_Pos.z, (int)plr_pos.x, (int)plr_pos.z)) // If we are nearby the action destination, just prepare it for execution
             {
                 QueChanged = true;
@@ -285,9 +319,8 @@ public class WorldInteractorTool : MonoBehaviour
             }
             else // If we are not nearby the action destination, let's walk to it first
             {
-                Current_Action = new Action(onTop.dst_Pos, ActionType.Walk_To);
-                Current_Action.Set_Origin(GetPlayerCoords());
-                Current_Action.flag = 2;
+                Current_Action = new Action(onTop.dst_Pos, ActionType.Walk_To, 2);
+                Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
                 onTop.active = true; // we are currently performing this action, but not directly - we first must find a path to it
             }
         }
@@ -321,6 +354,13 @@ public class WorldInteractorTool : MonoBehaviour
                         controller.OpenShopUI();
                         Current_Action.done = true;
                         break;
+                    // -------------------------------------------------------------------
+                    case ActionType.PickUpShoorm:
+
+                        Debug.Log("Shroom PIKED");
+
+                        Current_Action.done = true;
+                        break;
                         // -------------------------------------------------------------------
                 }
 
@@ -341,24 +381,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     private void PerformAction_chop_tree_at(Vector3 pos)
     {
-        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-        //{
-        //    if (dist <= 1.3f)
-        //    {
-        //        if (hit.collider.CompareTag("Tree"))
-        //        {
 
-        //            tree treescript = hit.collider.gameObject.GetComponent<tree>();
-        //            Text script = hit.collider.gameObject.GetComponentInChildren<Text>();
-        //            treescript.Perform_Chop();
-
-        //        }
-        //        else if (hit.collider.CompareTag("BalloonPad"))
-        //        {
-        //            controller.OpenShopUI();
-        //        }
-        //    }
-        //}
         GameObject treeObj = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
         tree treescript = treeObj.GetComponent<tree>();
         treescript.Perform_Chop();
@@ -367,7 +390,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     private void PerformAction_plant_tree_at(Vector3 pos)
     {
-        controller.GetTerrain().Spawner_Tree((int)pos.x, (int)pos.z);
+        controller.GetTerrain().Spawn_Tree_At((int)pos.x, (int)pos.z);
         Current_Action.done = true;
     }
 
@@ -463,6 +486,7 @@ public class WorldInteractorTool : MonoBehaviour
         return clickPosition;
     }
 
+
     private Vector3 adjustCords(Vector3 pos)
     {
         int x = Mathf.RoundToInt(pos.x + 0.01f);
@@ -472,7 +496,10 @@ public class WorldInteractorTool : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
-    private Vector3 GetPlayerCoords()
+    /// <summary>
+    /// Get palyer coordianes adjusted to Worl Grid coordinates (e.g.: x = 1.37 equals x = 1)
+    /// </summary>
+    private Vector3 GetPlayerPosition_Adjusted()
     {
         return adjustCords(player.transform.position);
     }
