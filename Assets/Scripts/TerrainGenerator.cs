@@ -110,29 +110,11 @@ public class TerrainGenerator : MonoBehaviour
     // =========================
 
 
-    // Dictionaries to keep terrain parts and objects name tags
-    private Dictionary<string, int> types = new Dictionary<string, int>()
-    {
-        {"dead", -1},
-        {"grass", 0},
-        {"rock", 1},
-        {"mountain", 2 },
-        {"water", 3 } // water, for now
-    };
-
-    private Dictionary<string, int> vegTypes = new Dictionary<string, int>()
-    {
-        {"dead", -1},
-        {"plain", 0},
-        {"grass", 1},
-        {"tree", 2}
-    };
-    // =========================
-
-
     // Temporary variables, will be changed
-    private GameObject[,] grid_Terrain_Objects;          // Stores grass,rock,mountain terrain blocks
+    private GameObject[,] grid_Terrain_Objects;       // Stores grass,rock,mountain terrain blocks
     private GameObject[,] grid_Vegetation_Objects;    // Stores trees,mushrooms,plants blocks
+
+    private GameObject[,] grid_Interactable_Objects;  // Stores balloon pads and other stuf like that
 
     //private int[,] grid_Terrain_Array;          // Stores terrain grid tags 
     //private int[,] grid_Vegetation_Array;       // Stores vegetation grid tags
@@ -205,9 +187,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         grid_Terrain_Objects = new GameObject[sX, sY];
         grid_Vegetation_Objects = new GameObject[sX, sY];
-
-        //grid_Terrain_Array = new int[sX, sY];
-        //grid_Vegetation_Array = new int[sX, sY];
+        grid_Interactable_Objects = new GameObject[sX, sY];
     }
 
     int[,] GenerateSquareIsland(int size_x, int size_y)
@@ -233,6 +213,8 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int j = 0; j < map.GetLength(1); j++)
             {
+                grid_Interactable_Objects[i, j] = null;
+
                 if (map[i, j] == 1)
                 {
 
@@ -344,25 +326,25 @@ public class TerrainGenerator : MonoBehaviour
     #region Terrain, plants, trees ... objects spanwer functions
     // --------------------------------------------
     // Terrain
-    public void Spawner_Grass(int x, int z)
+    private void Spawner_Grass(int x, int z)
     {
         GameObject obj = SpawnGrass(x, z);
         grid_Terrain_Objects[x, z] = obj;
     }
 
-    public void Spawner_FlatRock(int x, int z)
+    private void Spawner_FlatRock(int x, int z)
     {
         GameObject obj = SpawnFlatRock(x, z);
         grid_Terrain_Objects[x, z] = obj;
     }
 
-    public void Spawner_Mountain(int x, int z, float h)
+    private void Spawner_Mountain(int x, int z, float h)
     {
         GameObject obj = SpawnMountain(x, z, h);
         grid_Terrain_Objects[x, z] = obj;
     }
 
-    public void Spawner_Water(int x, int z)
+    private void Spawner_Water(int x, int z)
     {
         GameObject obj = SpawnWater(x, z);
         grid_Terrain_Objects[x, z] = obj;
@@ -370,9 +352,9 @@ public class TerrainGenerator : MonoBehaviour
 
     // --------------------------------------------
     // Trees and plants
-    public void Spawner_Tree(int x, int z)
+    private void Spawner_Tree(int x, int z)
     {
-        if (grid_Vegetation_Objects[x, z] == null && ChechkIfPlantable(x, z))
+        if (grid_Vegetation_Objects[x, z] == null && IsPlantable(x, z))
         {
             string h = grid_Terrain_Objects[x, z].tag;
             GameObject obj = SpawnTree(x, z, h);
@@ -380,7 +362,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    public void Spawner_ForestPlant(int x, int z)
+    private void Spawner_ForestPlant(int x, int z)
     {
         string h = grid_Terrain_Objects[x, z].tag;
         GameObject obj = SpawnForestPlant(x, z, h);
@@ -520,11 +502,11 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns> GameObject or null if nothingn found on guven X anz Z </returns>
     public GameObject Get_Terrian_Object_From_Grid(int i, int j)
     {
-        GameObject locatedVeg = grid_Terrain_Objects[i, j];          // Located Vegetation object on the surface of the terrain
+        GameObject located = grid_Terrain_Objects[i, j];          // Located Vegetation object on the surface of the terrain
 
-        if (locatedVeg != null)
+        if (located != null)
         {
-            return locatedVeg;
+            return located;
         }
 
         return null;
@@ -538,14 +520,62 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns> GameObject or null if nothingn found on guven X anz Z </returns>
     public GameObject Get_Vegetation_Object_From_Grid(int i, int j)
     {
-        GameObject locatedTer = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
 
-        if (locatedTer != null)
+        if (located != null)
         {
-            return locatedTer;
+            return located;
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Checks if anything can be planted on the given X and Z
+    /// </summary>
+    /// <param name="i"> x coord </param>
+    /// <param name="j"> z coord </param>
+    /// <returns> true if anything can be planted there </returns>
+    public bool IsPlantable(int i, int j)
+    {
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+
+        if (IsWalkable(i, j) && located == null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Cheks if there is a tree
+    /// </summary>
+    public bool IsTree(int i, int j)
+    {
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+
+        if (located != null && located.CompareTag("Tree"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Cheks if there is a shroom
+    /// </summary>
+    public bool IsShroom(int i, int j)
+    {
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+
+        if (located != null && located.CompareTag("Mushroom"))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -555,10 +585,8 @@ public class TerrainGenerator : MonoBehaviour
     /// <param name="i"> x coord </param>
     /// <param name="j"> z coord </param>
     /// <returns> true if walkable, false if not</returns>
-    public bool GetWalkable(int i, int j)
+    public bool IsWalkable(int i, int j)
     {
-        // Debug.Log(i + " " + j);
-        // Debug.Log(grid_Terrain_Array[i,j]);
 
         if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
             return false;
@@ -629,22 +657,6 @@ public class TerrainGenerator : MonoBehaviour
         return false;
     }
 
-    public bool ChechkIfPlantable(int i, int j)
-    {
-        // Debug.Log(i + " " + j);
-        // Debug.Log(grid_Terrain_Array[i,j]);
-
-        if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
-            return false;
-
-        if (grid_Terrain_Objects[i, j].tag.Equals("Grass") ||
-            grid_Terrain_Objects[i, j].tag.Equals("Rock"))
-        {
-            return true;
-        }
-
-        return false;
-    }
     /// <summary>
     /// Removes Tree Object from the grid on given X and Z
     /// </summary>
@@ -683,7 +695,20 @@ public class TerrainGenerator : MonoBehaviour
     {
         float newY = grid_Terrain_Objects[(int)objPos.x, (int)objPos.z].transform.position.y + 0.5f;
         obj.transform.position = new Vector3(objPos.x, newY, objPos.z);
+
+        grid_Interactable_Objects[(int)objPos.x, (int)objPos.z] = obj;
     }
     // =========================
+
+
+    public void Spawn_Tree_At(int x, int z)
+    {
+        if (IsPlantable(x, z) && grid_Interactable_Objects[x, z] == null)
+        {
+            string h = grid_Terrain_Objects[x, z].tag;
+            GameObject obj = SpawnTree(x, z, h);
+            grid_Vegetation_Objects[x, z] = obj;
+        }
+    }
     #endregion
 }

@@ -23,7 +23,7 @@ public class PathfindingService
     private List<Node> FindPath(Vector3 curPos, Vector3 newPos, TerrainGenerator terrain, int flag)
     {
         Node StartNode = new Node((int) curPos.x, (int) curPos.z, true);
-        Node TargerNode = new Node((int) newPos.x, (int) newPos.z, terrain.GetWalkable((int)newPos.x, (int) newPos.z));
+        Node TargerNode = new Node((int) newPos.x, (int) newPos.z, terrain.IsWalkable((int)newPos.x, (int) newPos.z));
 
         List<Node> OpenList = new List<Node>();
         List<Node> ClosedList = new List<Node>();
@@ -118,21 +118,21 @@ public class PathfindingService
         List<Node> list = new List<Node>();
         //left side
             //up
-            if (terrain.GetWalkable(current.X-1, current.Z+1) && 
-                terrain.GetWalkable(current.X, current.Z+1) && 
-                terrain.GetWalkable(current.X-1, current.Z))
+            if (terrain.IsWalkable(current.X-1, current.Z+1) && 
+                terrain.IsWalkable(current.X, current.Z+1) && 
+                terrain.IsWalkable(current.X-1, current.Z))
             {
                 list.Add(new Node(current.X-1, current.Z+1, true));
             }
             //center
-            if (current.Z<terrain.ySize && terrain.GetWalkable(current.X-1, current.Z))
+            if (current.Z<terrain.ySize && terrain.IsWalkable(current.X-1, current.Z))
             {
                 list.Add(new Node(current.X-1, current.Z, true));
             }
             //down
-            if (terrain.GetWalkable(current.X-1, current.Z-1) &&
-                terrain.GetWalkable(current.X-1, current.Z) && 
-                terrain.GetWalkable(current.X, current.Z-1))
+            if (terrain.IsWalkable(current.X-1, current.Z-1) &&
+                terrain.IsWalkable(current.X-1, current.Z) && 
+                terrain.IsWalkable(current.X, current.Z-1))
             {
                 list.Add(new Node(current.X-1, current.Z-1, true));
             }
@@ -140,34 +140,34 @@ public class PathfindingService
         
         //center
             //up
-            if (terrain.GetWalkable(current.X, current.Z+1))
+            if (terrain.IsWalkable(current.X, current.Z+1))
             {
                 list.Add(new Node(current.X, current.Z+1, true));
             }
             //down
-            if (terrain.GetWalkable(current.X, current.Z-1))
+            if (terrain.IsWalkable(current.X, current.Z-1))
             {
                 list.Add(new Node(current.X, current.Z-1, true));
             }
             
         //right side
             //up
-            if (terrain.GetWalkable(current.X+1, current.Z+1) && 
-                terrain.GetWalkable(current.X+1, current.Z) && 
-                terrain.GetWalkable(current.X, current.Z+1))
+            if (terrain.IsWalkable(current.X+1, current.Z+1) && 
+                terrain.IsWalkable(current.X+1, current.Z) && 
+                terrain.IsWalkable(current.X, current.Z+1))
             {
                 list.Add(new Node(current.X+1, current.Z+1, true));
             }
             //center
-            if (current.Z<terrain.ySize && terrain.GetWalkable(current.X+1, current.Z))
+            if (current.Z<terrain.ySize && terrain.IsWalkable(current.X+1, current.Z))
             {
                 list.Add(new Node(current.X+1, current.Z, true));
             }
             //down
             
-            if (terrain.GetWalkable(current.X + 1, current.Z - 1) && 
-                terrain.GetWalkable(current.X, current.Z-1) &&
-                terrain.GetWalkable(current.X+1, current.Z))
+            if (terrain.IsWalkable(current.X + 1, current.Z - 1) && 
+                terrain.IsWalkable(current.X, current.Z-1) &&
+                terrain.IsWalkable(current.X+1, current.Z))
             {
                 list.Add(new Node(current.X + 1, current.Z - 1, true));
             }
