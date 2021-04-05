@@ -10,6 +10,7 @@ public class tree : MonoBehaviour
     public GameObject controller;
 
     GameObject ThisTree;
+    
     BoxCollider ThisCollider;
 
     public int treeHealth = 5;
@@ -18,6 +19,8 @@ public class tree : MonoBehaviour
 
     private Canvas thisTreeCanvas;
     private Text thisTreeHealthbar;
+    private ParticleSystem Particle;
+    private MeshRenderer mesh;
     private bool showUI = false;
     private bool wasInteracted = false;
 
@@ -26,6 +29,8 @@ public class tree : MonoBehaviour
         ThisTree = transform.gameObject;
         thisTreeHealthbar = transform.gameObject.GetComponentInChildren<Text>();
         thisTreeCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
+        Particle = transform.gameObject.GetComponentInChildren<ParticleSystem>();
+        mesh = transform.gameObject.GetComponent<MeshRenderer>();
         thisTreeCanvas.enabled = false;
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
@@ -82,17 +87,21 @@ public class tree : MonoBehaviour
     private IEnumerator dropTree()
     {
         yield return new WaitForSeconds(3);
-        ThisCollider.enabled = false;
-
+        ThisCollider.enabled = true;
         StartCoroutine(destroyTree());
+        Particle.Play();
+        mesh.enabled = false;
+        
     }
 
-    private IEnumerator destroyTree()
+    private IEnumerator destroyTree( )
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         Destroy(ThisTree);
 
     }
+
+
 
     private IEnumerator TurnOffUI()
     {
