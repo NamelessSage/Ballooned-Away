@@ -361,9 +361,8 @@ public class WorldInteractorTool : MonoBehaviour
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.PickUpShoorm:
-
                         Debug.Log("Shroom PIKED");
-
+                        Pick_Shoorm(Current_Action.dst_Pos);
                         Current_Action.done = true;
                         break;
                         // -------------------------------------------------------------------
@@ -397,6 +396,12 @@ public class WorldInteractorTool : MonoBehaviour
     private void PerformAction_plant_tree_at(Vector3 pos)
     {
         controller.GetTerrain().Spawn_Tree_At((int)pos.x, (int)pos.z);
+        Current_Action.done = true;
+    }
+
+    private void Pick_Shoorm(Vector3 pos)
+    {
+        
         Current_Action.done = true;
     }
 
