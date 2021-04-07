@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2393902}
   - component: {fileID: 1745776107265272285}
   - component: {fileID: 3545803511923521016}
-  - component: {fileID: 2316160497456986113}
   m_Layer: 0
   m_Name: Poplar_Tree
   m_TagString: Tree
@@ -99,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  treeHealth: 1
+  treeHealth: 100
   progress: 0
 --- !u!65 &3545803511923521016
 BoxCollider:
@@ -114,25 +113,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7355786, y: 4.9507008, z: 0.82797366}
   m_Center: {x: 0.040278062, y: 2.475603, z: -0.030604998}
---- !u!95 &2316160497456986113
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137650}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &968407316359847446
 GameObject:
   m_ObjectHideFlags: 0
