@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
@@ -77,7 +78,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     private Stack<Action> Action_Que = new Stack<Action>(3); // Only 3 actions can be stored
     private Action Current_Action = null;
-    private Action Previous_Root_Action = null;
+    //private Action Previous_Root_Action = null;
     private bool QueChanged = false;
 
     // ---------------------------------------
@@ -93,6 +94,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     public GameObject GameController;
     public GameObject selector;
+    public GameObject EventSysObj;
     
     private GameControllerScript controller;
     private List<Node> path;
@@ -100,14 +102,17 @@ public class WorldInteractorTool : MonoBehaviour
     private int curNode = 0;
     private Vector3 target;
     private GameObject player;
+    private EventSystem EventSys;
 
 
 
     void Start()
     {
         controller = GameController.GetComponent<GameControllerScript>();
+        EventSys = EventSysObj.GetComponent<EventSystem>();
         player = controller.playerObj;
         selector.SetActive(false);
+        
     }
 
     void Update()
@@ -116,8 +121,8 @@ public class WorldInteractorTool : MonoBehaviour
         #region Mouse Input
         bool leftBtn = Input.GetMouseButtonDown(0);
         bool rightBtn = Input.GetMouseButtonDown(1);
-
-        if (leftBtn || rightBtn) // If right or left button was smacked
+        
+        if (!EventSys.currentSelectedGameObject && (leftBtn || rightBtn)) // If right or left button was smacked AND wasnt a UI smack
         {
             RaycastHit hit;
             Vector3 clickPosition;
@@ -377,6 +382,7 @@ public class WorldInteractorTool : MonoBehaviour
     }
     #endregion
     // --------------------------------------
+
 
     private void PerformAction_chop_tree_at(Vector3 pos)
     {
