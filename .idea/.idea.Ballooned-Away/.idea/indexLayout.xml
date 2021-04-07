@@ -17,6 +17,7 @@
       <Path>.git</Path>
       <Path>.idea</Path>
       <Path>Library</Path>
+      <Path>UIElementsSchema</Path>
       <Path>obj</Path>
     </explicitExcludes>
   </component>
