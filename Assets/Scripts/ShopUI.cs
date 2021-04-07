@@ -52,11 +52,9 @@ public class ShopUI : MonoBehaviour
 
     private void GetItemsFromBalloon(BalloonPad Balloon)
     {
-        string[] names = Balloon.GetItemsOnSale1();
-        int[] prices = Balloon.GetItemsOnSale2();
         for (int i = 0; i < 3; i++)
         {
-            ShopItems[i] = new Item(names[i], prices[i]);
+
         }
     }
 

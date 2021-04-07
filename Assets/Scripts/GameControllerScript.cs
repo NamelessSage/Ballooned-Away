@@ -4,40 +4,69 @@ using UnityEngine;
 
 public class GameControllerScript : MonoBehaviour
 {
+    // External modules
     public GameObject terrainObj;
     public GameObject playerObj;
+    public GameObject uiObj;
 
-    // player resources
-    public GameObject playerUiObj;
-    private UI PlayerUI;
-    private ShopUI Shop;
-    private int woodAmount = 0;
-    private int rockAmount = 0;
+    private TerrainGenerator terrain;
+    private PlayerGuiController GUI;
+    private AcquirableAssetsData ResourseAndItemManager;
+    private Inventory PlrInventory;
+    private BalloonPad Ballon_pad_script;
+
+    //-------------------------------------
 
 
     // Mechanics objects
     public GameObject balloon_Pad_Prefab;
-    private GameObject Balloon_Pad;
     public GameObject balloon_Model;
+
+    private GameObject Balloon_Pad;
     //
 
-    private TerrainGenerator terrain;
 
     void Start()
     {
         terrain = terrainObj.GetComponent<TerrainGenerator>();
-        PlayerUI = playerUiObj.GetComponent<UI>();
-        Shop = playerUiObj.GetComponentInChildren<ShopUI>();
-        Shop.CloseShop();
+        GUI = uiObj.GetComponent<PlayerGuiController>();
+        ResourseAndItemManager = GetComponent<AcquirableAssetsData>();
+        PlrInventory = GetComponent<Inventory>();
+
         spawnPlayer();
         spawnBalloonPad();
     }
-    
-    
+
+
+    //------------------------------------------
+
+    public void UpdateWoodAmount()
+    {
+        int i = Random.Range(1, 10);
+        PlrInventory.Resources_AddToResources("Wood", i);
+    }
+
+
+    public Vector3 adjustCords(Vector3 pos)
+    {
+        int x = Mathf.RoundToInt(pos.x + 0.01f);
+        int y = Mathf.RoundToInt(pos.y + 0.01f);
+        int z = Mathf.RoundToInt(pos.z + 0.01f);
+
+        return new Vector3(x, y, z);
+    }
+
+    public void OpenShopUI()
+    {
+        GUI.OpeShop();
+    }
 
 
     // METHODS BELLOW
 
+
+
+    #region Terrain Interface Methods
     /// <summary>
     /// Find terrain object (grass block, rock block, mountain, water...) on given Vector3 coordinate
     /// </summary>
@@ -73,6 +102,15 @@ public class GameControllerScript : MonoBehaviour
         return terrain;
     }
 
+    /// <summary>
+    /// Return Terrain Generator object
+    /// </summary>
+    /// <returns> TerrainGenerator object </returns>
+    public PlayerGuiController GetUi()
+    {
+        return GUI;
+    }
+
 
     /// <summary>
     /// Removes tree from the world grid
@@ -83,39 +121,12 @@ public class GameControllerScript : MonoBehaviour
     {
         pos = adjustCords(pos);
 
-        //woodAmount++;
-        PlayerUI.printAmountOfWood(woodAmount);
-
         terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
         return null;
     }
-
-    public void UpdateWoodAmount()
-    {
-        int i = Random.Range(1,5);
-        woodAmount = woodAmount + i;
-        PlayerUI.printAmountOfWood(woodAmount);
-    }
-
-
-    public Vector3 adjustCords(Vector3 pos)
-    {
-        int x = Mathf.RoundToInt(pos.x + 0.01f);
-        int y = Mathf.RoundToInt(pos.y + 0.01f);
-        int z = Mathf.RoundToInt(pos.z + 0.01f);
-
-        return new Vector3(x, y, z);
-    }
-
-    public void OpenShopUI()
-    {
-        Shop.OpenShop(Balloon_Pad.GetComponent<BalloonPad>());
-    }
+    #endregion
 
     #region PRIVATE METHODS BELLOW
-
-
-
     /// <summary>
     /// spawns a player where there on grass ant there is no vegetation
     /// </summary>
@@ -148,6 +159,10 @@ public class GameControllerScript : MonoBehaviour
 
                     Vector3 pos = new Vector3(i, 0, j);
                     Balloon_Pad = Instantiate(balloon_Pad_Prefab);
+                    Ballon_pad_script = Balloon_Pad.GetComponent<BalloonPad>();
+                    Ballon_pad_script.SetPlayerUI(GUI);
+                    Ballon_pad_script.SetPlayerInventory(PlrInventory);
+                    Balloon_Pad.name = "Ballon Pad";
                     terrain.PositionateObjectInWorld(Balloon_Pad, pos);
                     return;
                 }
