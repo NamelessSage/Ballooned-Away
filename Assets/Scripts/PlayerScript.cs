@@ -8,10 +8,14 @@ public class PlayerScript : MonoBehaviour
     {
         if (other.CompareTag("Mushroom"))
         {
-            MeshRenderer mesh = other.gameObject.GetComponent<MeshRenderer>();
-            ParticleSystem Particle = other.gameObject.GetComponentInChildren<ParticleSystem>();
-            Particle.Play();
-            mesh.enabled = false;
+            AudioSource audio = other.GetComponent<AudioSource>();
+            MeshRenderer[] mesh = other.gameObject.GetComponentsInChildren<MeshRenderer>();
+            ParticleSystem[] Particle = other.gameObject.GetComponentsInChildren<ParticleSystem>();
+            audio.Play();
+            mesh[0].enabled = false;
+            mesh[1].enabled = false;
+            Particle[0].Play();
+            Particle[1].Play();
             other.enabled = false;
             StartCoroutine(Destroy_shroom(other));
 
@@ -20,7 +24,7 @@ public class PlayerScript : MonoBehaviour
 
     private IEnumerator Destroy_shroom(Collider other)
     {
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2);
         Destroy(other.gameObject);
         
 
