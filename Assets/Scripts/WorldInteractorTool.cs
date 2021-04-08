@@ -400,8 +400,10 @@ public class WorldInteractorTool : MonoBehaviour
     }
 
     private void Pick_Shoorm(Vector3 pos)
-    {
-        
+    {       
+        GameObject Obj = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
+        PickupShroom pick = Obj.GetComponent<PickupShroom>();
+        pick.pickup();
         Current_Action.done = true;
     }
 
