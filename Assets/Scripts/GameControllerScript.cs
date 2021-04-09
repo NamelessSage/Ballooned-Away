@@ -140,6 +140,8 @@ public class GameControllerScript : MonoBehaviour
                 if (terrain.ChechkIfFlat(i, j))
                 {
                     Vector3 spawn = new Vector3(i, 1.2f, j);
+                    // _rigidbody = playerObj.GetComponent<Rigidbody>();
+                    // _rigidbody.position = spawn;
                     playerObj.transform.position = spawn;
                     return;
                 }
