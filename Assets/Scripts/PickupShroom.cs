@@ -1,15 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
+// ReSharper disable All
 
 public class PickupShroom : MonoBehaviour
 {
     private GameObject shroom;
     private Animator animator;
+    private MeshRenderer mesh;
+    private ParticleSystem particle;
+    private AudioSource audio;
+    private Collider coll;
+    public int force = 100;
     private void Start()
     {
         shroom = transform.gameObject;
+        mesh = shroom.GetComponent<MeshRenderer>();
+        particle = shroom.GetComponentInChildren<ParticleSystem>();
+        audio = shroom.GetComponent<AudioSource>();
+        coll = shroom.GetComponent<Collider>();
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,7 +36,7 @@ public class PickupShroom : MonoBehaviour
 
     public void pickup()
     {
-        shroom = transform.gameObject;
+        //shroom = transform.gameObject;
         UpdateShroom();
         
     }
@@ -39,15 +48,17 @@ public class PickupShroom : MonoBehaviour
     private IEnumerator Explosion()
     {
         yield return new WaitForSeconds(0.6f);
-        shroom.GetComponent<MeshRenderer>().enabled = false;
-        shroom.GetComponentInChildren<ParticleSystem>().Play();
+        mesh.enabled = false;
+        coll.enabled = false;
+        particle.Play();
+        audio.Play();
         Collider[] collider = Physics.OverlapSphere(transform.position, 5);
         foreach (Collider temp in collider)
         {
             Rigidbody rb = temp.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddExplosionForce(100,transform.position,5);
+                rb.AddExplosionForce(force,transform.position,5);
             }
         }
         StartCoroutine(Destroyitem());
