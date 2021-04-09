@@ -103,6 +103,7 @@ public class WorldInteractorTool : MonoBehaviour
     private Vector3 target;
     private GameObject player;
     private EventSystem EventSys;
+    private Rigidbody _rigidbody;
 
 
 
@@ -111,11 +112,13 @@ public class WorldInteractorTool : MonoBehaviour
         controller = GameController.GetComponent<GameControllerScript>();
         EventSys = EventSysObj.GetComponent<EventSystem>();
         player = controller.playerObj;
+        _rigidbody = player.GetComponent<Rigidbody>();
         selector.SetActive(false);
         
     }
+    
 
-    void Update()
+    void FixedUpdate()
     {
         // -------------------------------------
         #region Mouse Input
@@ -206,10 +209,17 @@ public class WorldInteractorTool : MonoBehaviour
         // movement block
         if (pathFound)
         {
-            Vector3 dir = target - player.transform.position;
-            
-            player.transform.Translate(dir.normalized * player_Speed * Time.deltaTime, Space.World);
-            if (Vector3.Distance(player.transform.position, target) <= precision)
+            // Vector3 dir = target - player.transform.position;
+            //
+            // player.transform.Translate(dir.normalized * player_Speed * Time.deltaTime, Space.World);
+            // if (Vector3.Distance(player.transform.position, target) <= precision)
+            // {
+            //     GetNextNode();
+            // }
+            Vector3 dir = (target - _rigidbody.position).normalized;
+            _rigidbody.velocity = new Vector3(dir.x * player_Speed, target.y, dir.z * player_Speed);
+            //Debug.Log( target + " " +Vector3.Distance(_rigidbody.position, target));
+            if (Vector3.Distance(_rigidbody.position, target) <= precision)
             {
                 GetNextNode();
             }
@@ -448,6 +458,7 @@ public class WorldInteractorTool : MonoBehaviour
             pathFound = false;
             curNode = 0;
             path.Clear();
+            path = null;
         }
 
 
