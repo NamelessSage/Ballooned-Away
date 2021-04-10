@@ -217,7 +217,9 @@ public class WorldInteractorTool : MonoBehaviour
             //     GetNextNode();
             // }
             Vector3 dir = (target - _rigidbody.position).normalized;
-            _rigidbody.velocity = new Vector3(dir.x * player_Speed, dir.y, dir.z * player_Speed);
+
+            _rigidbody.velocity = new Vector3(dir.x * player_Speed, _rigidbody.velocity.y, dir.z * player_Speed);
+
             //Debug.Log( target + " " +Vector3.Distance(_rigidbody.position, target));
             if (Vector3.Distance(_rigidbody.position, target) <= precision)
             {
@@ -444,6 +446,11 @@ public class WorldInteractorTool : MonoBehaviour
                 {
                     y = 1.2f;
                 }
+                if (CheckIfJumpNeeded())
+                {
+                    Debug.Log("jump1");
+                    PlayerJump();
+                }
                 target = new Vector3(path[0].X, y, path[0].Z);
             }
         }  
@@ -478,7 +485,14 @@ public class WorldInteractorTool : MonoBehaviour
                 }
                 return;
             }
+            
+
             curNode++;
+            if (CheckIfJumpNeeded())
+            {
+                Debug.Log("jump");
+                PlayerJump();
+            }
             float y = 0;
             if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("Rock"))
             {
@@ -488,8 +502,65 @@ public class WorldInteractorTool : MonoBehaviour
             {
                 y = 1.2f;
             }
+
+
             target = new Vector3(path[curNode].X, y, path[curNode].Z);
         }
+    }
+
+    private bool CheckRockJump()
+    {
+        if (curNode == 0)
+        {
+            if(controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("Rock") && _rigidbody.position.y <= 1.6)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+        if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("Rock") && _rigidbody.position.y <= 1.6)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    private bool CheckPlatformJump()
+    {
+        if (curNode == 0)
+        {
+            if(controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("BalloonPad") && _rigidbody.position.y <= 1.4)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+        if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[curNode].X, path[curNode].Z).CompareTag("BalloonPad") && _rigidbody.position.y <= 1.4)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    private bool CheckIfJumpNeeded()
+    {
+        if (CheckRockJump())
+        {
+            return true;
+        }
+        if (CheckPlatformJump())
+        {
+            return true;
+        }
+        return false;
+    }
+    private void PlayerJump()
+    {
+        // _rigidbody.AddForce(0,5f,0);
+        _rigidbody.velocity = Vector3.up * 5.7f;
     }
 
 
@@ -540,6 +611,5 @@ public class WorldInteractorTool : MonoBehaviour
             selector.SetActive(true);
             selector.transform.position = newSelectroPos;
         }
-
     }
 }
