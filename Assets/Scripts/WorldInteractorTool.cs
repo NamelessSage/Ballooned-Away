@@ -118,7 +118,7 @@ public class WorldInteractorTool : MonoBehaviour
     }
     
 
-    void FixedUpdate()
+    void Update()
     {
         // -------------------------------------
         #region Mouse Input
@@ -217,7 +217,7 @@ public class WorldInteractorTool : MonoBehaviour
             //     GetNextNode();
             // }
             Vector3 dir = (target - _rigidbody.position).normalized;
-            _rigidbody.velocity = new Vector3(dir.x * player_Speed, target.y, dir.z * player_Speed);
+            _rigidbody.velocity = new Vector3(dir.x * player_Speed, dir.y, dir.z * player_Speed);
             //Debug.Log( target + " " +Vector3.Distance(_rigidbody.position, target));
             if (Vector3.Distance(_rigidbody.position, target) <= precision)
             {

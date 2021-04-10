@@ -121,7 +121,17 @@ public class GameControllerScript : MonoBehaviour
     {
         pos = adjustCords(pos);
 
-        terrain.RemoveTreeFromGrid((int)pos.x, (int)pos.z);
+        terrain.RemovePlantFromGrid((int)pos.x, (int)pos.z);
+        return null;
+    }
+
+    public GameObject PickUpShroomAtPosition(Vector3 pos)
+    {
+        pos = adjustCords(pos);
+
+       PlrInventory.Resources_AddToResources("Food", 2);
+
+        terrain.RemovePlantFromGrid((int)pos.x, (int)pos.z);
         return null;
     }
     #endregion

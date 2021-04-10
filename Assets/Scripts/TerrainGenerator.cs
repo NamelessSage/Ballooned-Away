@@ -446,8 +446,6 @@ public class TerrainGenerator : MonoBehaviour
         float p_val_ter = GetPerlinVal(i, j, terrain_PerlinScale, terrain_XOffset, terrain_YOffset);
         float p_val_veg = GetPerlinVal(i, j, forest_PerlinScale, forest_XOffset, forest_YOffset);
 
-        float add = 0.2f;
-
         if (p_val_ter >= WaterCoverage && p_val_ter <= WaterCoverage + 0.1f && p_val_veg > ForestCoverage - 0.06f)
             grass = Instantiate(block_Sandy);
         else if (p_val_ter <= (MountainsCoverage * RockAmount) && p_val_ter >= (MountainsCoverage * RockAmount) - 0.08f)
@@ -759,11 +757,11 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Removes Tree Object from the grid on given X and Z
+    /// Removes Plant Object from the grid on given X and Z
     /// </summary>
     /// <param name="i"> x coord </param>
     /// <param name="j"> z coord </param>
-    public void RemoveTreeFromGrid(int i, int j)
+    public void RemovePlantFromGrid(int i, int j)
     {
         //grid_Vegetation_Array[i, j] = vegTypes["dead"];
         grid_Vegetation_Objects[i, j] = null;
