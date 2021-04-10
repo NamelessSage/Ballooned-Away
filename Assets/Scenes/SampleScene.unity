@@ -414,7 +414,7 @@ RectTransform:
   - {fileID: 1764356835}
   - {fileID: 1569195737}
   m_Father: {fileID: 2116918072}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2635,10 +2635,16 @@ MonoBehaviour:
   layer_Ground: {fileID: 2056748788}
   layer_Rocks: {fileID: 4256763}
   layer_Mountains: {fileID: 1246547292}
-  layer_Forests: {fileID: 587744583}
+  layer_Plants: {fileID: 587744583}
   layer_Waters: {fileID: 944434550}
   layer_parent_Terrain: {fileID: 1926796843}
   block_Grass: {fileID: 9213852088266282708, guid: c4554cb5424a95a47b896b67c6aee9e9,
+    type: 3}
+  block_Foresty: {fileID: 9213852088266282708, guid: 94432c0615e23794eb0fd620853d09ba,
+    type: 3}
+  block_Harsh: {fileID: 9213852088266282708, guid: 59ad040e7a5faa440944686a972212d7,
+    type: 3}
+  block_Sandy: {fileID: 9213852088266282708, guid: bdc4b9b576015c64eaaeb4d61565e490,
     type: 3}
   block_Rock: {fileID: 2365593111430259882, guid: fe50903ddacf5cb4bb327df48659049d,
     type: 3}
@@ -2649,8 +2655,10 @@ MonoBehaviour:
   spawner_Tree_Pool:
   - {fileID: 137650, guid: 826b6a0b570e8460990010fa615b5a2a, type: 3}
   - {fileID: 6941765000743290380, guid: c60edd51c065ceb46b345849a03bc106, type: 3}
-  spawner_Plants_Pool:
+  spawner_ForestPlants_Pool:
   - {fileID: 5302218853581083112, guid: 641183f63cd47b249868cb6ff7058608, type: 3}
+  spawner_Plants_Pool:
+  - {fileID: 5302218853581083112, guid: 998007dcdf42c91458e3dcf93c4bf3a3, type: 3}
 --- !u!4 &891263350
 Transform:
   m_ObjectHideFlags: 0
@@ -3814,7 +3822,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1162693975}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3825,8 +3833,8 @@ RectTransform:
   - {fileID: 5776620}
   - {fileID: 916687542}
   - {fileID: 1046777022}
-  m_Father: {fileID: 2116918072}
-  m_RootOrder: 2
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5161,7 +5169,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.086666666
+  m_Size: 0.025666667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7246,7 +7254,6 @@ RectTransform:
   m_Children:
   - {fileID: 654630878}
   - {fileID: 1125245281}
-  - {fileID: 1162693976}
   - {fileID: 28577390}
   m_Father: {fileID: 0}
   m_RootOrder: 7
