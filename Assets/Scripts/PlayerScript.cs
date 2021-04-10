@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    public GameObject controllerObj;
+    private GameControllerScript controller;
+
+    void Start()
+    {
+        controller = controllerObj.GetComponent<GameControllerScript>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Mushroom"))
@@ -17,6 +25,9 @@ public class PlayerScript : MonoBehaviour
             Particle[0].Play();
             Particle[1].Play();
             other.enabled = false;
+
+            controller.PickUpShroomAtPosition(other.gameObject.transform.position);
+
             StartCoroutine(Destroy_shroom(other));
 
         }
