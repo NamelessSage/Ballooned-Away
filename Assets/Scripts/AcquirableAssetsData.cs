@@ -127,6 +127,7 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_Resources.Add(new ResourceUnit(1, "Wood"));
         AVAIALABE_Resources.Add(new ResourceUnit(2, "Stone"));
         AVAIALABE_Resources.Add(new ResourceUnit(3, "Iron"));
+        AVAIALABE_Resources.Add(new ResourceUnit(4, "Food"));
 
         //AVAIALABE_Resources.Add(new ResourceUnit(id -  from 1 to ..., name - string));
     }
@@ -136,8 +137,9 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_GameItems.Add(new GameItem(1, "Axe", null));
         AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", null));
         AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", null));
-        AVAIALABE_GameItems.Add(new GameItem(4, "Apple", null));
-        AVAIALABE_GameItems.Add(new GameItem(5, "Rock", null));
+        AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Campfire", null));
+        AVAIALABE_GameItems.Add(new GameItem(5, "Apple", null));
+        AVAIALABE_GameItems.Add(new GameItem(6, "Rock", null));
     }
 }
 

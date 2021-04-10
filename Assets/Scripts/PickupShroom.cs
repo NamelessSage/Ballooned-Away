@@ -11,6 +11,7 @@ public class PickupShroom : MonoBehaviour
     private AudioSource audio;
     private Collider coll;
     public int force = 100;
+
     private void Start()
     {
         shroom = transform.gameObject;
@@ -23,7 +24,7 @@ public class PickupShroom : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (gameObject.CompareTag("Redshroom") )
+        if (gameObject.CompareTag("Redshroom"))
         {
             if (other.CompareTag("Player"))
             {
