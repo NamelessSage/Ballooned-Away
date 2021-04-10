@@ -65,13 +65,18 @@ public class TerrainGenerator : MonoBehaviour
     private float forest_XOffset = 0;                // Perlin noise X offset (Should be Random by Default)
     private float forest_YOffset = 0;                // Perlin noise Y offset (Should be Random by Default)
 
+    private float plants_MinBoundary = 0.01f;           // Regulates how far from water the plants begin to spawn
+    private float plants_MaxBoundary = 0.01f;           // Regulates how far from the edges of forests and heights will plants begin to spawn
+    private float plants_Density = 0.2f;    // How dense
+
+
     [Range(0, 100)]
     public int forest_PlantsToTrees_ratio = 10;     // Regulates how often plants should spawn in the foest
     // =========================
 
 
     // Water features settings
-    private float WaterCoverage = 0.15f;
+    private float WaterCoverage = 0.15f;            // Regulates perecentage of water covering the grass area
     // =========================
 
 
@@ -85,7 +90,7 @@ public class TerrainGenerator : MonoBehaviour
     public GameObject layer_Ground;                // Grass (ground) terrain parts stored here
     public GameObject layer_Rocks;                 // Walkable rocks (around mountains) terrain parts stored here
     public GameObject layer_Mountains;             // Mountains (unwalkable) terrain parts stored here
-    public GameObject layer_Forests;               // Forests and *vegetation?* objects stored here
+    public GameObject layer_Plants;                // Forests and *vegetation?* objects stored here
     public GameObject layer_Waters;                // Lakes, rivers terrain parts stored here
 
     public GameObject layer_parent_Terrain;        // Main parent where all layers stored
@@ -95,13 +100,18 @@ public class TerrainGenerator : MonoBehaviour
 
     // Terrain parts, objects GameObject references
     public GameObject block_Grass;
+    public GameObject block_Foresty;
+    public GameObject block_Harsh;
+    public GameObject block_Sandy;
+
     public GameObject block_Rock;
     public GameObject block_Mountain;
     public GameObject block_Water;
 
 
     [Header("Trees Spawn Pool")] public GameObject[] spawner_Tree_Pool;
-    [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
+    [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_ForestPlants_Pool;
+    [Header("Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
     // =========================
 
 
@@ -163,13 +173,14 @@ public class TerrainGenerator : MonoBehaviour
         ResetArrays(xSize, ySize);
         Generate_Surface(island);
         Generate_Forests(island);
+        Generate_Plants(island);
     }
 
     #region world pre-loading
     void ClearMap()
     {
         ClearObjectChildren(layer_Ground);
-        ClearObjectChildren(layer_Forests);
+        ClearObjectChildren(layer_Plants);
         ClearObjectChildren(layer_Rocks);
         ClearObjectChildren(layer_Mountains);
         ClearObjectChildren(layer_Waters);
@@ -249,7 +260,7 @@ public class TerrainGenerator : MonoBehaviour
     void Generate_Forests(int[,] map)
     {
         bool spawn_Trees = (spawner_Tree_Pool.Length > 0);
-        bool spawn_Plants = (spawner_Plants_Pool.Length > 0);
+        bool spawn_Plants = (spawner_ForestPlants_Pool.Length > 0);
 
         for (int i = 0; i < map.GetLength(0); i++)
         {
@@ -291,6 +302,57 @@ public class TerrainGenerator : MonoBehaviour
             }
         }
     }
+
+    void Generate_Plants(int[,] map)
+    {
+        bool spawn_Plants = (spawner_Plants_Pool.Length > 0);
+        if (spawn_Plants)
+        {
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    if (map[i, j] == 1)
+                    {
+                        string current_block_tag = grid_Terrain_Objects[i, j].tag;
+                        float p_val_ter = GetPerlinVal(i, j, terrain_PerlinScale, terrain_XOffset, terrain_YOffset);
+                        float p_val_veg = GetPerlinVal(i, j, forest_PerlinScale, forest_XOffset, forest_YOffset);
+
+                        if (/*!current_block_tag.Equals("Mountain") &&
+                            !current_block_tag.Equals("Water") &&
+                            !current_block_tag.Equals("Rock") &&*/
+                            p_val_ter > (WaterCoverage + plants_MinBoundary) && p_val_ter < ((MountainsCoverage * RockAmount) - plants_MaxBoundary) &&
+                            p_val_veg > (ForestCoverage + plants_MaxBoundary))
+                        {
+                            float distMaxR = (MountainsCoverage * RockAmount) - ((MountainsCoverage * RockAmount) - plants_MaxBoundary);
+                            float distMaxF = (ForestCoverage + plants_MaxBoundary) - (ForestCoverage);
+
+                            float distMax = distMaxR;
+                            if (distMaxR > distMaxF) distMax = distMaxF;
+
+                            float distMin = (WaterCoverage + plants_MinBoundary) - WaterCoverage;
+
+                            float prop = (distMax / distMin);// * plants_Density;
+                            if (distMax > distMin) prop = distMin / distMax;
+
+                            prop = prop * plants_Density;
+
+                            int chance = Random.Range(0, 101);
+
+                            if (chance <= prop * 100)
+                            {
+                                Spawner_Plant(i, j);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
     #endregion
 
 
@@ -369,11 +431,32 @@ public class TerrainGenerator : MonoBehaviour
         grid_Vegetation_Objects[x, z] = obj;
     }
 
+    private void Spawner_Plant(int x, int z)
+    {
+        GameObject obj = SpawnPlant(x, z);
+        grid_Vegetation_Objects[x, z] = obj;
+    }
+
     // --------------------------------------------
     // Private 
     private GameObject SpawnGrass(int i, int j)
     {
-        GameObject grass = Instantiate(block_Grass);
+        GameObject grass = null;
+
+        float p_val_ter = GetPerlinVal(i, j, terrain_PerlinScale, terrain_XOffset, terrain_YOffset);
+        float p_val_veg = GetPerlinVal(i, j, forest_PerlinScale, forest_XOffset, forest_YOffset);
+
+        float add = 0.2f;
+
+        if (p_val_ter >= WaterCoverage && p_val_ter <= WaterCoverage + 0.1f && p_val_veg > ForestCoverage - 0.06f)
+            grass = Instantiate(block_Sandy);
+        else if (p_val_ter <= (MountainsCoverage * RockAmount) && p_val_ter >= (MountainsCoverage * RockAmount) - 0.08f)
+            grass = Instantiate(block_Harsh);
+        else if (p_val_veg <= ForestCoverage + 0.06f)
+            grass = Instantiate(block_Foresty);
+        else
+            grass = Instantiate(block_Grass);
+
         grass.name = "Grass_" + i + "_" + j;
         grass.transform.parent = layer_Ground.transform;
 
@@ -430,7 +513,7 @@ public class TerrainGenerator : MonoBehaviour
         int whichOne = Random.Range(0, spawner_Tree_Pool.Length);
         GameObject tree = Instantiate(spawner_Tree_Pool[whichOne]);
         tree.name = "Tree_" + i + "_" + j;
-        tree.transform.parent = layer_Forests.transform;
+        tree.transform.parent = layer_Plants.transform;
 
         float height = 1f;
         if (h.Equals("Rock")) height = 1.5f;
@@ -445,14 +528,32 @@ public class TerrainGenerator : MonoBehaviour
 
     private GameObject SpawnForestPlant(int i, int j, string h)
     {
-        int whichOne = Random.Range(0, spawner_Plants_Pool.Length);
-        GameObject plant = Instantiate(spawner_Plants_Pool[whichOne]);
+        int whichOne = Random.Range(0, spawner_ForestPlants_Pool.Length);
+        GameObject plant = Instantiate(spawner_ForestPlants_Pool[whichOne]);
 
         plant.name = "FPlant_" + i + "_" + j;
-        plant.transform.parent = layer_Forests.transform;
+        plant.transform.parent = layer_Plants.transform;
 
         float height = 1f;
         if (h.Equals("Rock")) height = 1.5f;
+        int rn = Random.Range(-6, 6);
+        int rot = 90 * rn;
+
+        plant.transform.position = new Vector3(i, height, j);
+        plant.transform.rotation = new Quaternion(0, rot * (Mathf.PI / 180), 0, 1);
+
+        return plant;
+    }
+
+    private GameObject SpawnPlant(int i, int j)
+    {
+        int whichOne = Random.Range(0, spawner_Plants_Pool.Length);
+        GameObject plant = Instantiate(spawner_Plants_Pool[whichOne]);
+
+        plant.name = "Plant_" + i + "_" + j;
+        plant.transform.parent = layer_Plants.transform;
+
+        float height = 1f;
         int rn = Random.Range(-6, 6);
         int rot = 90 * rn;
 
