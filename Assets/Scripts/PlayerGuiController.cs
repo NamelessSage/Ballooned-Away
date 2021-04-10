@@ -202,7 +202,7 @@ public class PlayerGuiController : MonoBehaviour
         Current_Balloon = new CurrentBallon(newList, pad);
         ballonShopActive = true;
         
-        Debug.Log(this.name + " BallonArived?");
+    //    Debug.Log(this.name + " BallonArived?");
     }
 
     private void UpdateShop()

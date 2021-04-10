@@ -144,7 +144,7 @@ public class BalloonPad : MonoBehaviour
 
     public void Reject()
     {
-        Debug.Log(this.name + " my session was closed. Im forced to leave and will return LATER");
+        //Debug.Log(this.name + " my session was closed. Im forced to leave and will return LATER");
         transform.GetChild(3).gameObject.SetActive(false);
 
     }
