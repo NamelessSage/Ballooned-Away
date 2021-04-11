@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Sawmill : MonoBehaviour
 {
-    public GameObject ControlerObj;
     public GameObject DepsitColliderObj;
     public GameObject WithdrawObj;
     private GameControllerScript Controller;
@@ -18,7 +17,6 @@ public class Sawmill : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Controller = ControlerObj.GetComponent<GameControllerScript>();
     }
 
     // Update is called once per frame
@@ -32,6 +30,11 @@ public class Sawmill : MonoBehaviour
                 StartCoroutine(ConvertWoodToPlanks(WaitTime));
             }
         }
+    }
+
+    public void SetController(GameControllerScript script)
+    {
+        Controller = script;
     }
 
     public void AddToQueue(int aow)

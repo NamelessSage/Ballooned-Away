@@ -14,7 +14,7 @@ public class WorldInteractorTool : MonoBehaviour
     // ---------------------------------------
     private enum ActionType
     {
-        Plant_Tree,
+        Place_Building,
         Walk_To,
         Chop_Tree,
         Open_Shop,
@@ -106,6 +106,10 @@ public class WorldInteractorTool : MonoBehaviour
     private Rigidbody _rigidbody;
     private CharacterAnimation anim;
 
+    // ------
+    private GameObject bldng;
+    private bool buildingActionCall;
+    // ------
 
     void Start()
     {
@@ -174,9 +178,10 @@ public class WorldInteractorTool : MonoBehaviour
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Open_Shop));
                     }
                     // If clicked on empty grass
-                    else if (plantable)
+                    else if (plantable && buildingActionCall)
                     {
-                        AddToQue(new Action(clickPositionOnGrid, ActionType.Plant_Tree));
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Place_Building));
+                        buildingActionCall = false;
                     }
                     // If clicked on a tree
                     else if (isTree)
@@ -286,7 +291,7 @@ public class WorldInteractorTool : MonoBehaviour
 
                     break;
                 // -------------------------------------------------------------------
-                case ActionType.Plant_Tree:
+                case ActionType.Place_Building:
 
                     DetermineNextStep(onTop);
 
@@ -361,8 +366,8 @@ public class WorldInteractorTool : MonoBehaviour
 
                         break;
                     // -------------------------------------------------------------------
-                    case ActionType.Plant_Tree:
-                        PerformAction_plant_tree_at(Current_Action.dst_Pos);
+                    case ActionType.Place_Building:
+                        PerfromAction_Place_Building(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.Chop_Tree:
@@ -407,9 +412,12 @@ public class WorldInteractorTool : MonoBehaviour
         Current_Action.done = true;
     }
 
-    private void PerformAction_plant_tree_at(Vector3 pos)
+    private void PerfromAction_Place_Building(Vector3 pos)
     {
-        controller.GetTerrain().Spawn_Tree_At((int)pos.x, (int)pos.z);
+        //controller.GetTerrain().Spawn_Tree_At((int)pos.x, (int)pos.z);
+        //PositionateObjectInWorld
+        GameObject a = Instantiate(bldng);
+        controller.GetTerrain().PositionateObjectInWorld(a, new Vector3((int)pos.x, 0, (int)pos.z));
         Current_Action.done = true;
     }
 
@@ -617,5 +625,12 @@ public class WorldInteractorTool : MonoBehaviour
             selector.SetActive(true);
             selector.transform.position = newSelectroPos;
         }
+    }
+
+
+    public void NextBuildAction(GameObject a)
+    {
+        bldng = a;
+        buildingActionCall = true;
     }
 }

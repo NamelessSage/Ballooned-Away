@@ -104,6 +104,8 @@ public class AcquirableAssetsData : MonoBehaviour
     public List<ResourceUnit> AVAIALABE_Resources = new List<ResourceUnit>();
     public List<GameItem> AVAIALABE_GameItems = new List<GameItem>();
 
+    public GameObject[] buildings;
+
     void Start()
     {
         MakeRes();
@@ -135,7 +137,7 @@ public class AcquirableAssetsData : MonoBehaviour
     private void MakeItems()
     {
         AVAIALABE_GameItems.Add(new GameItem(1, "Axe", null));
-        AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", null));
+        AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", buildings[0]));
         AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", null));
         AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Campfire", null));
         AVAIALABE_GameItems.Add(new GameItem(5, "Apple", null));

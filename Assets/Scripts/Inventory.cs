@@ -320,5 +320,19 @@ public class Inventory : MonoBehaviour
 
         return array;
     }
+
+    public void DrawItem(string name)
+    {
+        int indx = Inventory_FindIndexOf_byName(name);
+        Debug.Log(indx + " beep " + " " + name);
+        if (indx > -1 && Player_Inventory[indx].item.obj != null)
+        {
+            
+            controller.PlayerSpawnBuilding(Player_Inventory[indx].item.obj);
+            Player_Inventory.RemoveAt(indx);
+            gui.UpdateBackpackUi();
+        }
+    }
+
     #endregion
 }
