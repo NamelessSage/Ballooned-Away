@@ -17,7 +17,7 @@ public class DayNightCycle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(transform.rotation.eulerAngles.x);
+        //Debug.Log(transform.rotation.eulerAngles.x);
         if (transform.rotation.eulerAngles.x>=190 && transform.rotation.eulerAngles.x<=350)
         {
             transform.RotateAround(Vector3.zero, Vector3.right,160);
