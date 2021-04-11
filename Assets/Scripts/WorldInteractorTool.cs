@@ -104,7 +104,7 @@ public class WorldInteractorTool : MonoBehaviour
     private GameObject player;
     private EventSystem EventSys;
     private Rigidbody _rigidbody;
-
+    private CharacterAnimation anim;
 
 
     void Start()
@@ -114,6 +114,7 @@ public class WorldInteractorTool : MonoBehaviour
         player = controller.playerObj;
         _rigidbody = player.GetComponent<Rigidbody>();
         selector.SetActive(false);
+        anim = player.GetComponent<CharacterAnimation>();
         
     }
     
@@ -217,9 +218,10 @@ public class WorldInteractorTool : MonoBehaviour
             //     GetNextNode();
             // }
             Vector3 dir = (target - _rigidbody.position).normalized;
-
-            _rigidbody.velocity = new Vector3(dir.x * player_Speed, _rigidbody.velocity.y, dir.z * player_Speed);
-
+            Vector3 rot = target - _rigidbody.position;
+            // _rigidbody.velocity = new Vector3(dir.x * player_Speed, _rigidbody.velocity.y, dir.z * player_Speed);
+            _rigidbody.MovePosition(_rigidbody.position + dir * player_Speed * Time.deltaTime);
+            RotatePlayer(new Vector3(dir.x, 0f, dir.z));
             //Debug.Log( target + " " +Vector3.Distance(_rigidbody.position, target));
             if (Vector3.Distance(_rigidbody.position, target) <= precision)
             {
@@ -435,8 +437,8 @@ public class WorldInteractorTool : MonoBehaviour
             if (newPath.Count > 0)
             {
                 path = newPath;
-
                 pathFound = true;
+                anim._animRun = true;
                 float y = 0;
                 if (controller.GetTerrain().Get_Terrian_Object_From_Grid(path[0].X, path[0].Z).CompareTag("Rock"))
                 {
@@ -462,13 +464,13 @@ public class WorldInteractorTool : MonoBehaviour
     {
         if (path != null)
         {
+            anim._animRun = false;
             pathFound = false;
             curNode = 0;
             path.Clear();
             path = null;
         }
-
-
+        
     }
 
     private void GetNextNode()
@@ -486,7 +488,6 @@ public class WorldInteractorTool : MonoBehaviour
                 return;
             }
             
-
             curNode++;
             if (CheckIfJumpNeeded())
             {
@@ -560,7 +561,12 @@ public class WorldInteractorTool : MonoBehaviour
     private void PlayerJump()
     {
         // _rigidbody.AddForce(0,5f,0);
-        _rigidbody.velocity = Vector3.up * 5.7f;
+        _rigidbody.velocity = Vector3.up * 5.8f;
+    }
+    
+    private void RotatePlayer(Vector3 dir)
+    {
+        _rigidbody.MoveRotation(Quaternion.LookRotation(dir));
     }
 
 
