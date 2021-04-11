@@ -4235,6 +4235,7 @@ MonoBehaviour:
   terrainObj: {fileID: 891263348}
   playerObj: {fileID: 1776559997}
   uiObj: {fileID: 2116918068}
+  interactroObj: {fileID: 182406570}
   balloon_Pad_Prefab: {fileID: 6157364954012186749, guid: 3056a94d6f8a769489c92cde9845e54d,
     type: 3}
   balloon_Model: {fileID: 926040784799367400, guid: 09999dba8b1c63a4eb5de6c98fd4c7ad,
@@ -4253,6 +4254,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AVAIALABE_Resources: []
   AVAIALABE_GameItems: []
+  buildings:
+  - {fileID: 1892226146590632690, guid: 960c8eb65a0214449bf98a27cb769ec7, type: 3}
 --- !u!114 &1297849962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5321,7 +5324,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.185
+  m_Size: 0.064
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
