@@ -5,13 +5,15 @@ using UnityEngine;
 public class Bush : MonoBehaviour
 {
     private GameObject game;
-    public int force = 100;
+    public int force = 500;
+    private AudioSource audio;
     private Animator animator;
     private bool push = false;
     private void Start()
     {
         game = transform.gameObject;
         animator = GetComponent<Animator>();
+        audio = transform.gameObject.GetComponent<AudioSource>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -22,6 +24,7 @@ public class Bush : MonoBehaviour
                 if (push == false)
                 {
                     animator.Play("Bushpush");
+                    audio.Play();
                     StartCoroutine(Push());
                     
                 }

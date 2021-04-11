@@ -2547,9 +2547,11 @@ MonoBehaviour:
   - {fileID: 6941765000743290380, guid: c60edd51c065ceb46b345849a03bc106, type: 3}
   spawner_ForestPlants_Pool:
   - {fileID: 5302218853581083112, guid: 641183f63cd47b249868cb6ff7058608, type: 3}
+  - {fileID: 5302218853581083112, guid: 53b8a37f1ea89724eaeee1aa963782a2, type: 3}
   spawner_Plants_Pool:
   - {fileID: 5302218853581083112, guid: 998007dcdf42c91458e3dcf93c4bf3a3, type: 3}
   - {fileID: 5302218853581083112, guid: 53b8a37f1ea89724eaeee1aa963782a2, type: 3}
+  - {fileID: 5302218853581083112, guid: 73bdae02a16b7c645b25ac2cfaadbd0e, type: 3}
 --- !u!4 &891263350
 Transform:
   m_ObjectHideFlags: 0
@@ -3043,7 +3045,7 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.12415449, g: 0.80091995, b: 0.8490566, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -5175,7 +5177,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.066
+  m_Size: 0.022666667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
