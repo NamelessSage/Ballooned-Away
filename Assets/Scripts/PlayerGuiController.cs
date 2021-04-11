@@ -296,18 +296,22 @@ public class PlayerGuiController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("1");
+            DrawItem(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("2");
+            DrawItem(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Debug.Log("3");
+            DrawItem(2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             Debug.Log("4");
+            DrawItem(3);
         }
         else if (Input.GetKeyDown(KeyCode.Tab))
         {
@@ -315,6 +319,17 @@ public class PlayerGuiController : MonoBehaviour
             OpenInv();
 
             UpdateBackpackUi();
+        }
+    }
+
+    private void DrawItem(int i)
+    {
+        if (BackpackList[i] != null)
+        {
+            string nam = BackpackList[i].name;
+            BackpackList[i] = null;
+            playerINV.DrawItem(nam);
+            
         }
     }
 
@@ -355,7 +370,7 @@ public class PlayerGuiController : MonoBehaviour
         }
     }
 
-    private void UpdateBackpackUi()
+    public void UpdateBackpackUi()
     {
         for (int i = 0; i < BackpackList.Length; i++)
         {
