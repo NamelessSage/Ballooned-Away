@@ -11,6 +11,8 @@ TagManager:
   - Grass
   - Mushroom
   - BalloonPad
+  - Redshroom
+  - Bush
   layers:
   - Default
   - TransparentFX
