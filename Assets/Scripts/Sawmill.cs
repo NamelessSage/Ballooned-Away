@@ -71,6 +71,7 @@ public class Sawmill : MonoBehaviour
         yield return new WaitForSeconds(2);
         transform.GetChild(0).gameObject.SetActive(true);
         transform.GetChild(4).gameObject.GetComponent<ParticleSystem>().Play();
+        transform.GetChild(4).gameObject.GetComponents<AudioSource>()[1].Play();
         Destroy(transform.GetChild(3).gameObject);
     }
 
