@@ -18,7 +18,9 @@ public class WorldInteractorTool : MonoBehaviour
         Walk_To,
         Chop_Tree,
         Open_Shop,
-        PickUpShoorm
+        PickUpShoorm,
+        DropResources,
+        TakeResource
     }
 
     #region Action Queue class
@@ -177,6 +179,14 @@ public class WorldInteractorTool : MonoBehaviour
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Open_Shop));
                     }
+                    else if (hit.collider.gameObject.CompareTag("Giver"))
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.TakeResource));
+                    }
+                    else if (hit.collider.gameObject.CompareTag("Depositor"))
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.DropResources));
+                    }
                     // If clicked on empty grass
                     else if (plantable && buildingActionCall)
                     {
@@ -291,30 +301,13 @@ public class WorldInteractorTool : MonoBehaviour
 
                     break;
                 // -------------------------------------------------------------------
-                case ActionType.Place_Building:
+                default:
 
                     DetermineNextStep(onTop);
 
                     break;
-                // -------------------------------------------------------------------
-                case ActionType.Chop_Tree:
 
-                    DetermineNextStep(onTop);
-
-                    break;
-                // -------------------------------------------------------------------
-                case ActionType.Open_Shop:
-
-                    DetermineNextStep(onTop);
-
-                    break;
-                // -------------------------------------------------------------------
-                case ActionType.PickUpShoorm:
-
-                    DetermineNextStep(onTop);
-
-                    break;
-                    // -------------------------------------------------------------------
+               // -------------------------------------------------------------------
             }
         }
 
@@ -371,7 +364,7 @@ public class WorldInteractorTool : MonoBehaviour
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.Chop_Tree:
-                        PerformAction_chop_tree_at(Current_Action.dst_Pos);
+                        PerformAction_chop_resource_at(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.Open_Shop:
@@ -380,11 +373,20 @@ public class WorldInteractorTool : MonoBehaviour
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.PickUpShoorm:
-                        Debug.Log("Shroom PIKED");
                         Pick_Shoorm(Current_Action.dst_Pos);
                         Current_Action.done = true;
                         break;
-                        // -------------------------------------------------------------------
+                    // -------------------------------------------------------------------
+                    case ActionType.DropResources:
+                        PerformAction_drop_resources_at(Current_Action.dst_Pos);
+                        Current_Action.done = true;
+                        break;
+                    // -------------------------------------------------------------------
+                    case ActionType.TakeResource:
+                        PerformAction_take_resources_at(Current_Action.dst_Pos);
+                        Current_Action.done = true;
+                        break;
+                    // -------------------------------------------------------------------
                 }
 
             }
@@ -403,12 +405,36 @@ public class WorldInteractorTool : MonoBehaviour
     // --------------------------------------
 
 
-    private void PerformAction_chop_tree_at(Vector3 pos)
+    private void PerformAction_chop_resource_at(Vector3 pos)
     {
+        GameObject possibeResource = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
+        GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
+        possibeResourceScript.Perform_Chop();
+        Current_Action.done = true;
+    }
 
-        GameObject treeObj = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
-        tree treescript = treeObj.GetComponent<tree>();
-        treescript.Perform_Chop();
+    private void PerformAction_drop_resources_at(Vector3 pos)
+    {
+        GameObject buildingObj = controller.GetTerrain().Get_Interactable_Object_From_Grid((int)pos.x, (int)pos.z);
+        BuildingScript building = buildingObj.GetComponent<BuildingScript>();//
+        string whatItTakes = building.What_I_Take;
+        if (controller.RequestResourceFromPlayerInventory(whatItTakes, 1))
+        {
+            building.Deposit(1);
+        }
+        Current_Action.done = true;
+    }
+
+    private void PerformAction_take_resources_at(Vector3 pos)
+    {
+        GameObject buildingObj = controller.GetTerrain().Get_Interactable_Object_From_Grid((int)pos.x, (int)pos.z);
+        BuildingScript building = buildingObj.GetComponent<BuildingScript>();//
+        int amnt = building.Take();
+        string whatItGives = building.What_I_Give;
+        if (amnt > 0)
+        {
+            controller.AddResourceToPlayer(whatItGives, amnt);
+        }
         Current_Action.done = true;
     }
 

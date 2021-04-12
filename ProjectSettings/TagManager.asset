@@ -13,6 +13,10 @@ TagManager:
   - BalloonPad
   - Redshroom
   - Bush
+  - LastPosition
+  - StoneOre
+  - Depositor
+  - Giver
   layers:
   - Default
   - TransparentFX

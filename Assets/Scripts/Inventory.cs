@@ -94,12 +94,16 @@ public class Inventory : MonoBehaviour
             if (res.amount <= 0)
             {
                 Player_Resources.RemoveAt(index);
+                gui.UpdateResourcesTrackers(name);
                 return 0;
             }
             else
             {
+                gui.UpdateResourcesTrackers(name);
                 return res.amount;
             }
+
+            
         }
 
         Debug.Log("Such " + name + " does not exist in resources");

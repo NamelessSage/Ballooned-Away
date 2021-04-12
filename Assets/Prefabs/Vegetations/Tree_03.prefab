@@ -4987,8 +4987,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
-  treeHealth: 100
+  objectHealth: 50
   progress: 0
+  resourceName: Wood
 --- !u!65 &-6862973654210433345
 BoxCollider:
   m_ObjectHideFlags: 0
