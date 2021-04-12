@@ -37,7 +37,6 @@ public class PickupShroom : MonoBehaviour
 
     public void pickup()
     {
-        //shroom = transform.gameObject;
         UpdateShroom();
         
     }
