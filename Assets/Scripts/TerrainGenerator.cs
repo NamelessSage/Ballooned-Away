@@ -112,6 +112,7 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Trees Spawn Pool")] public GameObject[] spawner_Tree_Pool;
     [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_ForestPlants_Pool;
     [Header("Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
+    [Header("Rock Spawn Pool")] public GameObject[] spawner_Rocks_Pool;
     // =========================
 
 
@@ -174,6 +175,7 @@ public class TerrainGenerator : MonoBehaviour
         Generate_Surface(island);
         Generate_Forests(island);
         Generate_Plants(island);
+        Generate_Ores(island);
     }
 
     #region world pre-loading
@@ -351,6 +353,22 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
+    void Generate_Ores(int[,] map)
+    {
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                string current_block_tag = grid_Terrain_Objects[i, j].tag;
+                float p_val = GetPerlinVal(i, j, terrain_PerlinScale, terrain_XOffset, terrain_YOffset);
+
+                if (map[i, j] == 1 && p_val >= (MountainsCoverage * RockAmount * 1.1f) && p_val < (MountainsCoverage * 1) && grid_Vegetation_Objects[i, j] == null)
+                {
+                    Spawner_Ore(i, j);
+                }
+            }
+        }
+    }
 
 
     #endregion
@@ -438,6 +456,17 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     // --------------------------------------------
+    // Ores
+    private void Spawner_Ore(int x, int z)
+    {
+        if (grid_Vegetation_Objects[x, z] == null && IsPlantable(x, z))
+        {
+            GameObject obj = SpawnOre(x, z);
+            grid_Vegetation_Objects[x, z] = obj;
+        }
+    }
+
+    // --------------------------------------------
     // Private 
     private GameObject SpawnGrass(int i, int j)
     {
@@ -522,6 +551,23 @@ public class TerrainGenerator : MonoBehaviour
         tree.transform.rotation = new Quaternion(0, rot * (Mathf.PI / 180), 0, 1);
 
         return tree;
+    }
+
+    private GameObject SpawnOre(int i, int j)
+    {
+        int whichOne = Random.Range(0, spawner_Rocks_Pool.Length);
+        GameObject ore = Instantiate(spawner_Rocks_Pool[whichOne]);
+        ore.name = "Ore_" + i + "_" + j;
+        ore.transform.parent = layer_Plants.transform;
+
+        float height = 1.5f;
+        int rn = Random.Range(-6, 6);
+        int rot = 90 * rn;
+
+        ore.transform.position = new Vector3(i, height, j);
+        ore.transform.rotation = new Quaternion(0, rot * (Mathf.PI / 180), 0, 1);
+
+        return ore;
     }
 
     private GameObject SpawnForestPlant(int i, int j, string h)
@@ -629,6 +675,18 @@ public class TerrainGenerator : MonoBehaviour
         return null;
     }
 
+    public GameObject Get_Interactable_Object_From_Grid(int i, int j)
+    {
+        GameObject located = grid_Interactable_Objects[i, j];                // Located Terrain object in the world
+
+        if (located != null)
+        {
+            return located;
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// Checks if anything can be planted on the given X and Z
     /// </summary>
@@ -654,7 +712,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
 
-        if (located != null && located.CompareTag("Tree"))
+        if (located != null && (located.CompareTag("Tree") || located.CompareTag("StoneOre")))
         {
             return true;
         }
@@ -690,8 +748,8 @@ public class TerrainGenerator : MonoBehaviour
         if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
             return false;
 
-        if ((grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
-            (grid_Vegetation_Objects[i, j] == null || !grid_Vegetation_Objects[i, j].tag.Equals("Tree")))
+        if (!IsTree(i, j) && (grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
+            grid_Interactable_Objects[i, j] == null)
         {
             return true;
         }
