@@ -94,12 +94,16 @@ public class Inventory : MonoBehaviour
             if (res.amount <= 0)
             {
                 Player_Resources.RemoveAt(index);
+                gui.UpdateResourcesTrackers(name);
                 return 0;
             }
             else
             {
+                gui.UpdateResourcesTrackers(name);
                 return res.amount;
             }
+
+            
         }
 
         Debug.Log("Such " + name + " does not exist in resources");
@@ -320,5 +324,19 @@ public class Inventory : MonoBehaviour
 
         return array;
     }
+
+    public void DrawItem(string name)
+    {
+        int indx = Inventory_FindIndexOf_byName(name);
+        Debug.Log(indx + " beep " + " " + name);
+        if (indx > -1 && Player_Inventory[indx].item.obj != null)
+        {
+            
+            controller.PlayerSpawnBuilding(Player_Inventory[indx].item.obj);
+            Player_Inventory.RemoveAt(indx);
+            gui.UpdateBackpackUi();
+        }
+    }
+
     #endregion
 }

@@ -8,12 +8,14 @@ public class GameControllerScript : MonoBehaviour
     public GameObject terrainObj;
     public GameObject playerObj;
     public GameObject uiObj;
+    public GameObject interactroObj;
 
     private TerrainGenerator terrain;
     private PlayerGuiController GUI;
     private AcquirableAssetsData ResourseAndItemManager;
     private Inventory PlrInventory;
     private BalloonPad Ballon_pad_script;
+    private WorldInteractorTool interactor;
 
     //-------------------------------------
 
@@ -32,6 +34,7 @@ public class GameControllerScript : MonoBehaviour
         GUI = uiObj.GetComponent<PlayerGuiController>();
         ResourseAndItemManager = GetComponent<AcquirableAssetsData>();
         PlrInventory = GetComponent<Inventory>();
+        interactor = interactroObj.GetComponent<WorldInteractorTool>();
 
         spawnPlayer();
         spawnBalloonPad();
@@ -40,10 +43,28 @@ public class GameControllerScript : MonoBehaviour
 
     //------------------------------------------
 
-    public void UpdateWoodAmount()
+    public void AddResourceToPlayer(string name, int amnt = 0)
     {
-        int i = Random.Range(1, 10);
-        PlrInventory.Resources_AddToResources("Wood", i);
+        if (amnt == 0)
+        {
+            int i = Random.Range(1, 5);
+            PlrInventory.Resources_AddToResources(name, i);
+        }
+        else
+        {
+            PlrInventory.Resources_AddToResources(name, amnt);
+        }
+        
+    }
+
+    public bool RequestResourceFromPlayerInventory(string name, int amount)
+    {
+        int a = PlrInventory.Resources_ConsumeResource(name, amount);
+        if (a > -1)
+        {
+            return true;
+        }
+        return false;
     }
 
 
@@ -133,6 +154,11 @@ public class GameControllerScript : MonoBehaviour
 
         terrain.RemovePlantFromGrid((int)pos.x, (int)pos.z);
         return null;
+    }
+
+    public void PlayerSpawnBuilding(GameObject bldng)
+    {
+        interactor.NextBuildAction(bldng);
     }
     #endregion
 

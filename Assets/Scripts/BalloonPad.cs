@@ -66,9 +66,11 @@ public class BalloonPad : MonoBehaviour
     /// </summary>
     private class TradeLists
     {
-        public Trade[] BluePrints = { new Trade("Blueprint: Lumbermill", 1, "Wood", 100, TradeType.Blueprint),
-                                      new Trade("Blueprint: Blacksmith", 1, "Stone", 100, TradeType.Blueprint),
-                                      new Trade("Blueprint: Campfire", 1, "Wood", 10, TradeType.Blueprint) };
+        //public Trade[] BluePrints = { new Trade("Blueprint: Lumbermill", 1, "Wood", 1, TradeType.Blueprint),
+        //                              new Trade("Blueprint: Blacksmith", 1, "Stone", 100, TradeType.Blueprint),
+        //                              new Trade("Blueprint: Campfire", 1, "Wood", 10, TradeType.Blueprint) };
+        public Trade[] BluePrints = { new Trade("Blueprint: Lumbermill", 1, "Wood", 1, TradeType.Blueprint),
+                                      new Trade("Blueprint: Blacksmith", 1, "Stone", 1, TradeType.Blueprint)};
 
         public Trade[] Resources =  { new Trade("Wood", 20, "Stone", 10, TradeType.Resource),
                                       new Trade("Stone", 10, "Wood", 20, TradeType.Resource),

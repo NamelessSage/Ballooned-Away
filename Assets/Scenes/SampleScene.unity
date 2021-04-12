@@ -2552,6 +2552,8 @@ MonoBehaviour:
   - {fileID: 5302218853581083112, guid: 998007dcdf42c91458e3dcf93c4bf3a3, type: 3}
   - {fileID: 5302218853581083112, guid: 53b8a37f1ea89724eaeee1aa963782a2, type: 3}
   - {fileID: 5302218853581083112, guid: 73bdae02a16b7c645b25ac2cfaadbd0e, type: 3}
+  spawner_Rocks_Pool:
+  - {fileID: 117232, guid: d2f192c371f0f7f408ef6d3471aa68ca, type: 3}
 --- !u!4 &891263350
 Transform:
   m_ObjectHideFlags: 0
@@ -3886,7 +3888,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 91b2e4f1afbd50f40a7e806714464e35, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.541
       objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 91b2e4f1afbd50f40a7e806714464e35, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4091,6 +4093,7 @@ MonoBehaviour:
   terrainObj: {fileID: 891263348}
   playerObj: {fileID: 1776559997}
   uiObj: {fileID: 2116918068}
+  interactroObj: {fileID: 182406570}
   balloon_Pad_Prefab: {fileID: 6157364954012186749, guid: 3056a94d6f8a769489c92cde9845e54d,
     type: 3}
   balloon_Model: {fileID: 926040784799367400, guid: 09999dba8b1c63a4eb5de6c98fd4c7ad,
@@ -4109,6 +4112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AVAIALABE_Resources: []
   AVAIALABE_GameItems: []
+  buildings:
+  - {fileID: 1892226146590632690, guid: 960c8eb65a0214449bf98a27cb769ec7, type: 3}
+  - {fileID: 5069494846007109948, guid: 46767afcafe60fa4c98744d2cd853b85, type: 3}
 --- !u!114 &1297849962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5177,7 +5183,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.022666667
+  m_Size: 0
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
