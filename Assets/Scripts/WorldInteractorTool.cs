@@ -94,6 +94,9 @@ public class WorldInteractorTool : MonoBehaviour
     [Range(0, 1)]
     public float precision = 0.1f;
 
+    public int chop_power = 1;
+    public int loot_reward = 1;
+
     public GameObject GameController;
     public GameObject selector;
     public GameObject EventSysObj;
@@ -107,6 +110,7 @@ public class WorldInteractorTool : MonoBehaviour
     private EventSystem EventSys;
     private Rigidbody _rigidbody;
     private CharacterAnimation anim;
+    private Skills Skills;
 
     // ------
     private GameObject bldng;
@@ -121,7 +125,8 @@ public class WorldInteractorTool : MonoBehaviour
         _rigidbody = player.GetComponent<Rigidbody>();
         selector.SetActive(false);
         anim = player.GetComponent<CharacterAnimation>();
-        
+        Skills = player.GetComponent<Skills>();
+        Skills.SetPlayer(this);
     }
     
 
@@ -225,19 +230,12 @@ public class WorldInteractorTool : MonoBehaviour
         // movement block
         if (pathFound)
         {
-            // Vector3 dir = target - player.transform.position;
-            //
-            // player.transform.Translate(dir.normalized * player_Speed * Time.deltaTime, Space.World);
-            // if (Vector3.Distance(player.transform.position, target) <= precision)
-            // {
-            //     GetNextNode();
-            // }
             Vector3 dir = (target - _rigidbody.position).normalized;
-            Vector3 rot = target - _rigidbody.position;
-            // _rigidbody.velocity = new Vector3(dir.x * player_Speed, _rigidbody.velocity.y, dir.z * player_Speed);
+            Vector3 oldpos = _rigidbody.position;
             _rigidbody.MovePosition(_rigidbody.position + dir * player_Speed * Time.deltaTime);
+            float distance = Vector3.Distance(oldpos, _rigidbody.position);
+            Skills.AddDistance(distance);
             RotatePlayer(new Vector3(dir.x, 0f, dir.z));
-            //Debug.Log( target + " " +Vector3.Distance(_rigidbody.position, target));
             if (Vector3.Distance(_rigidbody.position, target) <= precision)
             {
                 GetNextNode();
@@ -409,7 +407,8 @@ public class WorldInteractorTool : MonoBehaviour
     {
         GameObject possibeResource = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
         GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
-        possibeResourceScript.Perform_Chop();
+        possibeResourceScript.Perform_Chop(chop_power, loot_reward);
+        Skills.AddChop();
         Current_Action.done = true;
     }
 
@@ -484,7 +483,6 @@ public class WorldInteractorTool : MonoBehaviour
                 }
                 if (CheckIfJumpNeeded())
                 {
-                    Debug.Log("jump1");
                     PlayerJump();
                 }
                 target = new Vector3(path[0].X, y, path[0].Z);
@@ -525,7 +523,6 @@ public class WorldInteractorTool : MonoBehaviour
             curNode++;
             if (CheckIfJumpNeeded())
             {
-                Debug.Log("jump");
                 PlayerJump();
             }
             float y = 0;

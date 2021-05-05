@@ -38,15 +38,14 @@ public class GatherableObject : MonoBehaviour
     }
 
 
-    public void Perform_Chop()
+    public void Perform_Chop(int chop_power, int loot_reward)
     {
-        objectHealth--;
-        progress++;
-        UpdateHealth();
-
+        objectHealth -= chop_power;
+        progress += chop_power;
+        UpdateHealth(loot_reward);
     }
 
-    private void UpdateHealth()
+    private void UpdateHealth(int loot_reward)
     {
         wasInteracted = true;
         if (objectHealth <= 0 && isKilled == false)
@@ -80,7 +79,7 @@ public class GatherableObject : MonoBehaviour
         if (progress >= 10)
         {
             progress = progress - 10;
-            controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName);
+            controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
         }
     }
 
