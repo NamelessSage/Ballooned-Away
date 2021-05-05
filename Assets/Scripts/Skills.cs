@@ -12,10 +12,14 @@ public class Skills : MonoBehaviour
     public int totalChop = 0;
     private int _currentChop = 0;
     private bool _skillTreeActive;
+    public int loot_reward;
+    public int chop_power;
     
     public void SetPlayer(WorldInteractorTool p)
     {
         _player = p;
+        loot_reward = _player.loot_reward;
+        chop_power = _player.chop_power;
     }
 
     public void AddDistance(float distance)
@@ -47,19 +51,19 @@ public class Skills : MonoBehaviour
 /// <param name="flag"></param>
     public void CheckSkillPoints(int flag)
     {
-        if (flag == 0 && skillPoints > 0)
+        if (flag == 0 && skillPoints > 0 && _player.player_Speed < 5)
         {
             IncreaseMoveSpeed();
             skillPoints--;
         }
 
-        if (flag==1 && skillPoints > 0)
+        if (flag==1 && skillPoints > 0 && _player.chop_power < 5)
         {
             IncreaseChopPower();
             skillPoints--;
         }
         
-        if (flag==2 && skillPoints > 0)
+        if (flag==2 && skillPoints > 0 && _player.loot_reward < 5)
         {
             IncreaseResourceReward();
             skillPoints--;
@@ -69,6 +73,7 @@ public class Skills : MonoBehaviour
     private void IncreaseResourceReward()
     {
         _player.loot_reward += 1;
+        loot_reward += 1;
     }
 
     private void IncreaseMoveSpeed()
@@ -79,5 +84,6 @@ public class Skills : MonoBehaviour
     private void IncreaseChopPower()
     {
         _player.chop_power += 1;
+        chop_power += 1;
     }
 }
