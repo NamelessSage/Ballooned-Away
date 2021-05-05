@@ -92,10 +92,10 @@ public class PlayerGuiController : MonoBehaviour
     public GameObject ballonShopUI;
     public GameObject backpackUI;
     public GameObject inventoryUI;
-
     public GameObject trackersPanel;
     public GameObject balloonShopMainSlotsPanel;
     public GameObject inventorySlotsPanel;
+    public GameObject skillTreeUi;
     // ---------------------------------
 
     // Script references
@@ -109,6 +109,8 @@ public class PlayerGuiController : MonoBehaviour
 
     private bool inventoryOpen = false;
 
+    private bool skillTreeActive = false;
+
 
     void Start()
     {
@@ -120,6 +122,7 @@ public class PlayerGuiController : MonoBehaviour
 
         controller = controllerObj.GetComponent<GameControllerScript>();
         playerINV = controller.GetComponent<Inventory>();
+        skillTreeUi.SetActive(false);
 
 
         CloseShop();
@@ -219,7 +222,7 @@ public class PlayerGuiController : MonoBehaviour
                 
             balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(0).gameObject.GetComponent<Text>().text = Current_Balloon.TradeList[i].name + amount;
             string priceText = Current_Balloon.TradeList[i].priceName + " x" + Current_Balloon.TradeList[i].priceAmount;
-            balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(2).gameObject.GetComponent<Text>().text = priceText; ;
+            balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(2).gameObject.GetComponent<Text>().text = priceText;
         }
     }
 
@@ -319,6 +322,11 @@ public class PlayerGuiController : MonoBehaviour
             OpenInv();
 
             UpdateBackpackUi();
+        }
+        else if (Input.GetKeyDown(KeyCode.P))
+        {
+            skillTreeActive = !skillTreeActive;
+            skillTreeUi.SetActive(skillTreeActive);
         }
     }
 
@@ -435,4 +443,6 @@ public class PlayerGuiController : MonoBehaviour
         foreach (Transform child in parent.transform)
             Destroy(child.gameObject);
     }
+    
+    
 }

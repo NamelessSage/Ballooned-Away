@@ -1,50 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 public class Skills : MonoBehaviour
 {
-    private WorldInteractorTool player;
+    private WorldInteractorTool _player;
     public float totalDistance = 0f;
-    private float currentDistance = 0f;
+    private float _currentDistance = 0f;
     public int skillPoints = 0;
     public int totalChop = 0;
-    private int currentChop = 0;
-
+    private int _currentChop = 0;
+    private bool _skillTreeActive;
+    
     public void SetPlayer(WorldInteractorTool p)
     {
-        player = p;
+        _player = p;
     }
 
     public void AddDistance(float distance)
     {
         totalDistance += distance;
-        currentDistance += distance;
-        if (currentDistance > 10)
+        _currentDistance += distance;
+        if (_currentDistance > 10)
         {
             skillPoints += 1;
-            currentDistance -= 10;
-            if (player.player_Speed < 4)
-            {
-                CheckSkillPoints(0);
-            }
+            _currentDistance -= 10;
         }
     }
     
     public void AddChop()
     {
-        currentChop += 1;
+        _currentChop += 1;
         totalChop += 1;
-        if (currentChop>10)
+        if (_currentChop>10)
         {
             skillPoints += 1;
-            currentChop = 0;
-            if (player.chop_power < 5)
-            {
-                CheckSkillPoints(1);
-                CheckSkillPoints(2);
-            }
+            _currentChop = 0;
         }
     }
     
@@ -53,36 +45,39 @@ public class Skills : MonoBehaviour
 /// flag 1 - chop
 /// </summary>
 /// <param name="flag"></param>
-    private void CheckSkillPoints(int flag)
+    public void CheckSkillPoints(int flag)
     {
         if (flag == 0 && skillPoints > 0)
         {
             IncreaseMoveSpeed();
+            skillPoints--;
         }
 
         if (flag==1 && skillPoints > 0)
         {
             IncreaseChopPower();
+            skillPoints--;
         }
         
         if (flag==2 && skillPoints > 0)
         {
             IncreaseResourceReward();
+            skillPoints--;
         }
     }
 
     private void IncreaseResourceReward()
     {
-        player.loot_reward += 1;
+        _player.loot_reward += 1;
     }
 
     private void IncreaseMoveSpeed()
     {
-        player.player_Speed = (float) Math.Round(player.player_Speed + 0.5f, 1);
+        _player.player_Speed = (float) Math.Round(_player.player_Speed + 0.5f, 1);
     }
 
     private void IncreaseChopPower()
     {
-        player.chop_power += 1;
+        _player.chop_power += 1;
     }
 }
