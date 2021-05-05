@@ -1342,6 +1342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 372480926}
   - component: {fileID: 372480927}
+  - component: {fileID: 372480928}
   m_Layer: 5
   m_Name: HealtBar
   m_TagString: Untagged
@@ -1415,12 +1416,25 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 102
-  m_WholeNumbers: 0
+  m_MaxValue: 100
+  m_WholeNumbers: 1
   m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &372480928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 372480925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c17b3dc66253f4796693edd844881d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 372480927}
 --- !u!1 &376222857
 GameObject:
   m_ObjectHideFlags: 0
