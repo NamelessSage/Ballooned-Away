@@ -43,18 +43,9 @@ public class GameControllerScript : MonoBehaviour
 
     //------------------------------------------
 
-    public void AddResourceToPlayer(string name, int amnt = 0)
+    public void AddResourceToPlayer(string name, int amnt)
     {
-        if (amnt == 0)
-        {
-            int i = Random.Range(1, 5);
-            PlrInventory.Resources_AddToResources(name, i);
-        }
-        else
-        {
-            PlrInventory.Resources_AddToResources(name, amnt);
-        }
-        
+        PlrInventory.Resources_AddToResources(name, amnt);
     }
 
     public bool RequestResourceFromPlayerInventory(string name, int amount)
