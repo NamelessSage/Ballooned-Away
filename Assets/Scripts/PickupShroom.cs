@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 // ReSharper disable All
 
@@ -37,7 +37,6 @@ public class PickupShroom : MonoBehaviour
 
     public void pickup()
     {
-        //shroom = transform.gameObject;
         UpdateShroom();
         
     }
