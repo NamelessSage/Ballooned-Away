@@ -19,9 +19,13 @@ public class GatherableObject : MonoBehaviour
     private Text thisHealthBar;
     private ParticleSystem Particle;
     private MeshRenderer mesh;
+    [SerializeField]
     private AudioSource audio;
+    [SerializeField]
+    private AudioSource audio2;
     private bool showUI = false;
     private bool wasInteracted = false;
+    private bool chopspeed = false;
 
     private void Start()
     {
@@ -30,7 +34,7 @@ public class GatherableObject : MonoBehaviour
         thisCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
         Particle = transform.gameObject.GetComponentInChildren<ParticleSystem>();
         mesh = transform.gameObject.GetComponent<MeshRenderer>();
-        audio = transform.gameObject.GetComponent<AudioSource>();
+        //audio = transform.gameObject.GetComponent<AudioSource>();
         thisCanvas.enabled = false;
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
@@ -40,9 +44,16 @@ public class GatherableObject : MonoBehaviour
 
     public void Perform_Chop(int chop_power, int loot_reward)
     {
-        objectHealth -= chop_power;
-        progress += chop_power;
-        UpdateHealth(loot_reward);
+        if (chopspeed == false)
+        {
+            audio2.Play();
+            objectHealth -= chop_power;
+            progress += chop_power;
+            UpdateHealth(loot_reward);
+            chopspeed = true;
+            StartCoroutine(chopsp());
+        }
+        
     }
 
     private void UpdateHealth(int loot_reward)
@@ -101,7 +112,12 @@ public class GatherableObject : MonoBehaviour
 
     }
 
-
+    private IEnumerator chopsp()
+    {
+        yield return new WaitForSeconds(0.8f);
+        chopspeed = false;
+        
+    }
 
     private IEnumerator TurnOffUI()
     {
