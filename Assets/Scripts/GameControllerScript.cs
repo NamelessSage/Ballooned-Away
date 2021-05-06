@@ -58,6 +58,34 @@ public class GameControllerScript : MonoBehaviour
         return false;
     }
 
+    public bool RequestItemFromPlayerInventory(string name, int amount)
+    {
+        int a = PlrInventory.Inventory_ConsumeItem(name, amount);
+        if (a > -1)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public GameObject AttemptPlaceBuilding(string name)
+    {
+        if (RequestItemFromPlayerInventory(name, 1))
+        {
+            GameObject bldng = GlobalItemsData.GetItemByName(name).obj;
+            GUI.Notify_successItemUse();
+            return bldng;
+        }
+
+        GUI.Notify_failItemUse();
+        return null;
+    }
+
+    public void Notify_ExternalActionCanceled()
+    {
+        GUI.Notify_failItemUse();
+    }
+
 
     public Vector3 adjustCords(Vector3 pos)
     {
@@ -75,6 +103,18 @@ public class GameControllerScript : MonoBehaviour
 
 
     // METHODS BELLOW
+
+    public void PlayerSpawnBuilding(string name)
+    {
+        interactor.PlaceExternalActionRequest(name);
+    }
+
+
+    public void PlayerCancelSpawnBuilding()
+    {
+        interactor.CancelExternalActionRequest();
+    }
+
 
 
 
@@ -145,11 +185,6 @@ public class GameControllerScript : MonoBehaviour
 
         terrain.RemovePlantFromGrid((int)pos.x, (int)pos.z);
         return null;
-    }
-
-    public void PlayerSpawnBuilding(GameObject bldng)
-    {
-        interactor.NextBuildAction(bldng);
     }
     #endregion
 

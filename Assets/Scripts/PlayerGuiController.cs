@@ -111,6 +111,8 @@ public class PlayerGuiController : MonoBehaviour
 
     private bool skillTreeActive = false;
 
+    private int curenltySelectedToolbeltSlot = -1;
+
 
     void Start()
     {
@@ -134,8 +136,8 @@ public class PlayerGuiController : MonoBehaviour
     void Update()
     {
         DoInputCheck();
+        OutlineSelectedItem();
     }
-
 
     #region Trackers Methods
 
@@ -294,6 +296,16 @@ public class PlayerGuiController : MonoBehaviour
 
     #region Player Inventory
 
+    private void OutlineSelectedItem()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject slt = backpackUI.transform.GetChild(i).gameObject;
+            slt.transform.GetComponent<Image>().color = new Color(0, 0, 0, 0.588f);
+            if (i == curenltySelectedToolbeltSlot) slt.transform.GetComponent<Image>().color = new Color(0.18f, 0.54f, 0.2f, 0.588f);
+        }
+    }
+
     private void DoInputCheck()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -332,12 +344,21 @@ public class PlayerGuiController : MonoBehaviour
 
     private void DrawItem(int i)
     {
-        if (BackpackList[i] != null)
+        if (curenltySelectedToolbeltSlot == i)
         {
-            string nam = BackpackList[i].name;
-            BackpackList[i] = null;
-            playerINV.DrawItem(nam);
-            
+            curenltySelectedToolbeltSlot = -1;
+            Notify_failItemUse();
+            controller.PlayerCancelSpawnBuilding();
+        }
+        else
+        {
+            curenltySelectedToolbeltSlot = i;
+            if (BackpackList[i] != null)
+            {
+                string nam = BackpackList[i].name;
+                playerINV.DrawItem(nam);
+
+            }
         }
     }
 
@@ -384,13 +405,15 @@ public class PlayerGuiController : MonoBehaviour
         {
             GameObject a = backpackUI.transform.GetChild(i).gameObject;
 
-            if (BackpackList[i] != null)
+            if (BackpackList[i] != null && playerINV.Inventory_CheckIfHasItem(BackpackList[i].name))
             {
+                BackpackList[i].amount = playerINV.Inventory_GetAmountOfItem(BackpackList[i].name);
                 a.transform.GetChild(0).gameObject.GetComponent<Text>().text = BackpackList[i].name;
                 a.transform.GetChild(2).gameObject.GetComponent<Text>().text = "x" + BackpackList[i].amount;
             }
             else
             {
+                BackpackList[i] = null;
                 a.transform.GetChild(0).gameObject.GetComponent<Text>().text = "";
                 a.transform.GetChild(2).gameObject.GetComponent<Text>().text = "";
             }
@@ -437,6 +460,19 @@ public class PlayerGuiController : MonoBehaviour
 
     #endregion
 
+
+    public void Notify_successItemUse()
+    {
+        Debug.Log("Selected slot was used perfectly!");
+        UpdateBackpackUi();
+    }
+
+    public void Notify_failItemUse()
+    {
+        Debug.Log("Selected slot was used FAILED/Deequiped!");
+        curenltySelectedToolbeltSlot = -1;
+        UpdateBackpackUi();
+    }
 
     private void ClearObjectChildren(GameObject parent)
     {
