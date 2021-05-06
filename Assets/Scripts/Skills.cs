@@ -6,6 +6,7 @@ using System.Collections;
 public class Skills : MonoBehaviour
 {
     private WorldInteractorTool _player;
+    public Slider healthSlider;
     public float totalDistance = 0f;
     private float _currentDistance = 0f;
     public int skillPoints = 0;
@@ -14,12 +15,16 @@ public class Skills : MonoBehaviour
     private bool _skillTreeActive;
     public int loot_reward;
     public int chop_power;
+    public int maxhealth;
+    public int currentHealth;
     
     public void SetPlayer(WorldInteractorTool p)
     {
         _player = p;
         loot_reward = _player.loot_reward;
         chop_power = _player.chop_power;
+        maxhealth = (int)healthSlider.maxValue;
+        currentHealth = (int) healthSlider.value;
     }
 
     public void AddDistance(float distance)
@@ -51,23 +56,34 @@ public class Skills : MonoBehaviour
 /// <param name="flag"></param>
     public void CheckSkillPoints(int flag)
     {
-        if (flag == 0 && skillPoints > 0 && _player.player_Speed < 5)
+        if (skillPoints > 0)
         {
-            IncreaseMoveSpeed();
-            skillPoints--;
+            if (flag == 0  && _player.player_Speed < 5)
+            {
+                IncreaseMoveSpeed();
+                skillPoints--;
+            }
+            
+            else if (flag==1  && _player.chop_power < 5)
+            {
+                IncreaseChopPower();
+                skillPoints--;
+            }
+            
+            else if (flag==2  && _player.loot_reward < 5)
+            {
+                IncreaseResourceReward();
+                skillPoints--;
+            }
+            
+            else if (flag==3  && healthSlider.maxValue < 200)
+            {
+                int health = (int) healthSlider.maxValue + 5;
+                SetMaxHealth(health);
+                skillPoints--;
+            }
         }
 
-        if (flag==1 && skillPoints > 0 && _player.chop_power < 5)
-        {
-            IncreaseChopPower();
-            skillPoints--;
-        }
-        
-        if (flag==2 && skillPoints > 0 && _player.loot_reward < 5)
-        {
-            IncreaseResourceReward();
-            skillPoints--;
-        }
     }
 
     private void IncreaseResourceReward()
@@ -85,5 +101,16 @@ public class Skills : MonoBehaviour
     {
         _player.chop_power += 1;
         chop_power += 1;
+        SetMaxHealth(5);
+    }
+    
+    public void SetHealth(int health)
+    {
+        healthSlider.value = health;
+    }
+    public void SetMaxHealth(int health)
+    {
+        healthSlider.maxValue = health;
+        maxhealth = health;
     }
 }
