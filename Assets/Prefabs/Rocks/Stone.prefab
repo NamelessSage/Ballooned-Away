@@ -113,6 +113,8 @@ MonoBehaviour:
   objectHealth: 30
   progress: 0
   resourceName: Stone
+  audio: {fileID: 2121054507413259250}
+  audio2: {fileID: 2121054507413259250}
 --- !u!82 &2121054507413259250
 AudioSource:
   m_ObjectHideFlags: 0
