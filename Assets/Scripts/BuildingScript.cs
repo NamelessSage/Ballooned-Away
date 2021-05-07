@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildingScript : MonoBehaviour
 {
     public GameObject DepsitColliderObj;
     public GameObject WithdrawObj;
+
+    public Slider progressBar;
+
 
     public string What_I_Take;
     public string What_I_Give;
@@ -18,6 +22,7 @@ public class BuildingScript : MonoBehaviour
     private int TotalAmountOfDeposited;
     private int TotalAmountOfMadeResource;
     private bool Operating = false;
+    private bool FinishedProcessingMaterials = true;
     
     // Start is called before the first frame update
     void Start()
@@ -30,12 +35,33 @@ public class BuildingScript : MonoBehaviour
     {
         if (TotalAmountOfDeposited > 0)
         {
+            if (FinishedProcessingMaterials == true)
+            {
+                transform.GetChild(4).gameObject.SetActive(true);
+                FinishedProcessingMaterials = false;
+            }
             if (Operating == false)
             {
                 Operating = true;
+                StartCoroutine(ProcessBarLoader(WaitTime/10, 1, 20)); 
                 StartCoroutine(Convert(WaitTime));
             }
         }
+        else
+        {
+            if (FinishedProcessingMaterials == false)
+            {
+                FinishedProcessingMaterials = true;
+                transform.GetChild(4).gameObject.SetActive(false);
+            }
+        }
+
+    }
+
+    public void ColorProcessBar(int i)
+    {
+        float coverPercentage = i/ConversionRatio;
+        progressBar.SetValueWithoutNotify(coverPercentage);
     }
 
     public void SetController(GameControllerScript script)
@@ -46,6 +72,7 @@ public class BuildingScript : MonoBehaviour
     public void Deposit(int aow)
     {
         TotalAmountOfDeposited += aow;
+        
     }
 
     public int Take(int amountToTake = 0)
@@ -74,6 +101,16 @@ public class BuildingScript : MonoBehaviour
         TotalAmountOfMadeResource += ConversionRatio;
         TotalAmountOfDeposited--;
         Operating = false;
+    }
+    
+    private IEnumerator ProcessBarLoader(int waitTime, int i, int count)
+    {
+        yield return new WaitForSeconds(waitTime);
+        ColorProcessBar(i);
+        if (count > 0)
+        {
+            StartCoroutine(ProcessBarLoader(waitTime, i + 1, count - 1)); 
+        }
     }
     
     private IEnumerator BuildTheBuilding()
