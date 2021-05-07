@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2866913411657666945}
   m_Layer: 0
-  m_Name: Grass 1
+  m_Name: WeepingShrub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,6 +167,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2866913411657666945}
     m_Modifications:
+    - target: {fileID: 5046534331221335620, guid: be9c750aa4adfe8479e2cccd1290f8b4,
+        type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: -1041676754820765452, guid: e56adde40d9c56b4eb3e581e221b15aa,
+        type: 2}
     - target: {fileID: 7932729035022062966, guid: be9c750aa4adfe8479e2cccd1290f8b4,
         type: 3}
       propertyPath: m_RootOrder
