@@ -1,4 +1,5 @@
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -123,6 +124,7 @@ public class WorldInteractorTool : MonoBehaviour
     private Rigidbody _rigidbody;
     private CharacterAnimation anim;
     private Skills Skills;
+    private bool chopspeed = false;
 
     // ------
     private ExternalActionRequest external_Action = null;
@@ -432,11 +434,18 @@ public class WorldInteractorTool : MonoBehaviour
     #region Action performers
     private void PerformAction_chop_resource_at(Vector3 pos)
     {
-        GameObject possibeResource = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
-        GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
-        possibeResourceScript.Perform_Chop(chop_power, loot_reward);
-        Skills.AddChop();
-        Current_Action.done = true;
+        if (chopspeed == false)
+        {
+            GameObject possibeResource =
+                controller.GetTerrain().Get_Vegetation_Object_From_Grid((int) pos.x, (int) pos.z);
+            GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
+            possibeResourceScript.Perform_Chop(chop_power, loot_reward);
+            Skills.AddChop();
+            Current_Action.done = true;
+            chopspeed = true;
+            StartCoroutine(chopsp());
+            Skills.addScore(1);
+        }
     }
 
     private void PerformAction_drop_resources_at(Vector3 pos)
@@ -490,6 +499,8 @@ public class WorldInteractorTool : MonoBehaviour
         GameObject Obj = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
         PickupShroom pick = Obj.GetComponent<PickupShroom>();
         pick.pickup();
+        Skills.heal(5);
+        Skills.addScore(10);
         Current_Action.done = true;
     }
 
@@ -689,6 +700,11 @@ public class WorldInteractorTool : MonoBehaviour
     {
         return adjustCords(player.transform.position);
     }
+    private IEnumerator chopsp()
+    {
+        yield return new WaitForSeconds(0.8f);
+        chopspeed = false;
+    }
 
     private void AdjustSelector(Vector3 position)
     {
@@ -703,4 +719,5 @@ public class WorldInteractorTool : MonoBehaviour
             selector.transform.position = newSelectroPos;
         }
     }
+    
 }

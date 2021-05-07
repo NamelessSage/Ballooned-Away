@@ -29,4 +29,5 @@ public class UI : MonoBehaviour
     {
         rock_txt.text = "Rock: " + amountOfRock;
     }
+ 
 }
