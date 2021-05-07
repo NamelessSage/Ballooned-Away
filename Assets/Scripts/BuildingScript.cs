@@ -60,8 +60,8 @@ public class BuildingScript : MonoBehaviour
 
     public void ColorProcessBar(int i)
     {
-        float coverPercentage = i/ConversionRatio;
-        progressBar.SetValueWithoutNotify(coverPercentage);
+        float coverPercentage = (i*1.0f) /ConversionRatio;
+        progressBar.value = coverPercentage; //(coverPercentage);
     }
 
     public void SetController(GameControllerScript script)
