@@ -1,14 +1,26 @@
-using System.Collections;
+
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
+
 
 
 public class WorldInteractorTool : MonoBehaviour
 {
+    private class ExternalActionRequest
+    {
+        public bool procesing = false;
+        public string subjectName = "";
+
+        public ExternalActionRequest() { }
+        public ExternalActionRequest(string subjectName)
+        {
+            procesing = false;
+            this.subjectName = subjectName;
+        }
+
+    }
+
     // ---------------------------------------
     // ACTION QUEUE ASSETS
     // ---------------------------------------
@@ -113,9 +125,10 @@ public class WorldInteractorTool : MonoBehaviour
     private Skills Skills;
 
     // ------
-    private GameObject bldng;
-    private bool buildingActionCall;
-    // ------
+    private ExternalActionRequest external_Action = null;
+
+
+
 
     void Start()
     {
@@ -193,10 +206,9 @@ public class WorldInteractorTool : MonoBehaviour
                         AddToQue(new Action(clickPositionOnGrid, ActionType.DropResources));
                     }
                     // If clicked on empty grass
-                    else if (plantable && buildingActionCall)
+                    else if (plantable && external_Action != null && !external_Action.procesing)
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Place_Building));
-                        buildingActionCall = false;
                     }
                     // If clicked on a tree
                     else if (isTree)
@@ -226,8 +238,9 @@ public class WorldInteractorTool : MonoBehaviour
         PerformCurrentAction();
         // -------------------------------------
 
+
         // -------------------------------------
-        // movement block
+        // movement section
         if (pathFound)
         {
             Vector3 dir = (target - _rigidbody.position).normalized;
@@ -245,9 +258,7 @@ public class WorldInteractorTool : MonoBehaviour
 
     }
 
-    // --------------------------------------
-    // Que management
-    #region Que methods
+    #region Que management methods
 
     // Add new action into action que
     private void AddToQue(Action newAction)
@@ -258,6 +269,9 @@ public class WorldInteractorTool : MonoBehaviour
 
         Action_Que.Push(newAction);
         QueChanged = true;
+
+        if (external_Action != null && external_Action.procesing)
+            CancelExternalActionRequest();
 
     }
 
@@ -280,6 +294,17 @@ public class WorldInteractorTool : MonoBehaviour
         }
     }
 
+    private void EndQueProccess()
+    {
+        if (Current_Action != null && Current_Action.done)
+        {
+            Current_Action = null;
+            QueChanged = true;
+
+            EmptyQue();
+        }
+    }
+
     // Update Qued action states and prepare Current action
     private void UpdateQue()
     {
@@ -296,6 +321,14 @@ public class WorldInteractorTool : MonoBehaviour
                     Current_Action = Action_Que.Pop();
                     Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
                     Current_Action.active = false;
+
+                    break;
+                // -------------------------------------------------------------------
+                case ActionType.Place_Building:
+                    if (external_Action != null)
+                        external_Action.procesing = true;
+
+                    DetermineNextStep(onTop);
 
                     break;
                 // -------------------------------------------------------------------
@@ -326,6 +359,7 @@ public class WorldInteractorTool : MonoBehaviour
         }
         else // if action was encountered for the first time, walk to it firstly
         {
+
             Vector3 plr_pos = GetPlayerPosition_Adjusted();
             if (controller.GetTerrain().IsAdjacent((int)onTop.dst_Pos.x, (int)onTop.dst_Pos.z, (int)plr_pos.x, (int)plr_pos.z)) // If we are nearby the action destination, just prepare it for execution
             {
@@ -389,20 +423,13 @@ public class WorldInteractorTool : MonoBehaviour
 
             }
 
-            if (Current_Action != null && Current_Action.done)
-            {
-                Current_Action = null;
-                QueChanged = true;
-
-                EmptyQue();
-            }
+            EndQueProccess();
 
         }
     }
     #endregion
-    // --------------------------------------
 
-
+    #region Action performers
     private void PerformAction_chop_resource_at(Vector3 pos)
     {
         GameObject possibeResource = controller.GetTerrain().Get_Vegetation_Object_From_Grid((int)pos.x, (int)pos.z);
@@ -439,10 +466,22 @@ public class WorldInteractorTool : MonoBehaviour
 
     private void PerfromAction_Place_Building(Vector3 pos)
     {
-        //controller.GetTerrain().Spawn_Tree_At((int)pos.x, (int)pos.z);
-        //PositionateObjectInWorld
-        GameObject a = Instantiate(bldng);
-        controller.GetTerrain().PositionateObjectInWorld(a, new Vector3((int)pos.x, 0, (int)pos.z));
+        if (external_Action != null)
+        {
+            GameObject obj = controller.AttemptPlaceBuilding(external_Action.subjectName);
+            if (obj != null)
+            {
+                GameObject a = Instantiate(obj);
+                controller.GetTerrain().PositionateObjectInWorld(a, new Vector3((int)pos.x, 0, (int)pos.z));
+                
+            }
+        }
+        else
+        {
+
+        }
+
+        CancelExternalActionRequest();
         Current_Action.done = true;
     }
 
@@ -489,8 +528,9 @@ public class WorldInteractorTool : MonoBehaviour
             }
         }  
     }
+    #endregion
 
-   
+    #region Player Movement and Path
 
     private void EndPath()
     {
@@ -600,8 +640,22 @@ public class WorldInteractorTool : MonoBehaviour
         _rigidbody.MoveRotation(Quaternion.LookRotation(dir));
     }
 
+    #endregion
 
+    public void PlaceExternalActionRequest(string name)
+    {
+        external_Action = new ExternalActionRequest(name);
+    }
 
+    public void CancelExternalActionRequest()
+    {
+        if (external_Action != null)
+        {
+            EndQueProccess();
+            controller.Notify_ExternalActionCanceled();
+        }
+        external_Action = null;
+    }
 
     private Vector3 GetMousePos()
     {
@@ -648,12 +702,5 @@ public class WorldInteractorTool : MonoBehaviour
             selector.SetActive(true);
             selector.transform.position = newSelectroPos;
         }
-    }
-
-
-    public void NextBuildAction(GameObject a)
-    {
-        bldng = a;
-        buildingActionCall = true;
     }
 }
