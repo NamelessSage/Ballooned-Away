@@ -153,8 +153,8 @@ RectTransform:
   m_Father: {fileID: 1214865599}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -433,11 +433,11 @@ AudioSource:
   m_GameObject: {fileID: 534368317}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -4143194597356847812, guid: e56adde40d9c56b4eb3e581e221b15aa,
+  OutputAudioMixerGroup: {fileID: -7593372017586763262, guid: e56adde40d9c56b4eb3e581e221b15aa,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 02f52e91a3ed8ae4bb614bd087284cd2, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.026
+  m_Volume: 0.237
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -617,10 +617,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 820685880}
   m_HandleRect: {fileID: 11226757}
   m_Direction: 0
-  m_MinValue: 0.0001
+  m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -930,7 +930,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1005,7 +1005,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.9100037, y: 59.75002}
+  m_AnchoredPosition: {x: 1.9100037, y: 60.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &839025038
@@ -1352,6 +1352,7 @@ GameObject:
   - component: {fileID: 1150198068}
   - component: {fileID: 1150198067}
   - component: {fileID: 1150198066}
+  - component: {fileID: 1150198070}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1442,6 +1443,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1150198070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150198065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 356a0e3353d185848be69b406f9829b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PauseMenuUI: {fileID: 0}
 --- !u!1 &1178786766
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,7 +2662,7 @@ GameObject:
   - component: {fileID: 1943849436}
   - component: {fileID: 1943849435}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
