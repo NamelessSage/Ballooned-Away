@@ -8,12 +8,14 @@ public class Bush : MonoBehaviour
     public int force = 500;
     private AudioSource audio;
     private Animator animator;
+    private Skills skills;
     private bool push = false;
     private void Start()
     {
         game = transform.gameObject;
         animator = GetComponent<Animator>();
         audio = transform.gameObject.GetComponent<AudioSource>();
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -25,6 +27,7 @@ public class Bush : MonoBehaviour
                 {
                     animator.Play("Bushpush");
                     audio.Play();
+                    
                     StartCoroutine(Push());
                     
                 }
@@ -42,6 +45,8 @@ public class Bush : MonoBehaviour
             if (rb != null)
             {
                 rb.AddExplosionForce(force,transform.position,5);
+                skills = rb.GetComponent<Skills>();
+                skills.takeDamage(20);
             }
         }
         yield return new WaitForSeconds(2f);
