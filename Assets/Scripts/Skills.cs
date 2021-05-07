@@ -113,4 +113,23 @@ public class Skills : MonoBehaviour
         healthSlider.maxValue = health;
         maxhealth = health;
     }
+
+    public void takeDamage(int damage)
+    {
+        currentHealth -= damage;
+        SetHealth(currentHealth);
+    }
+
+    public void heal(int health)
+    {
+        if (currentHealth + health > maxhealth)
+        {
+            currentHealth = maxhealth;
+        }
+        else
+        {
+            currentHealth += health;
+        }
+        SetHealth(currentHealth);
+    }
 }
