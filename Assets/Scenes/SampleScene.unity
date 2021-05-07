@@ -1255,7 +1255,6 @@ MonoBehaviour:
   loot_reward: 1
   GameController: {fileID: 1297849958}
   selector: {fileID: 696413719}
-  EventSysObj: {fileID: 1484304441}
 --- !u!1 &183883651
 GameObject:
   m_ObjectHideFlags: 0
@@ -1843,10 +1842,10 @@ RectTransform:
   m_Father: {fileID: 2116918072}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -353.28, y: 169.59}
-  m_SizeDelta: {x: 188.44968, y: 17.187012}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 25}
+  m_SizeDelta: {x: 200, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372480927
 MonoBehaviour:
@@ -7128,7 +7127,7 @@ MonoBehaviour:
   interactroObj: {fileID: 182406570}
   balloon_Pad_Prefab: {fileID: 6157364954012186749, guid: 3056a94d6f8a769489c92cde9845e54d,
     type: 3}
-  balloon_Model: {fileID: 926040784799367400, guid: 09999dba8b1c63a4eb5de6c98fd4c7ad,
+  balloon_Model: {fileID: 172616364676810637, guid: 50e3b81053c283149b8d10f994ad5108,
     type: 3}
 --- !u!114 &1297849961
 MonoBehaviour:
@@ -8603,7 +8602,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.042
+  m_Size: 0.15766667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

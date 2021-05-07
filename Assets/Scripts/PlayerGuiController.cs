@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 public class InventorySlotInfo
 {
@@ -308,31 +308,30 @@ public class PlayerGuiController : MonoBehaviour
 
     private void DoInputCheck()
     {
+        int num = -1;
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("1");
-            DrawItem(0);
+            num = 0;
+            //DrawItem(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Debug.Log("2");
-            DrawItem(1);
+            num = 1;
+            //DrawItem(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Debug.Log("3");
-            DrawItem(2);
+            num = 2;
+            //DrawItem(2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Debug.Log("4");
-            DrawItem(3);
+            num = 3;
+            //DrawItem(3);
         }
         else if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Debug.Log("Opening Backpack");
             OpenInv();
-
             UpdateBackpackUi();
         }
         else if (Input.GetKeyDown(KeyCode.P))
@@ -340,7 +339,36 @@ public class PlayerGuiController : MonoBehaviour
             skillTreeActive = !skillTreeActive;
             skillTreeUi.SetActive(skillTreeActive);
         }
+
+        if (num > -1)
+        {
+            if (!EventSystem.current.IsPointerOverGameObject()) DrawItem(num);
+            else
+            {
+                GameObject clickObj = RaycastMouse();
+                if (clickObj.CompareTag("InventorySlotCollider"))
+                {
+                    string clickSlotName = clickObj.transform.parent.GetChild(1).gameObject.GetComponent<Text>().text;
+                    AddToBackpackList(clickSlotName, num);
+                }
+            }
+        }
     }
+
+    private GameObject RaycastMouse()
+    {
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            pointerId = -1,
+        };
+
+        pointerData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+        return results[0].gameObject;
+    }
+
 
     private void DrawItem(int i)
     {
@@ -362,35 +390,54 @@ public class PlayerGuiController : MonoBehaviour
         }
     }
 
-    private void AddToBackpackList(string name)
+    private void AddToBackpackList(string name, int slotNum = -1)
     {
+        //Debug.LogWarning("was - " + name);
         int am = playerINV.Inventory_GetAmountOfItem(name);
         if (am >= 0)
         {
             bool was = false;
 
-            for (int i = 0; i < BackpackList.Length; i++)
+            if (slotNum == -1)
             {
-                if (BackpackList[i] != null)
+                for (int i = 0; i < BackpackList.Length; i++)
                 {
-                    
-                    if (BackpackList[i].name.Equals(name))
+                    if (BackpackList[i] != null)
                     {
-                        BackpackList[i].amount = am;
-                        was = true;
-                        break;
+
+                        if (BackpackList[i].name.Equals(name))
+                        {
+                            BackpackList[i].amount = am;
+                            was = true;
+                            break;
+                        }
                     }
                 }
             }
 
+            Debug.Log("WAS" + was);
             if (!was)
             {
                 for (int i = 0; i < BackpackList.Length; i++)
                 {
-                    if (BackpackList[i] == null)
+                    if ( slotNum > -1)
                     {
-                        BackpackList[i] = new BackpackSlot(name, am);
-                        break;
+                        if (i == slotNum)
+                        {
+                            BackpackList[i] = new BackpackSlot(name, am);
+                        }
+                        else if (BackpackList[i] != null && BackpackList[i].name.Equals(name))
+                        {
+                            BackpackList[i] = null;
+                        }
+                    }
+                    else
+                    {
+                        if (BackpackList[i] == null)
+                        {
+                            BackpackList[i] = new BackpackSlot(name, am);
+                            break;
+                        }
                     }
                 }
             }
@@ -463,13 +510,11 @@ public class PlayerGuiController : MonoBehaviour
 
     public void Notify_successItemUse()
     {
-        Debug.Log("Selected slot was used perfectly!");
         UpdateBackpackUi();
     }
 
     public void Notify_failItemUse()
     {
-        Debug.Log("Selected slot was used FAILED/Deequiped!");
         curenltySelectedToolbeltSlot = -1;
         UpdateBackpackUi();
     }

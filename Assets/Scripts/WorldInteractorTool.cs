@@ -112,7 +112,6 @@ public class WorldInteractorTool : MonoBehaviour
 
     public GameObject GameController;
     public GameObject selector;
-    public GameObject EventSysObj;
     
     private GameControllerScript controller;
     private List<Node> path;
@@ -120,7 +119,6 @@ public class WorldInteractorTool : MonoBehaviour
     private int curNode = 0;
     private Vector3 target;
     private GameObject player;
-    private EventSystem EventSys;
     private Rigidbody _rigidbody;
     private CharacterAnimation anim;
     private Skills Skills;
@@ -135,7 +133,6 @@ public class WorldInteractorTool : MonoBehaviour
     void Start()
     {
         controller = GameController.GetComponent<GameControllerScript>();
-        EventSys = EventSysObj.GetComponent<EventSystem>();
         player = controller.playerObj;
         _rigidbody = player.GetComponent<Rigidbody>();
         selector.SetActive(false);
@@ -152,7 +149,7 @@ public class WorldInteractorTool : MonoBehaviour
         bool leftBtn = Input.GetMouseButtonDown(0);
         bool rightBtn = Input.GetMouseButtonDown(1);
         
-        if (!EventSys.currentSelectedGameObject && (leftBtn || rightBtn)) // If right or left button was smacked AND wasnt a UI smack
+        if (!EventSystem.current.IsPointerOverGameObject() && (leftBtn || rightBtn)) // If right or left button was smacked AND wasnt a UI smack
         {
             RaycastHit hit;
             Vector3 clickPosition;
