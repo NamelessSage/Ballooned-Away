@@ -19,13 +19,14 @@ public class GatherableObject : MonoBehaviour
     private Text thisHealthBar;
     private ParticleSystem Particle;
     private MeshRenderer mesh;
+    private GameObject obj;
     [SerializeField]
     private AudioSource audio;
     [SerializeField]
     private AudioSource audio2;
     private bool showUI = false;
     private bool wasInteracted = false;
-    private bool chopspeed = false;
+    
 
     private void Start()
     {
@@ -44,15 +45,10 @@ public class GatherableObject : MonoBehaviour
 
     public void Perform_Chop(int chop_power, int loot_reward)
     {
-        if (chopspeed == false)
-        {
-            audio2.Play();
-            objectHealth -= chop_power;
-            progress += chop_power;
-            UpdateHealth(loot_reward);
-            chopspeed = true;
-            StartCoroutine(chopsp());
-        }
+        audio2.Play();
+        objectHealth -= chop_power;
+        progress += chop_power;
+        UpdateHealth(loot_reward);
         
     }
 
@@ -72,7 +68,7 @@ public class GatherableObject : MonoBehaviour
 
             // Removes tree from the grid, so area where ThisTree was standing is now walkable
             controller.GetComponent<GameControllerScript>().ChopDownTreeAtPosition(thisObject.transform.position);
-
+            
             StartCoroutine(DropObject());
         }
         else
@@ -112,12 +108,7 @@ public class GatherableObject : MonoBehaviour
 
     }
 
-    private IEnumerator chopsp()
-    {
-        yield return new WaitForSeconds(0.8f);
-        chopspeed = false;
-        
-    }
+
 
     private IEnumerator TurnOffUI()
     {
