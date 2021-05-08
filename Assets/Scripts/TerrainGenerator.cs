@@ -64,14 +64,14 @@ public class TerrainGenerator : MonoBehaviour
     private float forest_PerlinScale = 0.148f;       // Regulates perlin noise scale (low - high -->> blobby and big forests - smaller and many forests)
     private float forest_XOffset = 0;                // Perlin noise X offset (Should be Random by Default)
     private float forest_YOffset = 0;                // Perlin noise Y offset (Should be Random by Default)
+    private float forest_rareTreshold = 0.095f;
 
     private float plants_MinBoundary = 0.01f;           // Regulates how far from water the plants begin to spawn
     private float plants_MaxBoundary = 0.01f;           // Regulates how far from the edges of forests and heights will plants begin to spawn
-    private float plants_Density = 0.2f;    // How dense
+    private float plants_Density = 0.4f;    // How dense
 
 
-    [Range(0, 100)]
-    public int forest_PlantsToTrees_ratio = 10;     // Regulates how often plants should spawn in the foest
+    public int forest_PlantsToTrees_ratio = 1;     // Regulates how often plants should spawn in the foest
     // =========================
 
 
@@ -110,6 +110,7 @@ public class TerrainGenerator : MonoBehaviour
 
 
     [Header("Trees Spawn Pool")] public GameObject[] spawner_Tree_Pool;
+    [Header("Rare Trees Spawn Pool")] public GameObject[] spawner_Rare_Tree_Pool;
     [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_ForestPlants_Pool;
     [Header("Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
     [Header("Rock Spawn Pool")] public GameObject[] spawner_Rocks_Pool;
@@ -276,7 +277,7 @@ public class TerrainGenerator : MonoBehaviour
 
                     if (spawn_Trees == true && spawn_Plants == true)
                     {
-                        int chance = Random.Range(0, 101);
+                        int chance = Random.Range(0, 30);
 
                         if (chance <= forest_PlantsToTrees_ratio)
                         {
@@ -284,13 +285,13 @@ public class TerrainGenerator : MonoBehaviour
                         }
                         else
                         {
-                            Spawner_Tree(i, j);
+                            Spawner_Tree(i, j, p_val);
                         }
 
                     }
                     else if (spawn_Trees == true)
                     {
-                        Spawner_Tree(i, j);
+                        Spawner_Tree(i, j, p_val);
                     }
                     else if (spawn_Plants == true)
                     {
@@ -432,12 +433,21 @@ public class TerrainGenerator : MonoBehaviour
 
     // --------------------------------------------
     // Trees and plants
-    private void Spawner_Tree(int x, int z)
+    private void Spawner_Tree(int x, int z, float p)
     {
         if (grid_Vegetation_Objects[x, z] == null && IsPlantable(x, z))
         {
             string h = grid_Terrain_Objects[x, z].tag;
-            GameObject obj = SpawnTree(x, z, h);
+            GameObject obj = null;
+            if (p <= forest_rareTreshold)
+            {
+                obj = SpawnTree(x, z, h, spawner_Rare_Tree_Pool);
+            }
+            else
+            {
+                obj = SpawnTree(x, z, h, spawner_Tree_Pool);
+            }
+            
             grid_Vegetation_Objects[x, z] = obj;
         }
     }
@@ -513,7 +523,7 @@ public class TerrainGenerator : MonoBehaviour
 
         float newMultiplier = Mathf.Pow(z * (difference + 1), z * (difference + 1));
         float newHeight = 2 * newMultiplier;
-        newHeight = newHeight * 0.6f; // Decreasing height by x%
+        newHeight = newHeight * 0.65f; // Decreasing height by x%
 
         float newY = newHeight / 2;
 
@@ -535,10 +545,10 @@ public class TerrainGenerator : MonoBehaviour
         return wat;
     }
 
-    private GameObject SpawnTree(int i, int j, string h)
+    private GameObject SpawnTree(int i, int j, string h, GameObject[] pool)
     {
-        int whichOne = Random.Range(0, spawner_Tree_Pool.Length);
-        GameObject tree = Instantiate(spawner_Tree_Pool[whichOne]);
+        int whichOne = Random.Range(0, pool.Length);
+        GameObject tree = Instantiate(pool[whichOne]);
         tree.name = "Tree_" + i + "_" + j;
         tree.transform.parent = layer_Plants.transform;
 
@@ -860,12 +870,12 @@ public class TerrainGenerator : MonoBehaviour
 
     public void Spawn_Tree_At(int x, int z)
     {
-        if (IsPlantable(x, z) && grid_Interactable_Objects[x, z] == null)
-        {
-            string h = grid_Terrain_Objects[x, z].tag;
-            GameObject obj = SpawnTree(x, z, h);
-            grid_Vegetation_Objects[x, z] = obj;
-        }
+        //if (IsPlantable(x, z) && grid_Interactable_Objects[x, z] == null)
+        //{
+        //    string h = grid_Terrain_Objects[x, z].tag;
+        //    GameObject obj = SpawnTree(x, z, h);
+        //    grid_Vegetation_Objects[x, z] = obj;
+        //}
     }
     #endregion
 }
