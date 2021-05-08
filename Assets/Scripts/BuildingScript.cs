@@ -35,6 +35,7 @@ public class BuildingScript : MonoBehaviour
     {
         if (TotalAmountOfDeposited > 0)
         {
+
             if (FinishedProcessingMaterials == true)
             {
                 transform.GetChild(4).gameObject.SetActive(true);
@@ -43,7 +44,7 @@ public class BuildingScript : MonoBehaviour
             if (Operating == false)
             {
                 Operating = true;
-                StartCoroutine(ProcessBarLoader(WaitTime/10, 1, 20)); 
+                StartCoroutine(SetBar(0, WaitTime));
                 StartCoroutine(Convert(WaitTime));
             }
         }
@@ -51,6 +52,7 @@ public class BuildingScript : MonoBehaviour
         {
             if (FinishedProcessingMaterials == false)
             {
+                progressBar.value = 0;
                 FinishedProcessingMaterials = true;
                 transform.GetChild(4).gameObject.SetActive(false);
             }
@@ -60,7 +62,7 @@ public class BuildingScript : MonoBehaviour
 
     public void ColorProcessBar(int i)
     {
-        float coverPercentage = (i*1.0f) /ConversionRatio;
+        float coverPercentage = (i*1.0f) /WaitTime;
         progressBar.value = coverPercentage; //(coverPercentage);
     }
 
@@ -94,7 +96,15 @@ public class BuildingScript : MonoBehaviour
             return amountToTake;
         }
     }
-    
+
+    private IEnumerator SetBar(int i, int total)
+    {
+        ColorProcessBar(i);
+        yield return new WaitForSeconds(1);
+        if (i < total)
+            StartCoroutine(SetBar(i + 1, total));
+
+    }
     private IEnumerator Convert(int waitTime)
     {
         yield return new WaitForSeconds(waitTime);
@@ -103,15 +113,6 @@ public class BuildingScript : MonoBehaviour
         Operating = false;
     }
     
-    private IEnumerator ProcessBarLoader(int waitTime, int i, int count)
-    {
-        yield return new WaitForSeconds(waitTime);
-        ColorProcessBar(i);
-        if (count > 0)
-        {
-            StartCoroutine(ProcessBarLoader(waitTime, i + 1, count - 1)); 
-        }
-    }
     
     private IEnumerator BuildTheBuilding()
     {

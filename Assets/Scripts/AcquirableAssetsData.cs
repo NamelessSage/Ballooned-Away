@@ -142,7 +142,8 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", buildings[1]));
         AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Campfire", null));
         AVAIALABE_GameItems.Add(new GameItem(5, "Apple", null));
-        AVAIALABE_GameItems.Add(new GameItem(6, "Rock", null));
+        AVAIALABE_GameItems.Add(new GameItem(6, "Berry", null));
+        AVAIALABE_GameItems.Add(new GameItem(7, "Rock", null));
     }
 }
 

@@ -731,6 +731,21 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// Cheks if there is a bush
+    /// </summary>
+    public bool IsBush(int i, int j)
+    {
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+
+        if (located != null && (located.CompareTag("Bush")))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Cheks if there is a shroom
     /// </summary>
     public bool IsShroom(int i, int j)
