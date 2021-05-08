@@ -14,12 +14,12 @@ public class GatherableObject : MonoBehaviour
     public int progress = 0;
 
     public string resourceName;
+    public bool isResource = true;
 
     private Canvas thisCanvas;
     private Text thisHealthBar;
     private ParticleSystem Particle;
     private MeshRenderer mesh;
-    private GameObject obj;
     [SerializeField]
     private AudioSource audio;
     [SerializeField]
@@ -68,7 +68,9 @@ public class GatherableObject : MonoBehaviour
 
             // Removes tree from the grid, so area where ThisTree was standing is now walkable
             controller.GetComponent<GameControllerScript>().ChopDownTreeAtPosition(thisObject.transform.position);
-            
+
+            audio.Play();
+            Particle.Play();
             StartCoroutine(DropObject());
         }
         else
@@ -83,10 +85,22 @@ public class GatherableObject : MonoBehaviour
             }
         }
 
+
         if (progress >= 10)
         {
             progress = progress - 10;
-            controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            if (isResource)
+                controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            else
+                controller.GetComponent<GameControllerScript>().AddItemToPlayer(resourceName, loot_reward);
+
+        }
+        else if (objectHealth == 0)
+        {
+            if (isResource)
+                controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            else
+                controller.GetComponent<GameControllerScript>().AddItemToPlayer(resourceName, loot_reward);
         }
     }
 
@@ -95,9 +109,8 @@ public class GatherableObject : MonoBehaviour
         yield return new WaitForSeconds(3);
         ThisCollider.enabled = true;
         StartCoroutine(destroyObject());
-        audio.Play();
-        Particle.Play();
-        mesh.enabled = false;
+        
+        if (mesh != null) mesh.enabled = false;
 
     }
 

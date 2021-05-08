@@ -29,7 +29,7 @@ public class WorldInteractorTool : MonoBehaviour
     {
         Place_Building,
         Walk_To,
-        Chop_Tree,
+        Chop_Harvestable,
         Open_Shop,
         PickUpShoorm,
         DropResources,
@@ -168,7 +168,8 @@ public class WorldInteractorTool : MonoBehaviour
                 TerrainGenerator terrain = controller.GetTerrain();
                 bool walkable = terrain.IsWalkable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
                 bool plantable = terrain.IsPlantable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
-                bool isTree = terrain.IsTree((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isGatherable = terrain.IsTree((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isBush = terrain.IsBush((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
                 bool isShroom = terrain.IsShroom((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
 
                 // -------------------------------------
@@ -210,14 +211,19 @@ public class WorldInteractorTool : MonoBehaviour
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Place_Building));
                     }
                     // If clicked on a tree
-                    else if (isTree)
+                    else if (isGatherable)
                     {
-                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Tree));
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Harvestable));
                     }
                     // If clicked on a shroom
                     else if (isShroom)
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.PickUpShoorm));
+                    }
+                    // If clicked on a bush
+                    else if (isBush)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Harvestable));
                     }
                 }
                 // -------------------------------------
@@ -394,7 +400,7 @@ public class WorldInteractorTool : MonoBehaviour
                         PerfromAction_Place_Building(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
-                    case ActionType.Chop_Tree:
+                    case ActionType.Chop_Harvestable:
                         PerformAction_chop_resource_at(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------

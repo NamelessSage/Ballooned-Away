@@ -46,7 +46,8 @@ public class Bush : MonoBehaviour
             {
                 rb.AddExplosionForce(force,transform.position,5);
                 skills = rb.GetComponent<Skills>();
-                skills.takeDamage(20);
+                if (skills != null)
+                    skills.takeDamage(20);
             }
         }
         yield return new WaitForSeconds(2f);

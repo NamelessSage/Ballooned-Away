@@ -10,10 +10,16 @@ public class PlayerCamera : MonoBehaviour
     private float cameraZ = 0;
     private Camera player_camera;
 
-    private Vector3 mainVec = new Vector3(-3, 5, -3);
-    private Vector3 rotate = new Vector3(60, 45, 0);
-
+    private float Radius = 4.2f;
+    public float circleAngle = 0;
     private int angle = 60;
+
+    private Vector3 mainVec = new Vector3(0, 5, -4.2f);
+    private Vector3 rotate = new Vector3(60, 0, 0);
+    private Vector3 oldPos = Vector3.zero;
+
+
+
     void Start()
     {
         cameraZ = transform.position.z;
@@ -21,11 +27,16 @@ public class PlayerCamera : MonoBehaviour
         player_camera.fieldOfView = 60;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
+    // Update is called once per frame
+        Vector3 thisPos = Input.mousePosition;
+        int mult = (thisPos.x < oldPos.x) ? -1 : 1;
+
         Vector2 scroll = Input.mouseScrollDelta;
+        bool midClick = Input.GetMouseButton(2);
+    
         if (scroll.y > 0f || scroll.y < 0f)
         {
             int O = (int)scroll.y;
@@ -33,7 +44,20 @@ public class PlayerCamera : MonoBehaviour
             if (angle > 60) angle = 60;
             if (angle < 30) angle = 30;
 
-            rotate = new Vector3(angle, 45, 0);
+            rotate = new Vector3(angle, rotate.y, 0);
+        }
+
+        if (midClick)
+        {
+            
+            float newAngle = (mult * ((Mathf.Abs(thisPos.x - oldPos.x)))) * 0.1f;
+            circleAngle += newAngle;
+
+            float newX = Radius * Mathf.Sin(circleAngle * Mathf.PI/180);
+            float newY = Radius * Mathf.Cos(circleAngle * Mathf.PI/180);
+
+            mainVec = new Vector3(-newX, 5, -newY);
+            rotate = new Vector3(rotate.x, circleAngle, 0);
         }
 
         if (target)
@@ -43,72 +67,7 @@ public class PlayerCamera : MonoBehaviour
             transform.eulerAngles = rotate;
         }
 
-
+        oldPos = thisPos;
     }
 }
 
-
-/*
- * GLOBAL -     private float height = 5;
- *  Vector2 scroll = Input.mouseScrollDelta;
-        if (scroll.y > 0f || scroll.y < 0f)
-        {
-            int O = (int)scroll.y;
-            angle += O;
-            if (angle > 90) angle = 90;
-            if (angle < 20) angle = 20;
-
-            if (scroll.y > 0) height += 0.1f;
-            if (scroll.y < 0) height -= 0.1f;
-
-            if (angle >= 60) height = 5;
-
-            if (height > 5) height = 5;
-            if (height < 3.5f) height = 3.5f;
-
-            Debug.Log(angle);
-
-            if (angle == 60)
-            {
-                mainVec = new Vector3(-3, 5, -3);
-                rotate = new Vector3(60, 45, 0);
-            }
-            
-            if (scroll.y > 0 && angle < 90)
-            {
-                if (angle < 60)
-                {
-                    mainVec = new Vector3(mainVec.x - (0.1f * O), height + (0.1f), mainVec.z - (0.1f * O));
-                    rotate = new Vector3(angle, 45, 0);
-                }
-                else
-                {
-                    mainVec = new Vector3(mainVec.x + (0.1f * O), height, mainVec.z + (0.1f * O));
-                    rotate = new Vector3(angle, 45, 0);
-                }
-            }
-            else if (scroll.y < 0 && angle > 20)
-            {
-                if (angle > 60)
-                {
-                    mainVec = new Vector3(mainVec.x + (0.1f * O), height, mainVec.z + (0.1f * O));
-                    rotate = new Vector3(angle, 45, 0);
-                }
-                else
-                {
-                    mainVec = new Vector3(mainVec.x - (0.1f * O), height - 0.1f, mainVec.z - (0.1f * O));
-                    rotate = new Vector3(angle, 45, 0);
-                }
-            }   
-            else if (angle == 90)
-            {
-                mainVec = new Vector3(0, 5, 0);
-                rotate = new Vector3(angle, 45, 0);
-            }
-            else if (angle == 20)
-            {
-                mainVec = new Vector3(-0.9f, 3.5f, -0.9f);
-                rotate = new Vector3(angle, 45, 0);
-            }
-        }
- */

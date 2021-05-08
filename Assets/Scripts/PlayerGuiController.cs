@@ -375,7 +375,7 @@ public class PlayerGuiController : MonoBehaviour
         if (curenltySelectedToolbeltSlot == i)
         {
             curenltySelectedToolbeltSlot = -1;
-            Notify_failItemUse();
+            Notify_fail();
             controller.PlayerCancelSpawnBuilding();
         }
         else
@@ -508,12 +508,12 @@ public class PlayerGuiController : MonoBehaviour
     #endregion
 
 
-    public void Notify_successItemUse()
+    public void Notify_success()
     {
         UpdateBackpackUi();
     }
 
-    public void Notify_failItemUse()
+    public void Notify_fail()
     {
         curenltySelectedToolbeltSlot = -1;
         UpdateBackpackUi();
