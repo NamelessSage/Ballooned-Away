@@ -15,8 +15,10 @@ public class Skills : MonoBehaviour
     private bool _skillTreeActive;
     public int loot_reward;
     public int chop_power;
-    public int maxhealth;
-    public int currentHealth;
+    public int maxhealth = 100;
+    public int currentHealth = 100;
+    public Text scoretext;
+    private int score = 0;
     
     public void SetPlayer(WorldInteractorTool p)
     {
@@ -101,7 +103,7 @@ public class Skills : MonoBehaviour
     {
         _player.chop_power += 1;
         chop_power += 1;
-        SetMaxHealth(5);
+        //SetMaxHealth(5);
     }
     
     public void SetHealth(int health)
@@ -131,5 +133,11 @@ public class Skills : MonoBehaviour
             currentHealth += health;
         }
         SetHealth(currentHealth);
+    }
+
+    public void addScore(int points)
+    {
+        score += points;
+        scoretext.text = "Score: " + score;
     }
 }
