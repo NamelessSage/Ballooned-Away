@@ -19,6 +19,7 @@ public class Skills : MonoBehaviour
     public int currentHealth = 100;
     public Text scoretext;
     private int score = 0;
+    public Text pointText;
     
     public void SetPlayer(WorldInteractorTool p)
     {
@@ -27,6 +28,7 @@ public class Skills : MonoBehaviour
         chop_power = _player.chop_power;
         maxhealth = (int)healthSlider.maxValue;
         currentHealth = (int) healthSlider.value;
+        pointText.text = "Skill points left: " + skillPoints;
     }
 
     public void AddDistance(float distance)
@@ -36,6 +38,7 @@ public class Skills : MonoBehaviour
         if (_currentDistance > 10)
         {
             skillPoints += 1;
+            pointText.text = "Skill points left: " + skillPoints;
             _currentDistance -= 10;
         }
     }
@@ -47,6 +50,7 @@ public class Skills : MonoBehaviour
         if (_currentChop>10)
         {
             skillPoints += 1;
+            pointText.text = "Skill points left: " + skillPoints;
             _currentChop = 0;
         }
     }
@@ -64,18 +68,21 @@ public class Skills : MonoBehaviour
             {
                 IncreaseMoveSpeed();
                 skillPoints--;
+                pointText.text = "Skill points left: " + skillPoints;
             }
             
             else if (flag==1  && _player.chop_power < 5)
             {
                 IncreaseChopPower();
                 skillPoints--;
+                pointText.text = "Skill points left: " + skillPoints;
             }
             
             else if (flag==2  && _player.loot_reward < 5)
             {
                 IncreaseResourceReward();
                 skillPoints--;
+                pointText.text = "Skill points left: " + skillPoints;
             }
             
             else if (flag==3  && healthSlider.maxValue < 200)
@@ -83,6 +90,7 @@ public class Skills : MonoBehaviour
                 int health = (int) healthSlider.maxValue + 5;
                 SetMaxHealth(health);
                 skillPoints--;
+                pointText.text = "Skill points left: " + skillPoints;
             }
         }
 
