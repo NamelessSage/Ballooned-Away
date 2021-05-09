@@ -20,6 +20,16 @@ public class Skills : MonoBehaviour
     public Text scoretext;
     private int score = 0;
     public Text pointText;
+    private Text movePointsText;
+    private Text powerPointsText;
+    private Text fortunePointsText;
+    private Text healthPointsText;
+    
+    private int movepoints = 0;
+    private int powerpoints = 0;
+    private int fortunepoints = 0;
+    private int healthpoints = 0;
+    
     
     public void SetPlayer(WorldInteractorTool p)
     {
@@ -29,6 +39,18 @@ public class Skills : MonoBehaviour
         maxhealth = (int)healthSlider.maxValue;
         currentHealth = (int) healthSlider.value;
         pointText.text = "Skill points left: " + skillPoints;
+        
+        movePointsText = GameObject.Find("MovementText").GetComponent<Text>();
+        movePointsText.text = "Movement Speed: \n" + movepoints + "/5";
+        
+        powerPointsText = GameObject.Find("PowerText").GetComponent<Text>();
+        powerPointsText.text = "Gathering power: \n" + powerpoints + "/5";
+        
+        fortunePointsText = GameObject.Find("FortuneText").GetComponent<Text>();
+        fortunePointsText.text = "Fortune: \n" + fortunepoints + "/5";
+        
+        healthPointsText = GameObject.Find("HealthText").GetComponent<Text>();
+        healthPointsText.text = "Health: \n" + healthpoints + "/20";
     }
 
     public void AddDistance(float distance)
@@ -64,28 +86,28 @@ public class Skills : MonoBehaviour
     {
         if (skillPoints > 0)
         {
-            if (flag == 0  && _player.player_Speed < 5)
+            if (flag == 0  && movepoints < 5)
             {
                 IncreaseMoveSpeed();
                 skillPoints--;
                 pointText.text = "Skill points left: " + skillPoints;
             }
             
-            else if (flag==1  && _player.chop_power < 5)
+            else if (flag==1  && powerpoints < 5)
             {
                 IncreaseChopPower();
                 skillPoints--;
                 pointText.text = "Skill points left: " + skillPoints;
             }
             
-            else if (flag==2  && _player.loot_reward < 5)
+            else if (flag==2  && fortunepoints < 5)
             {
                 IncreaseResourceReward();
                 skillPoints--;
                 pointText.text = "Skill points left: " + skillPoints;
             }
             
-            else if (flag==3  && healthSlider.maxValue < 200)
+            else if (flag==3  && healthpoints < 20)
             {
                 int health = (int) healthSlider.maxValue + 5;
                 SetMaxHealth(health);
@@ -100,18 +122,26 @@ public class Skills : MonoBehaviour
     {
         _player.loot_reward += 1;
         loot_reward += 1;
+        fortunepoints += 1;
+        fortunePointsText.text = "Fortune: \n" + fortunepoints + "/5";
+
     }
 
     private void IncreaseMoveSpeed()
     {
         _player.player_Speed = (float) Math.Round(_player.player_Speed + 0.5f, 1);
+        movepoints += 1;
+        movePointsText.text = "Movement Speed: \n" + movepoints + "/5";
+
     }
 
     private void IncreaseChopPower()
     {
         _player.chop_power += 1;
         chop_power += 1;
-        //SetMaxHealth(5);
+        powerpoints += 1;
+        powerPointsText.text = "Gathering power: \n" + powerpoints + "/5";
+
     }
     
     public void SetHealth(int health)
@@ -122,6 +152,9 @@ public class Skills : MonoBehaviour
     {
         healthSlider.maxValue = health;
         maxhealth = health;
+        healthpoints += 1;
+        healthPointsText.text = "Health: \n" + healthpoints + "/20";
+
     }
 
     public void takeDamage(int damage)
