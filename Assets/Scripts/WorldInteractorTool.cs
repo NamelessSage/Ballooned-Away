@@ -442,7 +442,7 @@ public class WorldInteractorTool : MonoBehaviour
             GameObject possibeResource =
                 controller.GetTerrain().Get_Vegetation_Object_From_Grid((int) pos.x, (int) pos.z);
             GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
-            possibeResourceScript.Perform_Chop(chop_power, loot_reward);
+            possibeResourceScript.Perform_Chop(chop_power, loot_reward,true,20);
             Skills.AddChop();
             Current_Action.done = true;
             chopspeed = true;
