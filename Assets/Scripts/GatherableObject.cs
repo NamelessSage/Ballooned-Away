@@ -18,6 +18,7 @@ public class GatherableObject : MonoBehaviour
 
     private Canvas thisCanvas;
     private Text thisHealthBar;
+    private Slider slider;
     private ParticleSystem Particle;
     private MeshRenderer mesh;
     [SerializeField]
@@ -32,6 +33,7 @@ public class GatherableObject : MonoBehaviour
     {
         thisObject = transform.gameObject;
         thisHealthBar = transform.gameObject.GetComponentInChildren<Text>();
+        slider = transform.gameObject.GetComponentInChildren<Slider>();
         thisCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
         Particle = transform.gameObject.GetComponentInChildren<ParticleSystem>();
         mesh = transform.gameObject.GetComponent<MeshRenderer>();
@@ -40,6 +42,7 @@ public class GatherableObject : MonoBehaviour
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
         ThisCollider = thisObject.GetComponent<BoxCollider>();
+        setmaxHealt(objectHealth);
     }
 
 
@@ -47,6 +50,7 @@ public class GatherableObject : MonoBehaviour
     {
         audio2.Play();
         objectHealth -= chop_power;
+        setHealt(objectHealth);
         progress += chop_power;
         UpdateHealth(loot_reward,HasRareDrop,rareDropRate);
         
@@ -122,6 +126,15 @@ public class GatherableObject : MonoBehaviour
         }
     }
 
+    private void setmaxHealt(int healt)
+    {
+        slider.value = healt;
+        slider.maxValue = healt;
+    }
+    private void setHealt(int healt)
+    {
+        slider.value = healt;
+    }
     private IEnumerator DropObject()
     {
         yield return new WaitForSeconds(3);
