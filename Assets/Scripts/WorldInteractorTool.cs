@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -33,7 +34,8 @@ public class WorldInteractorTool : MonoBehaviour
         Open_Shop,
         PickUpShoorm,
         DropResources,
-        TakeResource
+        TakeResource,
+        ShootAtEnemy
     }
 
     #region Action Queue class
@@ -123,6 +125,7 @@ public class WorldInteractorTool : MonoBehaviour
     private CharacterAnimation anim;
     private Skills Skills;
     private bool chopspeed = false;
+    public GameObject proj;
 
     // ------
     private ExternalActionRequest external_Action = null;
@@ -205,6 +208,12 @@ public class WorldInteractorTool : MonoBehaviour
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.DropResources));
                     }
+                    
+                    else if (hit.collider.gameObject.CompareTag("Enemy"))
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.ShootAtEnemy));
+                    }
+
                     // If clicked on empty grass
                     else if (plantable && external_Action != null && !external_Action.procesing)
                     {
@@ -424,6 +433,11 @@ public class WorldInteractorTool : MonoBehaviour
                         Current_Action.done = true;
                         break;
                     // -------------------------------------------------------------------
+                    case ActionType.ShootAtEnemy:
+                        PerformAction_Shoot_at_enemy(Current_Action.dst_Pos);
+                        Current_Action.done = true;
+                        break;
+                    // -------------------------------------------------------------------
                 }
 
             }
@@ -435,6 +449,15 @@ public class WorldInteractorTool : MonoBehaviour
     #endregion
 
     #region Action performers
+
+    private void PerformAction_Shoot_at_enemy(Vector3 pos)
+    {
+        GameObject Projectile = Instantiate(proj, new Vector3(player.transform.position.x, player.transform.position.y + 0.3f, player.transform.position.z), Quaternion.identity);
+        Vector3 shootDir = (pos - player.transform.position).normalized;
+        shootDir.y = 0;
+        Projectile.GetComponent<ProjectilePlayer>().Setup(shootDir);
+        Destroy(Projectile, 3f);
+    }
     private void PerformAction_chop_resource_at(Vector3 pos)
     {
         if (chopspeed == false)
@@ -487,10 +510,6 @@ public class WorldInteractorTool : MonoBehaviour
                 controller.GetTerrain().PositionateObjectInWorld(a, new Vector3((int)pos.x, 0, (int)pos.z));
                 
             }
-        }
-        else
-        {
-
         }
 
         CancelExternalActionRequest();

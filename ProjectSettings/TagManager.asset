@@ -18,6 +18,8 @@ TagManager:
   - Depositor
   - Giver
   - InventorySlotCollider
+  - Projectile
+  - Enemy
   layers:
   - Default
   - TransparentFX
