@@ -775,7 +775,7 @@ public class TerrainGenerator : MonoBehaviour
         if (i < 0 || i >= xSize || j < 0 || j >= ySize || grid_Terrain_Objects[i, j] == null)
             return false;
 
-        if (!IsTree(i, j) && (grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock")) &&
+        if (!IsTree(i, j) && (grid_Terrain_Objects[i, j].tag.Equals("Grass") || grid_Terrain_Objects[i, j].tag.Equals("Rock") || grid_Terrain_Objects[i, j].tag.Equals("Sand"))  &&
             grid_Interactable_Objects[i, j] == null)
         {
             return true;
