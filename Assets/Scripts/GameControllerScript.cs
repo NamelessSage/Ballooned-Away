@@ -37,6 +37,7 @@ public class GameControllerScript : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         terrain = terrainObj.GetComponent<TerrainGenerator>();
         GUI = uiObj.GetComponent<PlayerGuiController>();
         ResourseAndItemManager = GetComponent<AcquirableAssetsData>();
