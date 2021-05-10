@@ -14,12 +14,17 @@ public class GatherableObject : MonoBehaviour
     public int progress = 0;
 
     public string resourceName;
+    public bool isResource = true;
+
+    public string rareDropName;
+    public bool rareDropIsItem = false;
+    public bool hasRareDrop = false;
 
     private Canvas thisCanvas;
     private Text thisHealthBar;
+    private Slider slider;
     private ParticleSystem Particle;
     private MeshRenderer mesh;
-    private GameObject obj;
     [SerializeField]
     private AudioSource audio;
     [SerializeField]
@@ -32,6 +37,7 @@ public class GatherableObject : MonoBehaviour
     {
         thisObject = transform.gameObject;
         thisHealthBar = transform.gameObject.GetComponentInChildren<Text>();
+        slider = transform.gameObject.GetComponentInChildren<Slider>();
         thisCanvas = transform.gameObject.GetComponentInChildren<Canvas>();
         Particle = transform.gameObject.GetComponentInChildren<ParticleSystem>();
         mesh = transform.gameObject.GetComponent<MeshRenderer>();
@@ -40,6 +46,7 @@ public class GatherableObject : MonoBehaviour
         // Find gamecontroller in the game
         controller = GameObject.Find("GameController");
         ThisCollider = thisObject.GetComponent<BoxCollider>();
+        setmaxHealt(objectHealth);
     }
 
 
@@ -47,8 +54,10 @@ public class GatherableObject : MonoBehaviour
     {
         audio2.Play();
         objectHealth -= chop_power;
+        setHealt(objectHealth);
         progress += chop_power;
         UpdateHealth(loot_reward);
+        
         
     }
 
@@ -68,8 +77,20 @@ public class GatherableObject : MonoBehaviour
 
             // Removes tree from the grid, so area where ThisTree was standing is now walkable
             controller.GetComponent<GameControllerScript>().ChopDownTreeAtPosition(thisObject.transform.position);
-            
+
+            audio.Play();
+            Particle.Play();
             StartCoroutine(DropObject());
+            if (hasRareDrop)
+            {
+                int i = Random.Range(1, 100);
+                if (i >= 50)
+                {
+                    if (!rareDropIsItem) controller.GetComponent<GameControllerScript>().AddResourceToPlayer(rareDropName, 1);
+                    else controller.GetComponent<GameControllerScript>().AddItemToPlayer(rareDropName, 1);
+                }
+
+            }
         }
         else
         {
@@ -83,21 +104,41 @@ public class GatherableObject : MonoBehaviour
             }
         }
 
+
         if (progress >= 10)
         {
             progress = progress - 10;
-            controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            if (isResource)
+                controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            else
+                controller.GetComponent<GameControllerScript>().AddItemToPlayer(resourceName, loot_reward);
+
+        }
+        else if (objectHealth == 0)
+        {
+            if (isResource)
+                controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
+            else
+                controller.GetComponent<GameControllerScript>().AddItemToPlayer(resourceName, loot_reward);
         }
     }
 
+    private void setmaxHealt(int healt)
+    {
+        slider.value = healt;
+        slider.maxValue = healt;
+    }
+    private void setHealt(int healt)
+    {
+        slider.value = healt;
+    }
     private IEnumerator DropObject()
     {
         yield return new WaitForSeconds(3);
         ThisCollider.enabled = true;
         StartCoroutine(destroyObject());
-        audio.Play();
-        Particle.Play();
-        mesh.enabled = false;
+        
+        if (mesh != null) mesh.enabled = false;
 
     }
 

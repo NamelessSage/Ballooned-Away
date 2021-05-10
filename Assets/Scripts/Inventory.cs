@@ -212,6 +212,7 @@ public class Inventory : MonoBehaviour
             if (i.item.name.Equals(name))
             {
                 i.amount += amount;
+                gui.Notify_success();
                 return i.amount;
             }
         }
@@ -221,6 +222,7 @@ public class Inventory : MonoBehaviour
         {
             Debug.Log("Adding new item " + name);
             Player_Inventory.Add(new OwnedGameItem(g, amount));
+            gui.Notify_success();
             return amount;
         }
 
@@ -331,6 +333,10 @@ public class Inventory : MonoBehaviour
         if (indx > -1 && Player_Inventory[indx].item.obj != null)
         {
             controller.PlayerSpawnBuilding(name);
+        }
+        if (indx > -1 && Player_Inventory[indx].item.name.Equals("Rock"))
+        {
+            controller.HasRock(name);
         }
     }
 

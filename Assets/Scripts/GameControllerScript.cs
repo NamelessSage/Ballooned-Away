@@ -48,6 +48,11 @@ public class GameControllerScript : MonoBehaviour
         PlrInventory.Resources_AddToResources(name, amnt);
     }
 
+    public void AddItemToPlayer(string name, int amnt)
+    {
+        PlrInventory.Inventory_AddToInventory(name, amnt);
+    }
+
     public bool RequestResourceFromPlayerInventory(string name, int amount)
     {
         int a = PlrInventory.Resources_ConsumeResource(name, amount);
@@ -73,17 +78,17 @@ public class GameControllerScript : MonoBehaviour
         if (RequestItemFromPlayerInventory(name, 1))
         {
             GameObject bldng = GlobalItemsData.GetItemByName(name).obj;
-            GUI.Notify_successItemUse();
+            GUI.Notify_success();
             return bldng;
         }
 
-        GUI.Notify_failItemUse();
+        GUI.Notify_fail();
         return null;
     }
 
     public void Notify_ExternalActionCanceled()
     {
-        GUI.Notify_failItemUse();
+        GUI.Notify_fail();
     }
 
 
@@ -105,6 +110,11 @@ public class GameControllerScript : MonoBehaviour
     // METHODS BELLOW
 
     public void PlayerSpawnBuilding(string name)
+    {
+        interactor.PlaceExternalActionRequest(name);
+    }
+
+    public void HasRock(string name)
     {
         interactor.PlaceExternalActionRequest(name);
     }

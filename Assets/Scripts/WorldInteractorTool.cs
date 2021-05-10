@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Enemy;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -29,11 +30,12 @@ public class WorldInteractorTool : MonoBehaviour
     {
         Place_Building,
         Walk_To,
-        Chop_Tree,
+        Chop_Harvestable,
         Open_Shop,
         PickUpShoorm,
         DropResources,
-        TakeResource
+        TakeResource,
+        ShootAtEnemy
     }
 
     #region Action Queue class
@@ -123,6 +125,7 @@ public class WorldInteractorTool : MonoBehaviour
     private CharacterAnimation anim;
     private Skills Skills;
     private bool chopspeed = false;
+    public GameObject proj;
 
     // ------
     private ExternalActionRequest external_Action = null;
@@ -168,7 +171,8 @@ public class WorldInteractorTool : MonoBehaviour
                 TerrainGenerator terrain = controller.GetTerrain();
                 bool walkable = terrain.IsWalkable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
                 bool plantable = terrain.IsPlantable((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
-                bool isTree = terrain.IsTree((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isGatherable = terrain.IsTree((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
+                bool isBush = terrain.IsBush((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
                 bool isShroom = terrain.IsShroom((int)clickPositionOnGrid.x, (int)clickPositionOnGrid.z);
 
                 // -------------------------------------
@@ -204,20 +208,31 @@ public class WorldInteractorTool : MonoBehaviour
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.DropResources));
                     }
+                    
+                    else if (hit.collider.gameObject.CompareTag("Enemy") && external_Action != null)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.ShootAtEnemy));
+                    }
+
                     // If clicked on empty grass
                     else if (plantable && external_Action != null && !external_Action.procesing)
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Place_Building));
                     }
                     // If clicked on a tree
-                    else if (isTree)
+                    else if (isGatherable)
                     {
-                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Tree));
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Harvestable));
                     }
                     // If clicked on a shroom
                     else if (isShroom)
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.PickUpShoorm));
+                    }
+                    // If clicked on a bush
+                    else if (isBush)
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Chop_Harvestable));
                     }
                 }
                 // -------------------------------------
@@ -330,6 +345,14 @@ public class WorldInteractorTool : MonoBehaviour
                     DetermineNextStep(onTop);
 
                     break;
+                case ActionType.ShootAtEnemy:
+                    if (external_Action != null)
+                        external_Action.procesing = true;
+                    Current_Action = Action_Que.Pop();
+                    Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
+                    Current_Action.active = false;
+
+                    break;
                 // -------------------------------------------------------------------
                 default:
 
@@ -394,7 +417,7 @@ public class WorldInteractorTool : MonoBehaviour
                         PerfromAction_Place_Building(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
-                    case ActionType.Chop_Tree:
+                    case ActionType.Chop_Harvestable:
                         PerformAction_chop_resource_at(Current_Action.dst_Pos);
                         break;
                     // -------------------------------------------------------------------
@@ -418,6 +441,11 @@ public class WorldInteractorTool : MonoBehaviour
                         Current_Action.done = true;
                         break;
                     // -------------------------------------------------------------------
+                    case ActionType.ShootAtEnemy:
+                        PerformAction_Shoot_at_enemy(Current_Action.dst_Pos);
+                        Current_Action.done = true;
+                        break;
+                    // -------------------------------------------------------------------
                 }
 
             }
@@ -429,6 +457,15 @@ public class WorldInteractorTool : MonoBehaviour
     #endregion
 
     #region Action performers
+
+    private void PerformAction_Shoot_at_enemy(Vector3 pos)
+    {
+        GameObject Projectile = Instantiate(proj, new Vector3(player.transform.position.x, player.transform.position.y + 0.3f, player.transform.position.z), Quaternion.identity);
+        Vector3 shootDir = (pos - player.transform.position).normalized;
+        shootDir.y = 0;
+        Projectile.GetComponent<ProjectilePlayer>().Setup(shootDir);
+        controller.RequestItemFromPlayerInventory("Rock", 1);
+    }
     private void PerformAction_chop_resource_at(Vector3 pos)
     {
         if (chopspeed == false)
@@ -481,10 +518,6 @@ public class WorldInteractorTool : MonoBehaviour
                 controller.GetTerrain().PositionateObjectInWorld(a, new Vector3((int)pos.x, 0, (int)pos.z));
                 
             }
-        }
-        else
-        {
-
         }
 
         CancelExternalActionRequest();

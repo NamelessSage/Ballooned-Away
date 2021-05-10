@@ -114,6 +114,8 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_ForestPlants_Pool;
     [Header("Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
     [Header("Rock Spawn Pool")] public GameObject[] spawner_Rocks_Pool;
+
+    public GameObject spawner_Enemy;
     // =========================
 
 
@@ -723,6 +725,21 @@ public class TerrainGenerator : MonoBehaviour
         GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
 
         if (located != null && (located.CompareTag("Tree") || located.CompareTag("StoneOre")))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Cheks if there is a bush
+    /// </summary>
+    public bool IsBush(int i, int j)
+    {
+        GameObject located = grid_Vegetation_Objects[i, j];                // Located Terrain object in the world
+
+        if (located != null && (located.CompareTag("Bush")))
         {
             return true;
         }
