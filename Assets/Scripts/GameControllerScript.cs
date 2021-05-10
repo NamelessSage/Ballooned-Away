@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameControllerScript : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class GameControllerScript : MonoBehaviour
     private GameObject Balloon_Pad;
     private GameObject Broken_Pad;
     //
-
+    private bool IsGamePaused = false;
 
     void Start()
     {
@@ -135,6 +136,18 @@ public class GameControllerScript : MonoBehaviour
        // Broken_pad_script.ArriveBallon();
 
         GUI.CloseBrokenUI();
+        StartCoroutine(LoadGameOverScreen(3));
+    }
+    
+    private IEnumerator LoadGameOverScreen(int waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        if (IsGamePaused == false)
+        {
+            IsGamePaused = true;
+            Time.timeScale = 0f;
+        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void PlayerSpawnBuilding(string name)
