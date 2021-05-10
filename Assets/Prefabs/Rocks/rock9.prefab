@@ -118,6 +118,7 @@ MonoBehaviour:
   rareDropName: Rock
   rareDropIsItem: 1
   hasRareDrop: 1
+  rareAmount: 5
   audio: {fileID: 386614408953167868}
   audio2: {fileID: 2415652370826294822}
 --- !u!82 &386614408953167868

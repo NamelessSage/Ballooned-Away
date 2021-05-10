@@ -132,7 +132,8 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_Resources.Add(new ResourceUnit(4, "Food"));
         AVAIALABE_Resources.Add(new ResourceUnit(5, "Planks"));
         AVAIALABE_Resources.Add(new ResourceUnit(6, "Silk Leaf"));
-        AVAIALABE_Resources.Add(new ResourceUnit(7, "Pinecone"));
+        AVAIALABE_Resources.Add(new ResourceUnit(7, "Silk"));
+        AVAIALABE_Resources.Add(new ResourceUnit(8, "Pinecone"));
 
 
         //AVAIALABE_Resources.Add(new ResourceUnit(id -  from 1 to ..., name - string));
@@ -143,12 +144,13 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_GameItems.Add(new GameItem(1, "Axe", null));
         AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", buildings[0]));
         AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", buildings[1]));
-        AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Campfire", null));
-        AVAIALABE_GameItems.Add(new GameItem(5, "Apple", null));
-        AVAIALABE_GameItems.Add(new GameItem(6, "Berry", null));
-        AVAIALABE_GameItems.Add(new GameItem(7, "Rock", null));
-        AVAIALABE_GameItems.Add(new GameItem(8, "Plum", null));
-        AVAIALABE_GameItems.Add(new GameItem(9, "Silver Essence", null));
+        AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Whitch House", buildings[2]));
+        AVAIALABE_GameItems.Add(new GameItem(5, "Blueprint: Campfire", null));
+        AVAIALABE_GameItems.Add(new GameItem(6, "Apple", null));
+        AVAIALABE_GameItems.Add(new GameItem(7, "Berry", null));
+        AVAIALABE_GameItems.Add(new GameItem(8, "Rock", null));
+        AVAIALABE_GameItems.Add(new GameItem(9, "Plum", null));
+        AVAIALABE_GameItems.Add(new GameItem(10, "Silver Essence", null));
         
 
     }

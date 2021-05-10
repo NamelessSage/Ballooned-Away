@@ -106,6 +106,7 @@ MonoBehaviour:
   rareDropName: Silk Leaf
   rareDropIsItem: 0
   hasRareDrop: 1
+  rareAmount: 1
   audio: {fileID: 1626429822201418740}
   audio2: {fileID: 6467208803288289675}
 --- !u!65 &2459998809574396046
