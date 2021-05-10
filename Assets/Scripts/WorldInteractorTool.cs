@@ -32,6 +32,7 @@ public class WorldInteractorTool : MonoBehaviour
         Walk_To,
         Chop_Harvestable,
         Open_Shop,
+        Open_BrokenPad,
         PickUpShoorm,
         DropResources,
         TakeResource,
@@ -199,6 +200,10 @@ public class WorldInteractorTool : MonoBehaviour
                     if (hit.collider.gameObject.CompareTag("BalloonPad"))
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.Open_Shop));
+                    }
+                    else if (hit.collider.gameObject.CompareTag("BrokenBallonPad"))
+                    {
+                        AddToQue(new Action(clickPositionOnGrid, ActionType.Open_BrokenPad));
                     }
                     else if (hit.collider.gameObject.CompareTag("Giver"))
                     {
@@ -415,6 +420,11 @@ public class WorldInteractorTool : MonoBehaviour
                     // -------------------------------------------------------------------
                     case ActionType.Place_Building:
                         PerfromAction_Place_Building(Current_Action.dst_Pos);
+                        break;
+                    // -------------------------------------------------------------------
+                    case ActionType.Open_BrokenPad:
+                        controller.OpenBrokenPad();
+                        Current_Action.done = true;
                         break;
                     // -------------------------------------------------------------------
                     case ActionType.Chop_Harvestable:

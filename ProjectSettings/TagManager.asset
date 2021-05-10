@@ -21,6 +21,7 @@ TagManager:
   - Projectile
   - Enemy
   - PlayerProjectile
+  - BrokenBallonPad
   layers:
   - Default
   - TransparentFX

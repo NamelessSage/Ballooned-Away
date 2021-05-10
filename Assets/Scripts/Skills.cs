@@ -9,7 +9,7 @@ public class Skills : MonoBehaviour
     public Slider healthSlider;
     public float totalDistance = 0f;
     private float _currentDistance = 0f;
-    public int skillPoints = 0;
+    public int skillPoints = 100;
     public int totalChop = 0;
     private int _currentChop = 0;
     private bool _skillTreeActive;
