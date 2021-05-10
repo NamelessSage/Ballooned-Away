@@ -5240,6 +5240,9 @@ MonoBehaviour:
   progress: 0
   resourceName: Wood
   isResource: 1
+  rareDropName: Apple
+  rareDropIsItem: 1
+  hasRareDrop: 1
   audio: {fileID: 64109787472824890}
   audio2: {fileID: -8206688324846453474}
 --- !u!65 &-6862973654210433345

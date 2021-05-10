@@ -114,6 +114,11 @@ public class GameControllerScript : MonoBehaviour
         interactor.PlaceExternalActionRequest(name);
     }
 
+    public void HasRock(string name)
+    {
+        interactor.PlaceExternalActionRequest(name);
+    }
+
 
     public void PlayerCancelSpawnBuilding()
     {

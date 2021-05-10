@@ -16,6 +16,10 @@ public class GatherableObject : MonoBehaviour
     public string resourceName;
     public bool isResource = true;
 
+    public string rareDropName;
+    public bool rareDropIsItem = false;
+    public bool hasRareDrop = false;
+
     private Canvas thisCanvas;
     private Text thisHealthBar;
     private Slider slider;
@@ -46,18 +50,18 @@ public class GatherableObject : MonoBehaviour
     }
 
 
-    public void Perform_Chop(int chop_power, int loot_reward,bool HasRareDrop,int rareDropRate)
+    public void Perform_Chop(int chop_power, int loot_reward)
     {
         audio2.Play();
         objectHealth -= chop_power;
         setHealt(objectHealth);
         progress += chop_power;
-        UpdateHealth(loot_reward,HasRareDrop,rareDropRate);
+        UpdateHealth(loot_reward);
         
         
     }
 
-    private void UpdateHealth(int loot_reward,bool HasRareDrop,int rareDropRate)
+    private void UpdateHealth(int loot_reward)
     {
         wasInteracted = true;
         if (objectHealth <= 0 && isKilled == false)
@@ -77,20 +81,13 @@ public class GatherableObject : MonoBehaviour
             audio.Play();
             Particle.Play();
             StartCoroutine(DropObject());
-            if (HasRareDrop)
+            if (hasRareDrop)
             {
                 int i = Random.Range(1, 100);
-                if (i >= rareDropRate)
+                if (i >= 50)
                 {
-                    Debug.Log("Rare Drop!");
-                    if (resourceName == "Stone")
-                    {
-                        controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
-                    }
-                    if (resourceName == "Wood")
-                    {
-                        controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);
-                    }
+                    if (!rareDropIsItem) controller.GetComponent<GameControllerScript>().AddResourceToPlayer(rareDropName, 1);
+                    else controller.GetComponent<GameControllerScript>().AddItemToPlayer(rareDropName, 1);
                 }
 
             }

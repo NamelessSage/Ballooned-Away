@@ -103,6 +103,9 @@ MonoBehaviour:
   progress: 0
   resourceName: Wood
   isResource: 1
+  rareDropName: Silk Leaf
+  rareDropIsItem: 0
+  hasRareDrop: 1
   audio: {fileID: 1626429822201418740}
   audio2: {fileID: 6467208803288289675}
 --- !u!65 &2459998809574396046

@@ -20,6 +20,7 @@ TagManager:
   - InventorySlotCollider
   - Projectile
   - Enemy
+  - PlayerProjectile
   layers:
   - Default
   - TransparentFX

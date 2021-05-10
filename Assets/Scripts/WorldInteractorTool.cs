@@ -209,7 +209,7 @@ public class WorldInteractorTool : MonoBehaviour
                         AddToQue(new Action(clickPositionOnGrid, ActionType.DropResources));
                     }
                     
-                    else if (hit.collider.gameObject.CompareTag("Enemy"))
+                    else if (hit.collider.gameObject.CompareTag("Enemy") && external_Action != null)
                     {
                         AddToQue(new Action(clickPositionOnGrid, ActionType.ShootAtEnemy));
                     }
@@ -345,6 +345,14 @@ public class WorldInteractorTool : MonoBehaviour
                     DetermineNextStep(onTop);
 
                     break;
+                case ActionType.ShootAtEnemy:
+                    if (external_Action != null)
+                        external_Action.procesing = true;
+                    Current_Action = Action_Que.Pop();
+                    Current_Action.Set_Origin(GetPlayerPosition_Adjusted());
+                    Current_Action.active = false;
+
+                    break;
                 // -------------------------------------------------------------------
                 default:
 
@@ -456,7 +464,7 @@ public class WorldInteractorTool : MonoBehaviour
         Vector3 shootDir = (pos - player.transform.position).normalized;
         shootDir.y = 0;
         Projectile.GetComponent<ProjectilePlayer>().Setup(shootDir);
-        Destroy(Projectile, 3f);
+        controller.RequestItemFromPlayerInventory("Rock", 1);
     }
     private void PerformAction_chop_resource_at(Vector3 pos)
     {
@@ -465,7 +473,7 @@ public class WorldInteractorTool : MonoBehaviour
             GameObject possibeResource =
                 controller.GetTerrain().Get_Vegetation_Object_From_Grid((int) pos.x, (int) pos.z);
             GatherableObject possibeResourceScript = possibeResource.GetComponent<GatherableObject>();
-            possibeResourceScript.Perform_Chop(chop_power, loot_reward,true,20);
+            possibeResourceScript.Perform_Chop(chop_power, loot_reward);
             Skills.AddChop();
             Current_Action.done = true;
             chopspeed = true;

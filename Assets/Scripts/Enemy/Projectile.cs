@@ -13,21 +13,15 @@ namespace Enemy
 
         private void Update()
         {
-            float speed = 1;
+            float speed = 5;
             transform.position += direction * (Time.deltaTime * speed);
         }
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (collider.tag == "Player")
+            if (collider.tag != "BalloonPad" && collider.tag != "Grass" && collider.tag != "Enemy")
             {
-                Debug.Log("player");
-                Destroy(gameObject, 0f);
-            }
-            else if (collider.tag != "BalloonPad" && collider.tag != "Grass" && collider.tag != "Enemy")
-            {
-                Debug.Log("not player : " + collider.tag);
-                Destroy(gameObject, 0f);
+                Destroy(gameObject);
             }
         }
     }

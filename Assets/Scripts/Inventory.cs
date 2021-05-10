@@ -334,6 +334,10 @@ public class Inventory : MonoBehaviour
         {
             controller.PlayerSpawnBuilding(name);
         }
+        if (indx > -1 && Player_Inventory[indx].item.name.Equals("Rock"))
+        {
+            controller.HasRock(name);
+        }
     }
 
     #endregion

@@ -1509,7 +1509,7 @@ MonoBehaviour:
   loot_reward: 1
   GameController: {fileID: 1297849958}
   selector: {fileID: 696413719}
-  proj: {fileID: 1619013131466304792, guid: 9849303ff495c164ca795be3211aad53, type: 3}
+  proj: {fileID: 7358219675736124416, guid: 93bfc525c0c7f82408339bafca37d321, type: 3}
 --- !u!1 &183883651
 GameObject:
   m_ObjectHideFlags: 0
@@ -6320,8 +6320,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e37027aba1d7cb4a81f7c21d4666192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 65
-  ySize: 65
+  xSize: 58
+  ySize: 58
   forest_PlantsToTrees_ratio: 2
   layer_Ground: {fileID: 2056748788}
   layer_Rocks: {fileID: 4256763}
@@ -6357,6 +6357,7 @@ MonoBehaviour:
   spawner_ForestPlants_Pool:
   - {fileID: 5302218853581083112, guid: 641183f63cd47b249868cb6ff7058608, type: 3}
   - {fileID: 5302218853581083112, guid: 53b8a37f1ea89724eaeee1aa963782a2, type: 3}
+  - {fileID: 9139520393377838369, guid: 5bea9e4adab476d4f95a6f6a1214dcd2, type: 3}
   spawner_Plants_Pool:
   - {fileID: 5302218853581083112, guid: 998007dcdf42c91458e3dcf93c4bf3a3, type: 3}
   - {fileID: 5302218853581083112, guid: 53b8a37f1ea89724eaeee1aa963782a2, type: 3}
@@ -6366,6 +6367,7 @@ MonoBehaviour:
   spawner_Rocks_Pool:
   - {fileID: 1136410170050514, guid: 776e4179c67bbce45bfe586d805ed1b1, type: 3}
   - {fileID: 1275837788246996, guid: 300af311324cedc4cbcea2142292bc28, type: 3}
+  spawner_Enemy: {fileID: 0}
 --- !u!4 &891263350
 Transform:
   m_ObjectHideFlags: 0
@@ -8141,7 +8143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8861,7 +8863,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5137255, g: 0.7921569, b: 0.49411765, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.9019608}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -11107,7 +11109,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1696682038}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.047
+  m_Size: 0.15766667
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12812,7 +12814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5294118, g: 0.5294118, b: 0.5294118, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -14489,7 +14491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -15225,7 +15227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

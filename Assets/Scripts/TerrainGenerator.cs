@@ -114,6 +114,8 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Forest Small Plants Spawn Pool")] public GameObject[] spawner_ForestPlants_Pool;
     [Header("Plants Spawn Pool")] public GameObject[] spawner_Plants_Pool;
     [Header("Rock Spawn Pool")] public GameObject[] spawner_Rocks_Pool;
+
+    public GameObject spawner_Enemy;
     // =========================
 
 

@@ -181,4 +181,12 @@ public class Skills : MonoBehaviour
         score += points;
         scoretext.text = "Score: " + score;
     }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Projectile"))
+        {
+            takeDamage(25);
+        }
+    }
 }

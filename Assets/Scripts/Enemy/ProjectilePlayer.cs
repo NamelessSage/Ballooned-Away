@@ -9,25 +9,20 @@ namespace Enemy
         public void Setup(Vector3 dir)
         {
             direction = dir;
+            Destroy(gameObject, 2f);
         }
 
         private void Update()
         {
-            float speed = 1;
+            float speed = 5;
             transform.position += direction * (Time.deltaTime * speed);
         }
 
         private void OnTriggerEnter(Collider collider)
         {
-            if (collider.tag == "Enemy")
+            if (collider.tag != "BalloonPad" && collider.tag != "Grass" && collider.tag != "Player")
             {
-                Debug.Log("Enemy");
-                Destroy(gameObject, 0f);
-            }
-            else if (collider.tag != "BalloonPad" && collider.tag != "Grass" && collider.tag != "Player")
-            {
-                Debug.Log("not player : " + collider.tag);
-                Destroy(gameObject, 0f);
+                Destroy(gameObject);
             }
         }
     }
