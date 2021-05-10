@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5788008649340375539}
   m_Layer: 0
   m_Name: Sandy
-  m_TagString: Grass
+  m_TagString: Sand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
