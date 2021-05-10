@@ -30,7 +30,19 @@ public class Skills : MonoBehaviour
     private int fortunepoints = 0;
     private int healthpoints = 0;
     
-    
+    private float TimeAlive = 0;
+
+    void Update()
+    {
+        TimeAlive += Time.deltaTime;
+    }
+
+    public float[] GetStats()
+    {
+        float [] a = {score, TimeAlive};
+        return a;
+    }
+
     public void SetPlayer(WorldInteractorTool p)
     {
         _player = p;
