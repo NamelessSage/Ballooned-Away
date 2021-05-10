@@ -182,6 +182,7 @@ MonoBehaviour:
   rareDropName: Silver Essence
   rareDropIsItem: 1
   hasRareDrop: 1
+  rareAmount: 1
   audio: {fileID: 170768202795531232}
   audio2: {fileID: 1544281650648055466}
 --- !u!65 &3370932782743970451

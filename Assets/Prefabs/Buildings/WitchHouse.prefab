@@ -33,7 +33,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -168,7 +168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &617921753172550936
 RectTransform:
   m_ObjectHideFlags: 0
@@ -522,9 +522,9 @@ MonoBehaviour:
   DepsitColliderObj: {fileID: 5069494844571903902}
   WithdrawObj: {fileID: 5069494844418283676}
   progressBar: {fileID: 893442103950710006}
-  What_I_Take: Stone
-  What_I_Give: Iron
-  WaitTime: 10
+  What_I_Take: Silk Leaf
+  What_I_Give: Silk
+  WaitTime: 30
   ConversionRatio: 1
 --- !u!1 &6179611039171691545
 GameObject:
@@ -5666,6 +5666,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Witch house building
+      objectReference: {fileID: 0}
+    - target: {fileID: 4195655533572834417, guid: 614731c06474c314dbfbd225ffce2f5c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5135153731370880342, guid: 614731c06474c314dbfbd225ffce2f5c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.257
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 614731c06474c314dbfbd225ffce2f5c, type: 3}

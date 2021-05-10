@@ -59,7 +59,6 @@ namespace Enemy
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("Mi Hit");
             if (other.CompareTag("PlayerProjectile"))
             {
                 Health--;

@@ -90,6 +90,7 @@ public class PlayerGuiController : MonoBehaviour
 
     // UI panels references
     public GameObject ballonShopUI;
+    public GameObject BrokenBallonUI;
     public GameObject backpackUI;
     public GameObject inventoryUI;
     public GameObject trackersPanel;
@@ -129,6 +130,7 @@ public class PlayerGuiController : MonoBehaviour
 
         CloseShop();
         CloseInv();
+        CloseBrokenUI();
 
         UpdateBackpackUi();
     }
@@ -264,12 +266,22 @@ public class PlayerGuiController : MonoBehaviour
         BallonRejected();
     }
 
+    public void RepairBallon()
+    {
+        controller.AttemptRepair();
+    }
+
     public void BallonRejected()
     {
         ClearShop();
     }
 
-    public void OpeShop()
+    public void OpenBrokenPadUI()
+    {
+        DisplayBrokenPad();
+    }
+
+    public void OpenShop()
     {
         if (ballonShopActive)
         {
@@ -287,9 +299,19 @@ public class PlayerGuiController : MonoBehaviour
         ballonShopUI.SetActive(false);
     }
 
+    public void CloseBrokenUI()
+    {
+        BrokenBallonUI.SetActive(false);
+    }
+
     private void DisplayShop()
     {
         ballonShopUI.SetActive(true);
+    }
+
+    private void DisplayBrokenPad()
+    {
+        BrokenBallonUI.SetActive(true);
     }
 
     #endregion
