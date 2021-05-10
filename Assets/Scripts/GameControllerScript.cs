@@ -134,11 +134,12 @@ public class GameControllerScript : MonoBehaviour
             PlrInventory.Resources_ConsumeResource("Iron", 30);
             PlrInventory.Resources_ConsumeResource("Silk Leaf", 5);
             Broken_pad_script.ArriveBallon();
+            StartCoroutine(LoadGameOverScreen(3));
         }
        // Broken_pad_script.ArriveBallon();
 
         GUI.CloseBrokenUI();
-        StartCoroutine(LoadGameOverScreen(3));
+        
     }
     
     private IEnumerator LoadGameOverScreen(int waitTime)
@@ -151,7 +152,26 @@ public class GameControllerScript : MonoBehaviour
         }
 
         float [] x = playerObj.GetComponent<Skills>().GetStats();
-        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(true, x[0], (int)x[1]);
+        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(false, (int)x[0], x[1]);
+    }
+
+    public void PlayerDied()
+    {
+        if (IsGamePaused == false)
+        {
+            IsGamePaused = true;
+            Time.timeScale = 0f;
+        }
+
+        float[] x = playerObj.GetComponent<Skills>().GetStats();
+        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(true, (int)x[1], x[0]);
+    }
+
+    public void FORCEAttemptRepair()
+    {
+        Broken_pad_script.ArriveBallon();
+        GUI.CloseBrokenUI();
+        StartCoroutine(LoadGameOverScreen(3));
     }
 
     public void PlayerSpawnBuilding(string name)
@@ -162,6 +182,12 @@ public class GameControllerScript : MonoBehaviour
     public void HasRock(string name)
     {
         interactor.PlaceExternalActionRequest(name);
+    }
+
+    public void EatFruit(GameObject obj, string name)
+    {
+        GameObject fruit = Instantiate(obj);
+        PlrInventory.Inventory_ConsumeItem(name, 1);
     }
 
 
