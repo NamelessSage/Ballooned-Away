@@ -21,6 +21,7 @@ TagManager:
   - Projectile
   - Enemy
   - PlayerProjectile
+  - Sand
   layers:
   - Default
   - TransparentFX
