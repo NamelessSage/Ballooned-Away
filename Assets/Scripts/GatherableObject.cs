@@ -115,7 +115,7 @@ public class GatherableObject : MonoBehaviour
                 controller.GetComponent<GameControllerScript>().AddItemToPlayer(resourceName, loot_reward);
 
         }
-        else if (objectHealth == 0)
+        else if (objectHealth <= 0)
         {
             if (isResource)
                 controller.GetComponent<GameControllerScript>().AddResourceToPlayer(resourceName, loot_reward);

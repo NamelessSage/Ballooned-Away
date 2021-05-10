@@ -442,7 +442,6 @@ public class PlayerGuiController : MonoBehaviour
                 }
             }
 
-            Debug.Log("WAS" + was);
             if (!was)
             {
                 for (int i = 0; i < BackpackList.Length; i++)

@@ -204,6 +204,7 @@ public class Inventory : MonoBehaviour
     /// <returns> new amount <returns>
     public int Inventory_AddToInventory(string name, int amount = 1)
     {
+        Debug.Log("ADDING : |" + name + "| am:  " + amount);
         foreach (OwnedGameItem i in Player_Inventory)
         {
             if (i.item.name.Equals(name))
