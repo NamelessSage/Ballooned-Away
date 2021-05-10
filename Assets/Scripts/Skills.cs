@@ -5,6 +5,8 @@ using System.Collections;
 
 public class Skills : MonoBehaviour
 {
+    public GameControllerScript controller;
+
     private WorldInteractorTool _player;
     public Slider healthSlider;
     public float totalDistance = 0f;
@@ -30,18 +32,14 @@ public class Skills : MonoBehaviour
     private int fortunepoints = 0;
     private int healthpoints = 0;
 
-    private float TimeAlive = 0;
-
-    void Update()
-    {
-        TimeAlive += Time.deltaTime;
-    }
     
     private float TimeAlive = 0;
 
     void Update()
     {
         TimeAlive += Time.deltaTime;
+        if (currentHealth <= 0)
+            controller.PlayerDied();
     }
 
     public float[] GetStats()

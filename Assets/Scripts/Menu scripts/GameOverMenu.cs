@@ -13,7 +13,7 @@ public class GameOverMenu : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
     public void QuitGame()
@@ -21,7 +21,7 @@ public class GameOverMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void DisplayMessage(bool death, float timeALive, int score)
+    public void DisplayMessage(bool death, int score, float timeALive)
     {
         PauseGame();
         if (death == true)
@@ -32,8 +32,8 @@ public class GameOverMenu : MonoBehaviour
         {
             message.text = "You won!";
         }
-        scoreText.text = score.ToString();
-        timeAliveText.text = timeALive.ToString();
+        scoreText.text = "Score: " + score.ToString();
+        timeAliveText.text = "";//"TimeAlive: " + timeALive.ToString();
     }
 
     public void PauseGame()

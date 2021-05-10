@@ -152,7 +152,19 @@ public class GameControllerScript : MonoBehaviour
         }
 
         float [] x = playerObj.GetComponent<Skills>().GetStats();
-        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(true, x[0], (int)x[1]);
+        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(false, (int)x[0], x[1]);
+    }
+
+    public void PlayerDied()
+    {
+        if (IsGamePaused == false)
+        {
+            IsGamePaused = true;
+            Time.timeScale = 0f;
+        }
+
+        float[] x = playerObj.GetComponent<Skills>().GetStats();
+        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(true, (int)x[1], x[0]);
     }
 
     public void FORCEAttemptRepair()
