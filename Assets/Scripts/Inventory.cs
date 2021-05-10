@@ -284,10 +284,12 @@ public class Inventory : MonoBehaviour
             if (res.amount <= 0)
             {
                 Player_Inventory.RemoveAt(index);
+                gui.Notify_success();
                 return 0;
             }
             else
             {
+                gui.Notify_success();
                 return res.amount;
             }
         }
@@ -330,6 +332,10 @@ public class Inventory : MonoBehaviour
         if (indx > -1 && Player_Inventory[indx].item.name.Equals("Rock"))
         {
             controller.HasRock(name);
+        }
+        if (indx > -1 && Player_Inventory[indx].item.obj.name.Equals("EatFruit"))
+        {
+            controller.EatFruit(Player_Inventory[indx].item.obj, name);
         }
     }
 

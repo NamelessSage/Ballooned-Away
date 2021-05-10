@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 10ae8b6bf7e4e60458e458ae5cb3d0db,
     type: 2}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -11028,6 +11028,8 @@ MonoBehaviour:
   - {fileID: 1892226146590632690, guid: 960c8eb65a0214449bf98a27cb769ec7, type: 3}
   - {fileID: 5069494846007109948, guid: 46767afcafe60fa4c98744d2cd853b85, type: 3}
   - {fileID: 5069494846007109948, guid: ccf134f9139dd8d41acdb16397260da7, type: 3}
+  mechanics:
+  - {fileID: 1811017307788190587, guid: 74cd9b1c6f636384d93ccceb3ed4c34c, type: 3}
 --- !u!114 &1297849962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12573,7 +12575,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2116918073}
-        m_MethodName: RepairBallon
+        m_MethodName: FORCERepairBallon
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -29,6 +29,13 @@ public class Skills : MonoBehaviour
     private int powerpoints = 0;
     private int fortunepoints = 0;
     private int healthpoints = 0;
+
+    private float TimeAlive = 0;
+
+    void Update()
+    {
+        TimeAlive += Time.deltaTime;
+    }
     
     
     public void SetPlayer(WorldInteractorTool p)
@@ -148,13 +155,13 @@ public class Skills : MonoBehaviour
     {
         healthSlider.value = health;
     }
+
     public void SetMaxHealth(int health)
     {
         healthSlider.maxValue = health;
         maxhealth = health;
         healthpoints += 1;
         healthPointsText.text = "Health: \n" + healthpoints + "/20";
-
     }
 
     public void takeDamage(int damage)
