@@ -37,7 +37,19 @@ public class Skills : MonoBehaviour
         TimeAlive += Time.deltaTime;
     }
     
-    
+    private float TimeAlive = 0;
+
+    void Update()
+    {
+        TimeAlive += Time.deltaTime;
+    }
+
+    public float[] GetStats()
+    {
+        float [] a = {score, TimeAlive};
+        return a;
+    }
+
     public void SetPlayer(WorldInteractorTool p)
     {
         _player = p;

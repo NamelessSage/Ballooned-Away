@@ -10,6 +10,8 @@ public class GameControllerScript : MonoBehaviour
     public GameObject playerObj;
     public GameObject uiObj;
     public GameObject interactroObj;
+    public GameObject gameOverUI;
+    
 
     private TerrainGenerator terrain;
     private PlayerGuiController GUI;
@@ -148,7 +150,9 @@ public class GameControllerScript : MonoBehaviour
             IsGamePaused = true;
             Time.timeScale = 0f;
         }
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        float [] x = playerObj.GetComponent<Skills>().GetStats();
+        gameOverUI.GetComponent<GameOverMenu>().DisplayMessage(true, x[0], (int)x[1]);
     }
 
     public void FORCEAttemptRepair()
