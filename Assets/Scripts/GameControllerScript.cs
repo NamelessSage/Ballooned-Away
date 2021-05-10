@@ -137,6 +137,12 @@ public class GameControllerScript : MonoBehaviour
         GUI.CloseBrokenUI();
     }
 
+    public void FORCEAttemptRepair()
+    {
+        Broken_pad_script.ArriveBallon();
+        GUI.CloseBrokenUI();
+    }
+
     public void PlayerSpawnBuilding(string name)
     {
         interactor.PlaceExternalActionRequest(name);

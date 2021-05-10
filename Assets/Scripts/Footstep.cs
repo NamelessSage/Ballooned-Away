@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,19 +6,40 @@ using UnityEngine;
 public class Footstep : MonoBehaviour
 {
 
-    public AudioSource audio;
-    public AudioSource audiograss;
+    public AudioSource stoneStep;
+    public AudioSource grassStep;
+    
     
 
     private void OnCollisionEnter(Collision other)
     {
         if (other.collider.CompareTag("Rock"))
         {
-            audio.Play();
+            PlayStone();
         }
         if (other.collider.CompareTag("Grass"))
         {
-            audiograss.Play();
+            PlayGrass();
+        }
+    }
+
+    private void PlayGrass()
+    {
+        if (!grassStep.isPlaying)
+        {
+            float rn = Random.Range(2f, 2.3f);
+            grassStep.pitch = rn;
+            grassStep.Play();
+        }
+    }
+
+    private void PlayStone()
+    {
+        if (!stoneStep.isPlaying)
+        {
+            float rn = Random.Range(2f, 2.3f);
+            stoneStep.pitch = rn;
+            stoneStep.Play();
         }
     }
  

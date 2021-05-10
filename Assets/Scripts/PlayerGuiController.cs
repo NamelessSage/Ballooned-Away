@@ -270,6 +270,11 @@ public class PlayerGuiController : MonoBehaviour
     {
         controller.AttemptRepair();
     }
+    public void FORCERepairBallon()
+    {
+        controller.FORCEAttemptRepair();
+    }
+
 
     public void BallonRejected()
     {

@@ -312,6 +312,7 @@ MonoBehaviour:
   rareDropName: Iron
   rareDropIsItem: 0
   hasRareDrop: 1
+  rareAmount: 1
   audio: {fileID: 6464105174550626064}
   audio2: {fileID: 8647938854923434500}
 --- !u!1 &666045773694999442
