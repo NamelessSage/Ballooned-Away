@@ -19,6 +19,7 @@ public class GatherableObject : MonoBehaviour
     public string rareDropName;
     public bool rareDropIsItem = false;
     public bool hasRareDrop = false;
+    public int rareAmount = 1;
 
     private Canvas thisCanvas;
     private Text thisHealthBar;
@@ -87,7 +88,7 @@ public class GatherableObject : MonoBehaviour
                 if (i >= 50)
                 {
                     if (!rareDropIsItem) controller.GetComponent<GameControllerScript>().AddResourceToPlayer(rareDropName, 1);
-                    else controller.GetComponent<GameControllerScript>().AddItemToPlayer(rareDropName, 1);
+                    else controller.GetComponent<GameControllerScript>().AddItemToPlayer(rareDropName, rareAmount);
                 }
 
             }

@@ -5362,7 +5362,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Silk Leaf
+  m_Text: Silk
 --- !u!222 &657733584
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11027,6 +11027,7 @@ MonoBehaviour:
   buildings:
   - {fileID: 1892226146590632690, guid: 960c8eb65a0214449bf98a27cb769ec7, type: 3}
   - {fileID: 5069494846007109948, guid: 46767afcafe60fa4c98744d2cd853b85, type: 3}
+  - {fileID: 5069494846007109948, guid: ccf134f9139dd8d41acdb16397260da7, type: 3}
 --- !u!114 &1297849962
 MonoBehaviour:
   m_ObjectHideFlags: 0

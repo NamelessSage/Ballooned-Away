@@ -123,7 +123,7 @@ public class GameControllerScript : MonoBehaviour
     {
         bool planks = PlrInventory.Resources_CheckIfEnoughResource("Planks", 200);
         bool iron = PlrInventory.Resources_CheckIfEnoughResource("Iron", 30); ;
-        bool silk = PlrInventory.Resources_CheckIfEnoughResource("Silk Leaf", 5);
+        bool silk = PlrInventory.Resources_CheckIfEnoughResource("Silk", 5);
 
         if (planks && iron && silk)
         {
@@ -132,7 +132,7 @@ public class GameControllerScript : MonoBehaviour
             PlrInventory.Resources_ConsumeResource("Silk Leaf", 5);
             Broken_pad_script.ArriveBallon();
         }
-        Broken_pad_script.ArriveBallon();
+       // Broken_pad_script.ArriveBallon();
 
         GUI.CloseBrokenUI();
     }
