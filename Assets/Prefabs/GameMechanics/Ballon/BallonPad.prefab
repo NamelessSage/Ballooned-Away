@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 8054177693970600960}
   - component: {fileID: 1167528787122065401}
   m_Layer: 0
-  m_Name: BalloonPad
+  m_Name: BallonPad
   m_TagString: BalloonPad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

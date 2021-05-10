@@ -14,17 +14,21 @@ public class GameControllerScript : MonoBehaviour
     private PlayerGuiController GUI;
     private AcquirableAssetsData ResourseAndItemManager;
     private Inventory PlrInventory;
-    private BalloonPad Ballon_pad_script;
-    private WorldInteractorTool interactor;
 
+    private BalloonPad Ballon_pad_script;
+    private BorkenBallon Broken_pad_script;
+
+    private WorldInteractorTool interactor;
     //-------------------------------------
 
 
     // Mechanics objects
     public GameObject balloon_Pad_Prefab;
+    public GameObject broken_Pad_Prefab;
     public GameObject balloon_Model;
 
     private GameObject Balloon_Pad;
+    private GameObject Broken_Pad;
     //
 
 
@@ -38,6 +42,7 @@ public class GameControllerScript : MonoBehaviour
 
         spawnPlayer();
         spawnBalloonPad();
+        spawnBrokenBalloonPad();
     }
 
 
@@ -101,13 +106,36 @@ public class GameControllerScript : MonoBehaviour
         return new Vector3(x, y, z);
     }
 
+    public void OpenBrokenPad()
+    {
+        GUI.OpenBrokenPadUI();
+    }
+
     public void OpenShopUI()
     {
-        GUI.OpeShop();
+        GUI.OpenShop();
     }
 
 
     // METHODS BELLOW
+
+    public void AttemptRepair()
+    {
+        bool planks = PlrInventory.Resources_CheckIfEnoughResource("Planks", 200);
+        bool iron = PlrInventory.Resources_CheckIfEnoughResource("Iron", 30); ;
+        bool silk = PlrInventory.Resources_CheckIfEnoughResource("Silk Leaf", 5);
+
+        if (planks && iron && silk)
+        {
+            PlrInventory.Resources_ConsumeResource("Planks", 200);
+            PlrInventory.Resources_ConsumeResource("Iron", 30);
+            PlrInventory.Resources_ConsumeResource("Silk Leaf", 5);
+            Broken_pad_script.ArriveBallon();
+        }
+        Broken_pad_script.ArriveBallon();
+
+        GUI.CloseBrokenUI();
+    }
 
     public void PlayerSpawnBuilding(string name)
     {
@@ -243,7 +271,30 @@ public class GameControllerScript : MonoBehaviour
             }
         }
     }
+
+    private void spawnBrokenBalloonPad()
+    {
+        for (int i = ((int)terrain.xSize / 2 - 2); i < terrain.xSize; i++)
+        {
+            for (int j = 0; j < terrain.ySize; j++)
+            {
+
+                if (terrain.ChechkIfFlat(i, j))
+                {
+
+                    Vector3 pos = new Vector3(i, 0, j);
+                    Broken_Pad = Instantiate(broken_Pad_Prefab);
+                    Broken_pad_script = Broken_Pad.GetComponent<BorkenBallon>();
+                    Broken_pad_script.SetPlayerUI(GUI);
+                    Broken_pad_script.SetPlayerInventory(PlrInventory);
+                    Broken_Pad.name = "Broken Ballon Pad";
+                    terrain.PositionateObjectInWorld(Broken_Pad, pos);
+                    return;
+                }
+            }
+        }
+    }
     #endregion
-    
+
 
 }

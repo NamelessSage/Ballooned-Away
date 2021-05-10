@@ -106,7 +106,6 @@ public class Inventory : MonoBehaviour
             
         }
 
-        Debug.Log("Such " + name + " does not exist in resources");
         return -1;
     }
 
@@ -124,7 +123,6 @@ public class Inventory : MonoBehaviour
             return res.amount;
         }
 
-        Debug.Log("Such " + name + " does not exist in resources");
         return -1;
     }
 
@@ -150,7 +148,6 @@ public class Inventory : MonoBehaviour
             
             if (g != null)
             {
-                Debug.Log("Adding new resource " + name);
                 Player_Resources.Add(new OwnedResource(g, amount));
                 gui.UpdateResourcesTrackers(name);
                 return amount;
@@ -220,13 +217,11 @@ public class Inventory : MonoBehaviour
         GameItem g = GlobalItemsData.GetItemByName(name);
         if (g != null)
         {
-            Debug.Log("Adding new item " + name);
             Player_Inventory.Add(new OwnedGameItem(g, amount));
             gui.Notify_success();
             return amount;
         }
 
-        Debug.Log("Such " + name + " does not exist in inventory");
         return -1;
     }
 
@@ -296,8 +291,6 @@ public class Inventory : MonoBehaviour
                 return res.amount;
             }
         }
-
-        Debug.Log("Such " + name + " does not exist in inentory");
         return -1;
     }
 
