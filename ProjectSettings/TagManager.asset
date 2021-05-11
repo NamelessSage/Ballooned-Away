@@ -23,6 +23,7 @@ TagManager:
   - PlayerProjectile
   - Sand
   - BrokenBallonPad
+  - Wall
   layers:
   - Default
   - TransparentFX
