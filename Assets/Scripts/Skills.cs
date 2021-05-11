@@ -93,12 +93,6 @@ public class Skills : MonoBehaviour
             _currentChop = 0;
         }
     }
-    
-/// <summary>
-/// flag 0 - distance
-/// flag 1 - chop
-/// </summary>
-/// <param name="flag"></param>
     public void CheckSkillPoints(int flag)
     {
         if (skillPoints > 0)
