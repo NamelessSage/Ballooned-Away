@@ -8133,6 +8133,7 @@ MonoBehaviour:
     type: 3}
   block_Water: {fileID: 3744828197095186765, guid: 253c1a3dee4e4a2468bfeed4c9659d6f,
     type: 3}
+  obelisk: {fileID: 9139520393377838369, guid: 5bea9e4adab476d4f95a6f6a1214dcd2, type: 3}
   spawner_Tree_Pool:
   - {fileID: 191266, guid: dc2d0251b3879104d93d24d2ad3e4eb1, type: 3}
   - {fileID: 6941765000743290380, guid: 607f257c5b561b246956cacde3d8036d, type: 3}

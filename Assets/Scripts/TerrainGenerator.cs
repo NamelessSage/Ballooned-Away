@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -108,6 +109,8 @@ public class TerrainGenerator : MonoBehaviour
     public GameObject block_Mountain;
     public GameObject block_Water;
 
+    public GameObject obelisk;
+
 
     [Header("Trees Spawn Pool")] public GameObject[] spawner_Tree_Pool;
     [Header("Rare Trees Spawn Pool")] public GameObject[] spawner_Rare_Tree_Pool;
@@ -147,12 +150,15 @@ public class TerrainGenerator : MonoBehaviour
         ResetArrays(0, 0);
         CalculateOffsets();
         InitiateIsland(xSize, ySize);
+
+        
     }
 
     void Update()
     {
         //InitializeWorld();
     }
+
 
     void InitializeWorld()
     {
@@ -167,6 +173,14 @@ public class TerrainGenerator : MonoBehaviour
     }
     // =========================
 
+    private IEnumerator spawnObelisks(int[,] mapy)
+    {
+        yield return new WaitForSeconds(10);
+        Debug.Log("Wasup");
+        Generate_Obelisks(mapy);
+        StartCoroutine(spawnObelisks(mapy));
+    }
+
     void InitiateIsland(int x_s, int y_s)
     {
         ClearMap();
@@ -179,6 +193,8 @@ public class TerrainGenerator : MonoBehaviour
         Generate_Forests(island);
         Generate_Plants(island);
         Generate_Ores(island);
+
+        StartCoroutine(spawnObelisks(island));
     }
 
     #region world pre-loading
@@ -618,6 +634,46 @@ public class TerrainGenerator : MonoBehaviour
 
         return plant;
     }
+    #endregion
+
+    #region Gynimas
+
+    private void Generate_Obelisks(int[,] map)
+    {
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    if (map[i, j] == 1)
+                    {
+                        if (IsPlantable(i, j))
+                        {
+                            int random = Random.Range(1, 100);
+
+                            if (random >= 80)
+                            {
+                                GameObject obeliskSpawn = Instantiate(obelisk);
+
+                                obeliskSpawn.name = "Obelisk_" + i + "_" + j;
+                                obeliskSpawn.transform.parent = layer_Plants.transform;
+
+                                float height = 1f;
+                                if (Get_Terrian_Object_From_Grid(i, j) != null && Get_Terrian_Object_From_Grid(i, j).CompareTag("Rock")) height = 1.5f;
+                                int rn = Random.Range(-6, 6);
+                                int rot = 90 * rn;
+
+                                obeliskSpawn.transform.position = new Vector3(i, height, j);
+                                obeliskSpawn.transform.rotation = new Quaternion(0, rot * (Mathf.PI / 180), 0, 1);
+
+                                grid_Vegetation_Objects[i, j] = obeliskSpawn;
+                        }
+                        }
+
+                    }
+                }
+            }
+    }
+
     #endregion
 
 
