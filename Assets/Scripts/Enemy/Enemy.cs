@@ -23,9 +23,6 @@ namespace Enemy
             player = GameObject.Find("Player");
             PassedTime = WaitTime;
         }
-
-        
-
         private void Update()
         {
             PassedTime = PassedTime - Time.deltaTime;
@@ -50,13 +47,11 @@ namespace Enemy
                
             }
         }
-
         private IEnumerator breaker()
         {
             yield return new WaitForSeconds(1);
             Destroy(gameObject);
         }
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("PlayerProjectile"))
@@ -64,8 +59,6 @@ namespace Enemy
                 Health--;
             }
         }
-
-
     }
 }
 
