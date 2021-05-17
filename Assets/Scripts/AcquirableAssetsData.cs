@@ -149,10 +149,11 @@ public class AcquirableAssetsData : MonoBehaviour
         AVAIALABE_GameItems.Add(new GameItem(5, "Blueprint: Campfire", null));
         AVAIALABE_GameItems.Add(new GameItem(6, "Apple", mechanics[0]));
         AVAIALABE_GameItems.Add(new GameItem(7, "Berry", mechanics[0]));
-        AVAIALABE_GameItems.Add(new GameItem(8, "Rock", null));
+        AVAIALABE_GameItems.Add(new GameItem(8, "Rock", mechanics[1]));
         AVAIALABE_GameItems.Add(new GameItem(9, "Plum", mechanics[0]));
         AVAIALABE_GameItems.Add(new GameItem(10, "Silver Essence", null));
-        
+        AVAIALABE_GameItems.Add(new GameItem(11, "Blueprint: Wall", buildings[3]));
+
 
     }
 }
