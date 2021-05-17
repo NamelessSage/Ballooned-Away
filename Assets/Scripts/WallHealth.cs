@@ -31,10 +31,7 @@ public class WallHealth : MonoBehaviour
     {
         Health -= damage;
         setHealt(Health);
-        if (Health < 0)
-        {
-            DestroyObj();
-        }
+
     }
 
     private void DestroyObj()

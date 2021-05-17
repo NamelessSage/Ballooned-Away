@@ -175,7 +175,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private IEnumerator spawnObelisks(int[,] mapy)
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(15);
         Debug.Log("Wasup");
         Generate_Obelisks(mapy);
         StartCoroutine(spawnObelisks(mapy));
@@ -194,7 +194,7 @@ public class TerrainGenerator : MonoBehaviour
         Generate_Plants(island);
         Generate_Ores(island);
 
-        StartCoroutine(spawnObelisks(island));
+       /* GYNIMAS */ // StartCoroutine(spawnObelisks(island));
     }
 
     #region world pre-loading
