@@ -86,6 +86,7 @@ public class PlayerGuiController : MonoBehaviour
     // Templates prefabs
     public GameObject trackerTemplate;
     public GameObject slotTemplate;
+    public GameObject cheatSlotTemplate;
     // --------------------------------
 
     // Objects references
@@ -101,6 +102,9 @@ public class PlayerGuiController : MonoBehaviour
     public GameObject balloonShopMainSlotsPanel;
     public GameObject inventorySlotsPanel;
     public GameObject skillTreeUi;
+
+    public GameObject cheatSlotsUI;
+    public GameObject cheatSlotsPanel;
     // ---------------------------------
 
     // Script references
@@ -135,6 +139,7 @@ public class PlayerGuiController : MonoBehaviour
         CloseShop();
         CloseInv();
         CloseBrokenUI();
+        CloseCheats();
 
         UpdateBackpackUi();
     }
@@ -371,6 +376,10 @@ public class PlayerGuiController : MonoBehaviour
             skillTreeActive = !skillTreeActive;
             skillTreeUi.SetActive(skillTreeActive);
         }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCheats();
+        }
 
         if (num > -1)
         {
@@ -561,6 +570,51 @@ public class PlayerGuiController : MonoBehaviour
         foreach (Transform child in parent.transform)
             Destroy(child.gameObject);
     }
-    
-    
+
+
+
+    #region CHEATS
+    private void ToggleCheats()
+    {
+        if (cheatSlotsUI.activeSelf == true)
+        {
+            CloseCheats();
+        }
+        else
+        {
+            OpenCheats();
+        }
+    }
+
+    private void CloseCheats()
+    {
+        cheatSlotsUI.SetActive(false);
+    }
+
+    private void OpenCheats()
+    {
+        cheatSlotsUI.SetActive(true);
+        UpdateCHEATS();
+    }
+
+    private void UpdateCHEATS()
+    {
+        if (cheatSlotsUI.activeSelf == true)
+        {
+            ClearObjectChildren(cheatSlotsPanel);
+            foreach (GameItem s in GlobalItemsData.AVAIALABE_GameItems)
+            {
+                GameObject t = Instantiate(cheatSlotTemplate, cheatSlotsPanel.transform);
+                t.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = s.icon;
+                t.transform.GetChild(1).gameObject.GetComponent<Text>().text = s.name;
+                t.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(delegate () { AddItemFromCheat(s.name); });
+            }
+        }
+    }
+
+    private void AddItemFromCheat(string name)
+    {
+        playerINV.Inventory_AddToInventory(name);
+    }
+    #endregion
 }
