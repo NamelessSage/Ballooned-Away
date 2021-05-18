@@ -31,7 +31,8 @@ public class Skills : MonoBehaviour
     private int powerpoints = 0;
     private int fortunepoints = 0;
     private int healthpoints = 0;
-
+    public AudioSource Heal;
+    public AudioSource TakeDamage;
     
     private float TimeAlive = 0;
 
@@ -170,6 +171,7 @@ public class Skills : MonoBehaviour
 
     public void takeDamage(int damage)
     {
+        TakeDamage.Play();
         currentHealth -= damage;
         SetHealth(currentHealth);
     }
@@ -179,10 +181,12 @@ public class Skills : MonoBehaviour
         if (currentHealth + health > maxhealth)
         {
             currentHealth = maxhealth;
+            Heal.Play();
         }
         else
         {
             currentHealth += health;
+            Heal.Play();
         }
         SetHealth(currentHealth);
     }
