@@ -317,7 +317,7 @@ public class Inventory : MonoBehaviour
 
         for (int i = 0; i < len; i++)
         {
-            array[i] = new InventorySlotInfo(Player_Inventory[i].item.name, Player_Inventory[i].amount);
+            array[i] = new InventorySlotInfo(Player_Inventory[i].item.name, Player_Inventory[i].amount, Player_Inventory[i].item.icon);
         }
 
         return array;
@@ -328,15 +328,18 @@ public class Inventory : MonoBehaviour
         int indx = Inventory_FindIndexOf_byName(name);
         if (indx > -1 && Player_Inventory[indx].item.obj != null)
         {
-            controller.PlayerSpawnBuilding(name);
-        }
-        if (indx > -1 && Player_Inventory[indx].item.name.Equals("Rock"))
-        {
-            controller.HasRock(name);
-        }
-        if (indx > -1 && Player_Inventory[indx].item.obj.name.Equals("EatFruit"))
-        {
-            controller.EatFruit(Player_Inventory[indx].item.obj, name);
+            if (Player_Inventory[indx].item.name.Equals("Rock"))
+            {
+                controller.HasRock(name);
+            }
+            else if (Player_Inventory[indx].item.obj.name.Equals("EatFruit"))
+            {
+                controller.EatFruit(Player_Inventory[indx].item.obj, name);
+            }
+            else
+            {
+                controller.PlayerSpawnBuilding(name);
+            }
         }
     }
 

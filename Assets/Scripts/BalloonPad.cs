@@ -57,6 +57,12 @@ public class Trade
         this.priceAmount = priceAmount;
         this.type = type;
     }
+
+    public Sprite getIcon()
+    {
+        return GlobalItemsData.GetItemByName(name).icon;
+    }
+
 }
 
 public class BalloonPad : MonoBehaviour

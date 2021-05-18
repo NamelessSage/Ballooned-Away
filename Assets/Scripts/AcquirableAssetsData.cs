@@ -8,12 +8,14 @@ public class AcquirableAsset
 {
     public int ID;// { get; }
     public string name;// { get; }
+    public Sprite icon;
 
     public AcquirableAsset() { }
-    public AcquirableAsset(int id, string n)
+    public AcquirableAsset(int id, string n, Sprite ic = null)
     {
         ID = id;
         name = n;
+        icon = ic;
     }
 }
 
@@ -24,7 +26,7 @@ public class AcquirableAsset
 public class ResourceUnit : AcquirableAsset
 {
     public ResourceUnit() : base() { }
-    public ResourceUnit(int id, string name) : base(id, name)
+    public ResourceUnit(int id, string name, Sprite ic = null) : base(id, name, ic)
     {
 
     }
@@ -39,7 +41,7 @@ public class GameItem : AcquirableAsset
     public GameObject obj { get; }
 
     public GameItem() : base() { }
-    public GameItem(int id, string name, GameObject obj) : base(id, name)
+    public GameItem(int id, string name, GameObject obj, Sprite ic = null) : base(id, name, ic)
     {
         this.obj = obj;
     }
@@ -106,6 +108,7 @@ public class AcquirableAssetsData : MonoBehaviour
 
     public GameObject[] buildings;
     public GameObject[] mechanics;
+    public Sprite[] icons;
 
     void Start()
     {
@@ -142,17 +145,17 @@ public class AcquirableAssetsData : MonoBehaviour
 
     private void MakeItems()
     {
-        AVAIALABE_GameItems.Add(new GameItem(1, "Axe", null));
-        AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", buildings[0]));
-        AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", buildings[1]));
-        AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Whitch House", buildings[2]));
+        AVAIALABE_GameItems.Add(new GameItem(1, "Axe", null, icons[0]));
+        AVAIALABE_GameItems.Add(new GameItem(2, "Blueprint: Lumbermill", buildings[0], icons[1]));
+        AVAIALABE_GameItems.Add(new GameItem(3, "Blueprint: Blacksmith", buildings[1], icons[2]));
+        AVAIALABE_GameItems.Add(new GameItem(4, "Blueprint: Whitch House", buildings[2], icons[3]));
         AVAIALABE_GameItems.Add(new GameItem(5, "Blueprint: Campfire", null));
-        AVAIALABE_GameItems.Add(new GameItem(6, "Apple", mechanics[0]));
-        AVAIALABE_GameItems.Add(new GameItem(7, "Berry", mechanics[0]));
-        AVAIALABE_GameItems.Add(new GameItem(8, "Rock", mechanics[1]));
-        AVAIALABE_GameItems.Add(new GameItem(9, "Plum", mechanics[0]));
-        AVAIALABE_GameItems.Add(new GameItem(10, "Silver Essence", null));
-        AVAIALABE_GameItems.Add(new GameItem(11, "Blueprint: Wall", buildings[3]));
+        AVAIALABE_GameItems.Add(new GameItem(6, "Apple", mechanics[0], icons[4]));
+        AVAIALABE_GameItems.Add(new GameItem(7, "Berry", mechanics[0], icons[5]));
+        AVAIALABE_GameItems.Add(new GameItem(8, "Rock", mechanics[1], icons[6]));
+        AVAIALABE_GameItems.Add(new GameItem(9, "Plum", mechanics[0], icons[7]));
+        AVAIALABE_GameItems.Add(new GameItem(10, "Silver Essence", null, icons[8]));
+        AVAIALABE_GameItems.Add(new GameItem(11, "Blueprint: Wall", buildings[3], icons[9]));
 
 
     }
