@@ -9,16 +9,16 @@ public class Skills : MonoBehaviour
 
     private WorldInteractorTool _player;
     public Slider healthSlider;
-    public float totalDistance = 0f;
+    private float totalDistance = 0f;
     private float _currentDistance = 0f;
     public int skillPoints = 100;
-    public int totalChop = 0;
+    private int totalChop = 0;
     private int _currentChop = 0;
     private bool _skillTreeActive;
-    public int loot_reward;
-    public int chop_power;
-    public int maxhealth = 100;
-    public int currentHealth = 100;
+    private int loot_reward;
+    private int chop_power;
+    private int maxhealth = 100;
+    private int currentHealth = 100;
     public Text scoretext;
     private int score = 0;
     public Text pointText;
