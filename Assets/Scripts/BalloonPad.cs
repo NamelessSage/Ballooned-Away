@@ -57,6 +57,12 @@ public class Trade
         this.priceAmount = priceAmount;
         this.type = type;
     }
+
+    public Sprite getIcon()
+    {
+        return GlobalItemsData.GetItemByName(name).icon;
+    }
+
 }
 
 public class BalloonPad : MonoBehaviour
@@ -72,6 +78,9 @@ public class BalloonPad : MonoBehaviour
         public Trade[] BluePrints = { new Trade("Blueprint: Lumbermill", 1, "Wood", 1, TradeType.Blueprint),
                                       new Trade("Blueprint: Blacksmith", 1, "Stone", 1, TradeType.Blueprint),
                                       new Trade("Blueprint: Whitch House", 1, "Wood", 1, TradeType.Blueprint)};
+
+        public Trade Wall = new Trade("Blueprint: Wall", 5, "Wood", 1, TradeType.Blueprint);
+
 
         public Trade[] Resources =  { new Trade("Wood", 20, "Stone", 10, TradeType.Resource),
                                       new Trade("Stone", 10, "Wood", 20, TradeType.Resource),
@@ -133,7 +142,7 @@ public class BalloonPad : MonoBehaviour
         List<Trade> newTradeList = new List<Trade>();
 
         int random = Random.Range(0, Trades.Resources.Length);
-        newTradeList.Add(Trades.Resources[random]);
+        newTradeList.Add(Trades.Wall);
 
         random = Random.Range(0, Trades.BluePrints.Length);
         newTradeList.Add(Trades.BluePrints[random]);

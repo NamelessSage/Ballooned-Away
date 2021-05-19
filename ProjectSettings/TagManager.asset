@@ -24,6 +24,7 @@ TagManager:
   - Sand
   - BrokenBallonPad
   - Wall
+  - GenericGrass
   layers:
   - Default
   - TransparentFX

@@ -8,12 +8,14 @@ public class InventorySlotInfo
 {
     public string name;
     public int am;
+    public Sprite icon;
 
     public InventorySlotInfo() { }
 
-    public InventorySlotInfo(string n, int a)
+    public InventorySlotInfo(string n, int a, Sprite ico)
     {
         name = n; am = a;
+        icon = ico;
     }
 }
 
@@ -47,13 +49,15 @@ public class PlayerGuiController : MonoBehaviour
         public string name;
         public int amount;
         public int pos = -1;
+        public Sprite icon;
 
         public BackpackSlot() { }
 
-        public BackpackSlot(string n, int a)
+        public BackpackSlot(string n, int a, Sprite ico = null)
         {
             name = n;
             amount = a;
+            icon = GlobalItemsData.GetItemByName(n).icon;
         }
     }
 
@@ -82,6 +86,7 @@ public class PlayerGuiController : MonoBehaviour
     // Templates prefabs
     public GameObject trackerTemplate;
     public GameObject slotTemplate;
+    public GameObject cheatSlotTemplate;
     // --------------------------------
 
     // Objects references
@@ -97,6 +102,9 @@ public class PlayerGuiController : MonoBehaviour
     public GameObject balloonShopMainSlotsPanel;
     public GameObject inventorySlotsPanel;
     public GameObject skillTreeUi;
+
+    public GameObject cheatSlotsUI;
+    public GameObject cheatSlotsPanel;
     // ---------------------------------
 
     // Script references
@@ -131,6 +139,7 @@ public class PlayerGuiController : MonoBehaviour
         CloseShop();
         CloseInv();
         CloseBrokenUI();
+        CloseCheats();
 
         UpdateBackpackUi();
     }
@@ -217,13 +226,14 @@ public class PlayerGuiController : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             string amount = "";
-            if (Current_Balloon.TradeList[i].type == TradeType.Resource)
-            {
+            //if (Current_Balloon.TradeList[i].type == TradeType.Resource)
+           // {
                 int theAmount = Current_Balloon.TradeList[i].amount;
                 if (theAmount > 1)
                     amount = " x" + theAmount;
-            }
-                
+           // }
+
+            balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(1).gameObject.GetComponent<Image>().sprite = Current_Balloon.TradeList[i].getIcon();
             balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(0).gameObject.GetComponent<Text>().text = Current_Balloon.TradeList[i].name + amount;
             string priceText = Current_Balloon.TradeList[i].priceName + " x" + Current_Balloon.TradeList[i].priceAmount;
             balloonShopMainSlotsPanel.transform.GetChild(i).transform.GetChild(2).gameObject.GetComponent<Text>().text = priceText;
@@ -366,6 +376,10 @@ public class PlayerGuiController : MonoBehaviour
             skillTreeActive = !skillTreeActive;
             skillTreeUi.SetActive(skillTreeActive);
         }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleCheats();
+        }
 
         if (num > -1)
         {
@@ -478,16 +492,21 @@ public class PlayerGuiController : MonoBehaviour
         {
             GameObject a = backpackUI.transform.GetChild(i).gameObject;
 
+            Image imgOnslot = a.transform.GetChild(0).gameObject.GetComponent<Image>();
+
             if (BackpackList[i] != null && playerINV.Inventory_CheckIfHasItem(BackpackList[i].name))
             {
                 BackpackList[i].amount = playerINV.Inventory_GetAmountOfItem(BackpackList[i].name);
-                a.transform.GetChild(0).gameObject.GetComponent<Text>().text = BackpackList[i].name;
+                imgOnslot.enabled = true;
+                imgOnslot.sprite = BackpackList[i].icon;
                 a.transform.GetChild(2).gameObject.GetComponent<Text>().text = "x" + BackpackList[i].amount;
             }
             else
             {
                 BackpackList[i] = null;
-                a.transform.GetChild(0).gameObject.GetComponent<Text>().text = "";
+
+                imgOnslot.sprite = null;
+                imgOnslot.enabled = false;
                 a.transform.GetChild(2).gameObject.GetComponent<Text>().text = "";
             }
         }
@@ -504,6 +523,7 @@ public class PlayerGuiController : MonoBehaviour
             foreach (InventorySlotInfo s in slots)
             {
                 GameObject t = Instantiate(slotTemplate, inventorySlotsPanel.transform);
+                t.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = s.icon;
                 t.transform.GetChild(1).gameObject.GetComponent<Text>().text = s.name;
                 t.transform.GetChild(2).gameObject.GetComponent<Text>().text = "" + s.am;
             }
@@ -550,6 +570,51 @@ public class PlayerGuiController : MonoBehaviour
         foreach (Transform child in parent.transform)
             Destroy(child.gameObject);
     }
-    
-    
+
+
+
+    #region CHEATS
+    private void ToggleCheats()
+    {
+        if (cheatSlotsUI.activeSelf == true)
+        {
+            CloseCheats();
+        }
+        else
+        {
+            OpenCheats();
+        }
+    }
+
+    private void CloseCheats()
+    {
+        cheatSlotsUI.SetActive(false);
+    }
+
+    private void OpenCheats()
+    {
+        cheatSlotsUI.SetActive(true);
+        UpdateCHEATS();
+    }
+
+    private void UpdateCHEATS()
+    {
+        if (cheatSlotsUI.activeSelf == true)
+        {
+            ClearObjectChildren(cheatSlotsPanel);
+            foreach (GameItem s in GlobalItemsData.AVAIALABE_GameItems)
+            {
+                GameObject t = Instantiate(cheatSlotTemplate, cheatSlotsPanel.transform);
+                t.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = s.icon;
+                t.transform.GetChild(1).gameObject.GetComponent<Text>().text = s.name;
+                t.transform.GetChild(2).gameObject.GetComponent<Button>().onClick.AddListener(delegate () { AddItemFromCheat(s.name); });
+            }
+        }
+    }
+
+    private void AddItemFromCheat(string name)
+    {
+        playerINV.Inventory_AddToInventory(name);
+    }
+    #endregion
 }
