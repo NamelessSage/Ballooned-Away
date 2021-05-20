@@ -10,6 +10,7 @@ namespace Enemy
         private bool dead = false;
         public ParticleSystem parts;
         public AudioSource sound;
+        public AudioSource fireSound;
 
         public GameObject proj;
         private GameObject player;
@@ -29,6 +30,7 @@ namespace Enemy
 
             if (PassedTime <= 0 && Projectile == null && Vector3.Distance(transform.position, player.transform.position) < 3)
             {
+                fireSound.Play();
                 Projectile = Instantiate(proj, new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z), Quaternion.identity);
                 Vector3 shootDir = (player.transform.position - Projectile.transform.position).normalized;
                 shootDir.y = 0;

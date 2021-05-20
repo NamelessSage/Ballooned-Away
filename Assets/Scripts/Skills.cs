@@ -202,6 +202,7 @@ public class Skills : MonoBehaviour
         if (collider.CompareTag("Projectile"))
         {
             takeDamage(25);
+
         }
     }
 }
