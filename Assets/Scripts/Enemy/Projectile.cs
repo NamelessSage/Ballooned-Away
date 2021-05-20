@@ -4,11 +4,15 @@ namespace Enemy
 {
     public class Projectile : MonoBehaviour
     {
+        
         private Vector3 direction;
+        public AudioSource flightSound;
 
         public void Setup(Vector3 dir)
         {
             direction = dir;
+            flightSound.Play();
+            
         }
 
         private void Update()
