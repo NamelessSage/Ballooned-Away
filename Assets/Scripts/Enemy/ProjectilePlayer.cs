@@ -4,11 +4,15 @@ namespace Enemy
 {
     public class ProjectilePlayer : MonoBehaviour
     {
+        public AudioSource woosh;
+        public AudioSource hit;
+
         private Vector3 direction;
 
         public void Setup(Vector3 dir)
         {
             direction = dir;
+            woosh.Play();
             Destroy(gameObject, 2f);
         }
 
@@ -20,6 +24,7 @@ namespace Enemy
 
         private void OnTriggerEnter(Collider collider)
         {
+            hit.Play();
             if (collider.tag != "BalloonPad" && collider.tag != "Grass" && collider.tag != "Player")
             {
                 Destroy(gameObject);

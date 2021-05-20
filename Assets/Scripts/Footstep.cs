@@ -9,8 +9,10 @@ public class Footstep : MonoBehaviour
     public AudioSource stoneStep;
     public AudioSource grassStep;
     public AudioSource sandStep;
-    
-    
+    public AudioSource plantStep;
+
+
+
 
     private void OnCollisionEnter(Collision other)
     {
@@ -25,6 +27,10 @@ public class Footstep : MonoBehaviour
         if (other.collider.CompareTag("Sand"))
         { 
             PlaySand();
+        }
+        if (other.collider.CompareTag("GenericGrass"))
+        {
+            PlayPlant();
         }
     }
 
@@ -56,5 +62,14 @@ public class Footstep : MonoBehaviour
             sandStep.Play();
         }
     }
- 
+    private void PlayPlant()
+    {
+        if (!plantStep.isPlaying)
+        {
+            float rn = Random.Range(1f, 2.3f);
+            plantStep.pitch = rn;
+            plantStep.Play();
+        }
+    }
+
 }

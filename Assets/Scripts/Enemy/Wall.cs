@@ -24,7 +24,6 @@ namespace Enemy
             {
                 dead = true;
                 StartCoroutine(breaker());
-               
             }
         }
         private IEnumerator breaker()
